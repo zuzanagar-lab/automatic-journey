@@ -6,6 +6,7 @@
 <title>FibroMotýľ</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#440A63">
+<link rel="apple-touch-icon" href="icon-192.png">
 <style>
   :root{
     --bg: #F6EEFB;
@@ -246,6 +247,22 @@
     opacity:0;animation:riseIn .7s ease forwards;animation-delay:1.85s;
   }
   @keyframes riseIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+  /* counter (water) */
+  .counter-row{display:flex;gap:12px;align-items:center;justify-content:center;padding:6px 0;}
+  .counter-btn{
+    width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#FBF8FE;
+    color:var(--deep);font-size:22px;font-weight:800;cursor:pointer;line-height:1;
+  }
+  .counter-num{font-size:28px;font-weight:800;color:var(--purple);min-width:44px;text-align:center;}
+
+  /* print (Súhrn pre lekára) */
+  @media print{
+    body *{visibility:hidden;}
+    #summaryContent, #summaryContent *{visibility:visible;}
+    #summaryContent{position:absolute;left:0;top:0;width:100%;background:#fff;}
+    nav.bottom, header.top, #splash, .no-print{display:none !important;}
+  }
 </style>
 </head>
 <body>
@@ -316,6 +333,18 @@
           <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M6 2v8a3 3 0 0 0 3 3v9M6 2v6M9 2v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M17 2c-1.5 0-3 1.5-3 4v5a2 2 0 0 0 2 2v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
           <div class="lbl">Strava</div>
         </div>
+        <div class="tool-card" data-goto="cycle">
+          <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div class="lbl">Cyklus</div>
+        </div>
+        <div class="tool-card" data-goto="summary">
+          <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M6 2h9l3 3v17H6z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 10h6M9 14h6M9 18h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div class="lbl">Súhrn pre lekára</div>
+        </div>
+        <div class="tool-card" data-goto="backup">
+          <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div class="lbl">Záloha</div>
+        </div>
       </div>
 
       <div class="section-title">Posledných 7 dní</div>
@@ -348,12 +377,34 @@
       </div>
 
       <div class="card">
+        <h2>Nálada / stres dnes: <span class="val" id="moodVal">–</span></h2>
+        <div class="scale" id="moodScale"></div>
+        <div class="scale-labels"><span>pokojná</span><span>veľmi vystresovaná</span></div>
+      </div>
+
+      <div class="card">
         <h2>Spánok</h2>
         <div class="choice-row" id="sleepRow">
           <button data-v="dobry">Dobrý</button>
           <button data-v="priemerny">Priemerný</button>
           <button data-v="zly">Zlý</button>
         </div>
+      </div>
+
+      <div class="card">
+        <h2>Pitný režim dnes</h2>
+        <div class="counter-row">
+          <button class="counter-btn" id="waterMinusBtn">−</button>
+          <div class="counter-num" id="waterDisplay">0</div>
+          <button class="counter-btn" id="waterPlusBtn">+</button>
+        </div>
+        <div class="empty" style="padding:6px 0 0;">pohárov vody dnes</div>
+      </div>
+
+      <div class="card">
+        <h2>Počasie dnes</h2>
+        <button class="toggle-btn" id="weatherBtn" style="width:100%;">Zistiť počasie podľa polohy</button>
+        <div id="weatherStatus" style="font-size:13px;color:var(--ink-soft);margin-top:8px;"></div>
       </div>
 
       <div class="card">
@@ -398,6 +449,12 @@
     <!-- MEDS -->
     <section class="view" id="view-meds">
       <div class="card">
+        <h2>Pripomienky</h2>
+        <div class="empty" style="text-align:left;padding:0 0 10px;">Appka vám vie pripomenúť liek, ak ju máte otvorenú v prehliadači telefónu. Nie je to 100% spoľahlivé na pozadí (najmä na iPhone), preto sa naň úplne nespoliehajte.</div>
+        <button class="toggle-btn" id="notifPermBtn" style="width:100%;">Povoliť pripomienky</button>
+        <div id="notifStatus" style="font-size:13px;color:var(--ink-soft);margin-top:8px;"></div>
+      </div>
+      <div class="card">
         <h2>Pridať liek</h2>
         <label class="f">Názov lieku</label>
         <input type="text" id="medName" placeholder="Napr. Pregabalin">
@@ -405,6 +462,8 @@
         <input type="text" id="medDose" placeholder="Napr. 75 mg">
         <label class="f">Kedy užívať</label>
         <input type="text" id="medTime" placeholder="Napr. ráno a večer">
+        <label class="f">Pripomenúť o (nepovinné)</label>
+        <input type="time" id="medReminder">
         <button class="save-btn" id="medSaveBtn">Pridať liek</button>
       </div>
       <div class="section-title">Moje lieky</div>
@@ -469,6 +528,39 @@
       <div class="card" id="nutritionList"><div class="empty">Zatiaľ žiadny záznam.</div></div>
     </section>
 
+    <!-- CYCLE -->
+    <section class="view" id="view-cycle">
+      <div class="card">
+        <h2>Sledovanie cyklu</h2>
+        <div class="empty" id="cycleStatus" style="text-align:left;padding:0 0 14px;">Zatiaľ žiadny záznam.</div>
+        <button class="save-btn" id="cycleLogBtn">Dnes mi začala menštruácia</button>
+      </div>
+      <div class="section-title">História</div>
+      <div class="card" id="cycleList"><div class="empty">Zatiaľ žiadne záznamy.</div></div>
+    </section>
+
+    <!-- SUMMARY (pre lekára) -->
+    <section class="view" id="view-summary">
+      <div class="card no-print">
+        <h2>Súhrn pre lekára</h2>
+        <div class="empty" style="text-align:left;padding:0 0 14px;">Appka pripraví prehľadný súhrn posledných 14 dní. Tlačidlo otvorí tlačové okno, kde môžete zvoliť „Uložiť ako PDF" a poslať alebo vytlačiť súhrn pre lekára.</div>
+        <button class="save-btn" id="printSummaryBtn">Vytlačiť / uložiť ako PDF</button>
+      </div>
+      <div class="card" id="summaryContent"></div>
+    </section>
+
+    <!-- BACKUP -->
+    <section class="view" id="view-backup">
+      <div class="card">
+        <h2>Záloha dát</h2>
+        <div class="empty" style="text-align:left;padding:0 0 14px;">Appka ukladá dáta iba vo vašom telefóne. Stiahnite si zálohu (súbor), aby ste o dáta neprišli pri zmene telefónu alebo vymazaní prehliadača. Súbor si môžete uložiť napr. do emailu alebo cloudového úložiska.</div>
+        <button class="save-btn" id="exportBtn">Stiahnuť zálohu</button>
+        <label class="f" style="margin-top:18px;">Nahrať zálohu zo súboru</label>
+        <input type="file" id="importFile" accept="application/json">
+        <div class="save-note" id="backupNote"></div>
+      </div>
+    </section>
+
   </main>
 
   <nav class="bottom">
@@ -515,6 +607,8 @@ const STORAGE_KEYS = {
   labs: 'fibromotyl_labs',         // array: [{id, name, value, date}]
   team: 'fibromotyl_team',         // array: [{id, name, spec, phone}]
   nutrition: 'fibromotyl_nutrition', // array: [{id, ts, dateKey, name, kcal, grams}]
+  cycle: 'fibromotyl_cycle',       // array: [{id, date}]
+  notified: 'fibromotyl_notified', // array of notification keys already shown
 };
 
 function loadJSON(key, fallback){
@@ -536,13 +630,15 @@ function goto(view){
   if(view==='team') renderTeam();
   if(view==='journal') renderJournal();
   if(view==='nutrition') renderNutrition();
+  if(view==='cycle') renderCycle();
+  if(view==='summary') renderSummary();
 }
 document.querySelectorAll('[data-goto]').forEach(el=>{
   el.addEventListener('click', ()=> goto(el.dataset.goto));
 });
 
 /* ---------- TRACKER (daily entry) ---------- */
-let state = { pain:null, fatigue:null, sleep:null, syms:new Set(), note:"" };
+let state = { pain:null, fatigue:null, mood:null, sleep:null, syms:new Set(), note:"" };
 function todayKey(){ return new Date().toISOString().slice(0,10); }
 function fmtDateLabel(d){ return d.toLocaleDateString('sk-SK', { weekday:'long', day:'numeric', month:'long' }); }
 document.getElementById('todayLabel').textContent = fmtDateLabel(new Date());
@@ -571,6 +667,58 @@ function buildScale(containerId, valId, key){
 }
 buildScale('painScale','painVal','pain');
 buildScale('fatigueScale','fatigueVal','fatigue');
+buildScale('moodScale','moodVal','mood');
+
+function updateTodayField(field, value){
+  const all = loadJSON(STORAGE_KEYS.tracker, {});
+  all[todayKey()] = Object.assign({}, all[todayKey()], {[field]: value});
+  saveJSON(STORAGE_KEYS.tracker, all);
+}
+
+/* ---------- water ---------- */
+let waterCount = 0;
+function refreshWaterDisplay(){ document.getElementById('waterDisplay').textContent = waterCount; }
+document.getElementById('waterPlusBtn').addEventListener('click', ()=>{
+  waterCount++; refreshWaterDisplay(); updateTodayField('water', waterCount);
+});
+document.getElementById('waterMinusBtn').addEventListener('click', ()=>{
+  waterCount = Math.max(0, waterCount-1); refreshWaterDisplay(); updateTodayField('water', waterCount);
+});
+
+/* ---------- weather ---------- */
+function showWeatherStatus(w){
+  const el = document.getElementById('weatherStatus');
+  if(w && w.temp!==undefined){
+    el.textContent = `Naposledy zistené dnes: ${Math.round(w.temp)} °C, tlak ${Math.round(w.pressure)} hPa`;
+  }
+}
+document.getElementById('weatherBtn').addEventListener('click', ()=>{
+  const statusEl = document.getElementById('weatherStatus');
+  if(!('geolocation' in navigator)){
+    statusEl.textContent = 'Tento prehliadač nepodporuje zisťovanie polohy.';
+    return;
+  }
+  statusEl.textContent = 'Zisťujem polohu...';
+  navigator.geolocation.getCurrentPosition(async (pos)=>{
+    try{
+      statusEl.textContent = 'Zisťujem počasie...';
+      const { latitude, longitude } = pos.coords;
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,surface_pressure`;
+      const res = await fetch(url);
+      const data = await res.json();
+      const temp = data.current && data.current.temperature_2m;
+      const pressure = data.current && data.current.surface_pressure;
+      if(temp===undefined){ statusEl.textContent = 'Počasie sa nepodarilo zistiť.'; return; }
+      const w = { temp, pressure };
+      updateTodayField('weather', w);
+      showWeatherStatus(w);
+    }catch(e){
+      statusEl.textContent = 'Počasie sa nepodarilo zistiť. Skontrolujte pripojenie na internet.';
+    }
+  }, ()=>{
+    statusEl.textContent = 'Prístup k polohe bol zamietnutý.';
+  });
+});
 
 document.querySelectorAll('#sleepRow button').forEach(b=>{
   b.addEventListener('click', ()=>{
@@ -601,7 +749,7 @@ function saveEntry(){
   const heartRate = document.getElementById('heartRateInput').value.trim();
   const steps = document.getElementById('stepsInput').value.trim();
   const all = loadJSON(STORAGE_KEYS.tracker, {});
-  all[todayKey()] = { pain: state.pain, fatigue: state.fatigue, sleep: state.sleep, syms:[...state.syms], note: state.note, heartRate, steps };
+  all[todayKey()] = Object.assign({}, all[todayKey()], { pain: state.pain, fatigue: state.fatigue, mood: state.mood, sleep: state.sleep, syms:[...state.syms], note: state.note, heartRate, steps });
   saveJSON(STORAGE_KEYS.tracker, all);
   n.style.color = 'var(--good)'; n.textContent = 'Uložené ✓';
   loadHistory(); refreshHome();
@@ -614,6 +762,7 @@ function loadTodayIfExists(){
   if(d){
     if(d.pain!==null && d.pain!==undefined) document.getElementById('painScale').children[d.pain].click();
     if(d.fatigue!==null && d.fatigue!==undefined) document.getElementById('fatigueScale').children[d.fatigue].click();
+    if(d.mood!==null && d.mood!==undefined) document.getElementById('moodScale').children[d.mood].click();
     if(d.sleep){ [...document.querySelectorAll('#sleepRow button')].find(b=>b.dataset.v===d.sleep)?.click(); }
     state.syms = new Set(d.syms||[]);
     [...chipsEl.children].forEach(c=>{ if(state.syms.has(c.textContent)) c.classList.add('on'); });
@@ -622,6 +771,9 @@ function loadTodayIfExists(){
     document.getElementById('heartRateInput').value = d.heartRate||'';
     document.getElementById('stepsInput').value = d.steps||'';
   }
+  waterCount = (d && d.water) || 0;
+  refreshWaterDisplay();
+  if(d && d.weather) showWeatherStatus(d.weather);
 }
 
 function loadHistory(){
@@ -643,6 +795,7 @@ function loadHistory(){
           <button class="del-btn" data-date="${e.date}">Zmazať</button>
         </div>
         ${e.syms && e.syms.length ? `<div class="entry-syms">${escapeHtml(e.syms.join(', '))}</div>` : ''}
+        ${(e.mood!==undefined && e.mood!==null) || e.water || e.weather ? `<div class="entry-syms">${e.mood!==undefined && e.mood!==null ? 'Nálada/stres: '+e.mood : ''}${e.water ? ' · Voda: '+e.water+' pohárov' : ''}${e.weather ? ' · Počasie: '+Math.round(e.weather.temp)+'°C' : ''}</div>` : ''}
         ${(e.heartRate || e.steps) ? `<div class="entry-syms">${e.heartRate ? 'Tep: '+escapeHtml(e.heartRate)+' bpm' : ''}${e.heartRate && e.steps ? ' · ' : ''}${e.steps ? 'Kroky: '+escapeHtml(e.steps) : ''}</div>` : ''}
         ${e.note ? `<div class="entry-note">„${escapeHtml(e.note)}"</div>` : ''}
       `;
@@ -747,7 +900,7 @@ function renderMeds(){
     div.innerHTML = `
       <div class="info">
         <b>${escapeHtml(it.name)}</b>
-        <span>${escapeHtml(it.dose||'')}${it.time?' · '+escapeHtml(it.time):''}</span>
+        <span>${escapeHtml(it.dose||'')}${it.time?' · '+escapeHtml(it.time):''}${it.reminderTime?' · pripomienka '+escapeHtml(it.reminderTime):''}</span>
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
         <button class="toggle-btn ${takenToday?'on':''}" data-key="${it.id}">${takenToday?'Vzaté dnes ✓':'Vziať dnes'}</button>
@@ -782,14 +935,49 @@ document.getElementById('medSaveBtn').addEventListener('click', ()=>{
   if(!name) return;
   const dose = document.getElementById('medDose').value.trim();
   const time = document.getElementById('medTime').value.trim();
+  const reminderTime = document.getElementById('medReminder').value.trim();
   const items = loadJSON(STORAGE_KEYS.meds, []);
-  items.push({id: uid(), name, dose, time, takenDates:[]});
+  items.push({id: uid(), name, dose, time, reminderTime, takenDates:[]});
   saveJSON(STORAGE_KEYS.meds, items);
   document.getElementById('medName').value='';
   document.getElementById('medDose').value='';
   document.getElementById('medTime').value='';
+  document.getElementById('medReminder').value='';
   renderMeds();
 });
+
+/* ---------- notifications / med reminders ---------- */
+function updateNotifStatus(){
+  const el = document.getElementById('notifStatus');
+  if(!('Notification' in window)){ el.textContent = 'Tento prehliadač nepodporuje notifikácie.'; return; }
+  if(Notification.permission==='granted') el.textContent = 'Pripomienky sú povolené.';
+  else if(Notification.permission==='denied') el.textContent = 'Pripomienky boli zamietnuté (dajú sa znova povoliť v nastaveniach prehliadača).';
+  else el.textContent = '';
+}
+document.getElementById('notifPermBtn').addEventListener('click', ()=>{
+  if(!('Notification' in window)){ updateNotifStatus(); return; }
+  Notification.requestPermission().then(()=> updateNotifStatus());
+});
+updateNotifStatus();
+
+function checkMedReminders(){
+  if(!('Notification' in window) || Notification.permission!=='granted') return;
+  const hhmm = new Date().toTimeString().slice(0,5);
+  const items = loadJSON(STORAGE_KEYS.meds, []);
+  const notified = loadJSON(STORAGE_KEYS.notified, []);
+  let changed = false;
+  items.forEach(m=>{
+    if(m.reminderTime && m.reminderTime===hhmm){
+      const key = m.id + '_' + todayKey() + '_' + hhmm;
+      if(!notified.includes(key)){
+        try{ new Notification('Čas na liek: ' + m.name, { body: m.dose ? 'Dávka: ' + m.dose : 'Nezabudni si vziať liek.' }); }catch(e){}
+        notified.push(key); changed = true;
+      }
+    }
+  });
+  if(changed) saveJSON(STORAGE_KEYS.notified, notified);
+}
+setInterval(checkMedReminders, 30000);
 
 /* ---------- LABS ---------- */
 function renderLabs(){
@@ -977,6 +1165,119 @@ document.getElementById('manualFoodBtn').addEventListener('click', ()=>{
   document.getElementById('manualFoodKcal').value='';
 });
 
+/* ---------- CYCLE ---------- */
+function renderCycle(){
+  const list = document.getElementById('cycleList');
+  const statusEl = document.getElementById('cycleStatus');
+  const items = loadJSON(STORAGE_KEYS.cycle, []).slice().sort((a,b)=> b.date.localeCompare(a.date));
+  if(items.length===0){
+    statusEl.textContent = 'Zatiaľ žiadny záznam.';
+  }else{
+    const last = new Date(items[0].date+'T00:00:00');
+    const diffDays = Math.floor((new Date(todayKey()+'T00:00:00') - last) / 86400000) + 1;
+    statusEl.textContent = `Deň cyklu: ${diffDays} (posledná menštruácia ${last.toLocaleDateString('sk-SK',{day:'numeric',month:'short'})})`;
+  }
+  if(items.length===0){ list.innerHTML = '<div class="empty">Zatiaľ žiadne záznamy.</div>'; return; }
+  list.innerHTML = '';
+  items.forEach(it=>{
+    const div = document.createElement('div'); div.className='list-item';
+    const d = new Date(it.date+'T00:00:00');
+    div.innerHTML = `
+      <div class="info"><b>${d.toLocaleDateString('sk-SK',{day:'numeric',month:'short',year:'numeric'})}</b></div>
+      <button class="del-btn" data-key="${it.id}">Zmazať</button>
+    `;
+    list.appendChild(div);
+  });
+  list.querySelectorAll('.del-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const items2 = loadJSON(STORAGE_KEYS.cycle, []).filter(x=>x.id!==btn.dataset.key);
+      saveJSON(STORAGE_KEYS.cycle, items2);
+      renderCycle();
+    });
+  });
+}
+document.getElementById('cycleLogBtn').addEventListener('click', ()=>{
+  const items = loadJSON(STORAGE_KEYS.cycle, []);
+  if(items.some(x=>x.date===todayKey())) return;
+  items.push({id: uid(), date: todayKey()});
+  saveJSON(STORAGE_KEYS.cycle, items);
+  renderCycle();
+});
+
+/* ---------- SUMMARY (pre lekára) ---------- */
+function renderSummary(){
+  const all = loadJSON(STORAGE_KEYS.tracker, {});
+  const entries = Object.keys(all).map(date => ({date, ...all[date]})).sort((a,b)=> b.date.localeCompare(a.date)).slice(0,14);
+  const meds = loadJSON(STORAGE_KEYS.meds, []);
+  const team = loadJSON(STORAGE_KEYS.team, []).filter(t=>t.name);
+  const el = document.getElementById('summaryContent');
+  let rows = entries.map(e=>`
+    <tr>
+      <td style="padding:6px 8px;border-bottom:1px solid var(--line);">${new Date(e.date+'T00:00:00').toLocaleDateString('sk-SK',{day:'numeric',month:'short'})}</td>
+      <td style="padding:6px 8px;border-bottom:1px solid var(--line);">${e.pain ?? '–'}</td>
+      <td style="padding:6px 8px;border-bottom:1px solid var(--line);">${e.fatigue ?? '–'}</td>
+      <td style="padding:6px 8px;border-bottom:1px solid var(--line);">${e.mood ?? '–'}</td>
+      <td style="padding:6px 8px;border-bottom:1px solid var(--line);">${e.sleep ?? '–'}</td>
+      <td style="padding:6px 8px;border-bottom:1px solid var(--line);">${(e.syms||[]).join(', ')||'–'}</td>
+    </tr>
+  `).join('');
+  el.innerHTML = `
+    <h2>Súhrn pre FibroMotýľ – posledných ${entries.length} dní</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:13px;">
+      <thead><tr>
+        <th style="text-align:left;padding:6px 8px;">Dátum</th>
+        <th style="text-align:left;padding:6px 8px;">Bolesť</th>
+        <th style="text-align:left;padding:6px 8px;">Únava</th>
+        <th style="text-align:left;padding:6px 8px;">Nálada</th>
+        <th style="text-align:left;padding:6px 8px;">Spánok</th>
+        <th style="text-align:left;padding:6px 8px;">Príznaky</th>
+      </tr></thead>
+      <tbody>${rows || '<tr><td colspan="6" style="padding:10px;">Zatiaľ žiadne záznamy.</td></tr>'}</tbody>
+    </table>
+    <h2 style="margin-top:20px;">Aktuálne lieky</h2>
+    ${meds.length ? '<ul>'+meds.map(m=>`<li>${escapeHtml(m.name)}${m.dose?' – '+escapeHtml(m.dose):''}${m.time?' ('+escapeHtml(m.time)+')':''}</li>`).join('')+'</ul>' : '<div class="empty">Žiadne lieky.</div>'}
+    <h2 style="margin-top:20px;">Lekársky tím</h2>
+    ${team.length ? '<ul>'+team.map(t=>`<li>${escapeHtml(t.name)} – ${escapeHtml(t.spec||'')}</li>`).join('')+'</ul>' : '<div class="empty">Žiadne kontakty.</div>'}
+  `;
+}
+document.getElementById('printSummaryBtn').addEventListener('click', ()=>{
+  renderSummary();
+  window.print();
+});
+
+/* ---------- BACKUP (export / import) ---------- */
+document.getElementById('exportBtn').addEventListener('click', ()=>{
+  const data = {};
+  Object.entries(STORAGE_KEYS).forEach(([k,storageKey])=>{ data[k] = loadJSON(storageKey, null); });
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'fibromotyl-zaloha-' + todayKey() + '.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+});
+document.getElementById('importFile').addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const noteEl = document.getElementById('backupNote');
+  const reader = new FileReader();
+  reader.onload = () => {
+    try{
+      const data = JSON.parse(reader.result);
+      Object.entries(STORAGE_KEYS).forEach(([k,storageKey])=>{
+        if(data[k] !== undefined && data[k] !== null) saveJSON(storageKey, data[k]);
+      });
+      noteEl.style.color = 'var(--good)';
+      noteEl.textContent = 'Záloha bola úspešne nahraná. Appka sa teraz obnoví.';
+      setTimeout(()=> location.reload(), 1200);
+    }catch(err){
+      noteEl.style.color = 'var(--danger)';
+      noteEl.textContent = 'Súbor sa nepodarilo načítať. Skontrolujte, či ide o správnu zálohu.';
+    }
+  };
+  reader.readAsText(file);
+});
+
 /* ---------- helpers ---------- */
 function escapeHtml(str){
   const div = document.createElement('div');
@@ -1064,6 +1365,12 @@ loadTodayIfExists();
 const _entries = loadHistory();
 renderTrend(_entries);
 refreshHome();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
 </script>
 </body>
 </html>
