@@ -353,6 +353,17 @@
       </div>
 
       <div class="card">
+        <h2>Tep a kroky (nepovinné)</h2>
+        <label class="f">Priemerný tep (bpm)</label>
+        <input type="text" inputmode="numeric" id="heartRateInput" placeholder="Napr. 78">
+        <label class="f">Počet krokov</label>
+        <input type="text" inputmode="numeric" id="stepsInput" placeholder="Napr. 3200">
+        <div class="empty" style="padding:8px 0 0;text-align:left;">Zadajte hodnoty z appky Zdravie / Google Fit, alebo skúste krokomer nižšie.</div>
+        <button class="toggle-btn" id="pedoToggleBtn" style="margin-top:10px;width:100%;">Spustiť krokomer telefónu</button>
+        <div id="pedoStatus" style="font-size:13px;color:var(--ink-soft);margin-top:8px;"></div>
+      </div>
+
+      <div class="card">
         <h2>Príznaky dnes</h2>
         <div class="chips" id="symChips"></div>
       </div>
@@ -551,8 +562,10 @@ function saveEntry(){
     n.style.color = 'var(--danger)'; n.textContent = 'Vyber aspoň bolesť a únavu.';
     return;
   }
+  const heartRate = document.getElementById('heartRateInput').value.trim();
+  const steps = document.getElementById('stepsInput').value.trim();
   const all = loadJSON(STORAGE_KEYS.tracker, {});
-  all[todayKey()] = { pain: state.pain, fatigue: state.fatigue, sleep: state.sleep, syms:[...state.syms], note: state.note };
+  all[todayKey()] = { pain: state.pain, fatigue: state.fatigue, sleep: state.sleep, syms:[...state.syms], note: state.note, heartRate, steps };
   saveJSON(STORAGE_KEYS.tracker, all);
   n.style.color = 'var(--good)'; n.textContent = 'Uložené ✓';
   loadHistory(); refreshHome();
@@ -570,6 +583,8 @@ function loadTodayIfExists(){
     [...chipsEl.children].forEach(c=>{ if(state.syms.has(c.textContent)) c.classList.add('on'); });
     document.getElementById('noteInput').value = d.note||'';
     state.note = d.note||'';
+    document.getElementById('heartRateInput').value = d.heartRate||'';
+    document.getElementById('stepsInput').value = d.steps||'';
   }
 }
 
@@ -592,6 +607,7 @@ function loadHistory(){
           <button class="del-btn" data-date="${e.date}">Zmazať</button>
         </div>
         ${e.syms && e.syms.length ? `<div class="entry-syms">${escapeHtml(e.syms.join(', '))}</div>` : ''}
+        ${(e.heartRate || e.steps) ? `<div class="entry-syms">${e.heartRate ? 'Tep: '+escapeHtml(e.heartRate)+' bpm' : ''}${e.heartRate && e.steps ? ' · ' : ''}${e.steps ? 'Kroky: '+escapeHtml(e.steps) : ''}</div>` : ''}
         ${e.note ? `<div class="entry-note">„${escapeHtml(e.note)}"</div>` : ''}
       `;
       histCard.appendChild(div);
@@ -827,6 +843,75 @@ function escapeHtml(str){
   div.textContent = str == null ? '' : str;
   return div.innerHTML;
 }
+
+/* ---------- KROKOMER (experimentálny, funguje len keď je appka otvorená priamo v telefóne) ---------- */
+let pedoActive = false;
+let pedoCount = 0;
+let pedoLastMag = 0;
+let pedoLastStepTime = 0;
+let pedoAvg = 0;
+
+function pedoHandleMotion(event){
+  const a = event.accelerationIncludingGravity || event.acceleration;
+  if(!a || a.x===null) return;
+  const mag = Math.sqrt((a.x||0)**2 + (a.y||0)**2 + (a.z||0)**2);
+  pedoAvg = pedoAvg===0 ? mag : (pedoAvg*0.9 + mag*0.1);
+  const delta = mag - pedoAvg;
+  const now = Date.now();
+  const THRESHOLD = 2.2;
+  const MIN_GAP_MS = 300;
+  if(delta > THRESHOLD && pedoLastMag <= THRESHOLD && (now - pedoLastStepTime) > MIN_GAP_MS){
+    pedoCount++;
+    pedoLastStepTime = now;
+    updatePedoStatus();
+  }
+  pedoLastMag = delta;
+}
+
+function updatePedoStatus(){
+  const el = document.getElementById('pedoStatus');
+  el.innerHTML = `Napočítané kroky: <b>${pedoCount}</b> &nbsp; <button class="toggle-btn" id="pedoUseBtn" style="padding:4px 10px;font-size:12px;">Použiť tento počet</button>`;
+  const useBtn = document.getElementById('pedoUseBtn');
+  if(useBtn){
+    useBtn.addEventListener('click', ()=>{
+      document.getElementById('stepsInput').value = pedoCount;
+      stopPedometer();
+    });
+  }
+}
+
+function startPedometer(){
+  if(typeof DeviceMotionEvent === 'undefined'){
+    document.getElementById('pedoStatus').textContent = 'Krokomer nie je v tomto prehliadači podporovaný.';
+    return;
+  }
+  const begin = () => {
+    pedoActive = true; pedoCount = 0; pedoAvg = 0; pedoLastMag = 0; pedoLastStepTime = 0;
+    window.addEventListener('devicemotion', pedoHandleMotion);
+    document.getElementById('pedoToggleBtn').textContent = 'Zastaviť krokomer';
+    updatePedoStatus();
+  };
+  if(typeof DeviceMotionEvent.requestPermission === 'function'){
+    DeviceMotionEvent.requestPermission().then(state => {
+      if(state === 'granted') begin();
+      else document.getElementById('pedoStatus').textContent = 'Prístup k pohybovým senzorom bol zamietnutý.';
+    }).catch(()=>{
+      document.getElementById('pedoStatus').textContent = 'Prístup k pohybovým senzorom sa nepodarilo získať.';
+    });
+  } else {
+    begin();
+  }
+}
+
+function stopPedometer(){
+  pedoActive = false;
+  window.removeEventListener('devicemotion', pedoHandleMotion);
+  document.getElementById('pedoToggleBtn').textContent = 'Spustiť krokomer telefónu';
+}
+
+document.getElementById('pedoToggleBtn').addEventListener('click', ()=>{
+  if(pedoActive) stopPedometer(); else startPedometer();
+});
 
 /* ---------- splash ---------- */
 const splashEl = document.getElementById('splash');
