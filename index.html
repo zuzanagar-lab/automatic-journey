@@ -345,6 +345,10 @@
           <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
           <div class="lbl">Záloha</div>
         </div>
+        <div class="tool-card" data-goto="diagnoses">
+          <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M9 3h6a1 1 0 0 1 1 1v1h1a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h1V4a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.5 13l2 2 4-4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="lbl">Diagnózy</div>
+        </div>
       </div>
 
       <div class="section-title">Posledných 7 dní</div>
@@ -549,6 +553,23 @@
       <div class="card" id="summaryContent"></div>
     </section>
 
+    <!-- DIAGNOSES -->
+    <section class="view" id="view-diagnoses">
+      <div class="card">
+        <h2>Sprievodné diagnózy</h2>
+        <div class="empty" style="text-align:left;padding:0 0 12px;">Fibromyalgia sa často vyskytuje spolu s ďalšími diagnózami. Zaškrtnite tie, ktoré máte potvrdené – uvidíte ich potom aj v súhrne pre lekára.</div>
+        <div class="chips" id="diagnosisChips"></div>
+      </div>
+      <div class="card">
+        <h2>Pridať vlastnú diagnózu</h2>
+        <label class="f">Názov</label>
+        <input type="text" id="customDiagnosisName" placeholder="Napr. iná diagnóza, ktorá tu chýba">
+        <button class="save-btn" id="customDiagnosisBtn">Pridať</button>
+      </div>
+      <div class="section-title">Moje vlastné diagnózy</div>
+      <div class="card" id="customDiagnosisList"><div class="empty">Zatiaľ žiadne vlastné diagnózy.</div></div>
+    </section>
+
     <!-- BACKUP -->
     <section class="view" id="view-backup">
       <div class="card">
@@ -598,6 +619,23 @@
 
 <script>
 const SYMPTOMS = ["Mozgová hmla","Bolesť hlavy","Stuhnutosť","Nespavosť","Úzkosť / napätie","Bolesť žalúdka","Citlivosť na svetlo/hluk","Studené ruky/nohy"];
+const COMMON_DIAGNOSES = [
+  "Syndróm dráždivého čreva (IBS)",
+  "Migréna / chronické bolesti hlavy",
+  "Syndróm chronickej únavy (CFS/ME)",
+  "Depresia",
+  "Úzkostná porucha",
+  "Porucha spánku (nespavosť, spánkové apnoe)",
+  "Syndróm nepokojných nôh",
+  "Temporomandibulárna porucha (TMJ)",
+  "Intersticiálna cystitída",
+  "Endometrióza",
+  "Hypotyreóza",
+  "Reumatoidná artritída",
+  "Sjögrenov syndróm",
+  "Systémový lupus erythematosus",
+  "Osteoartróza"
+];
 const DOW = ["Ne","Po","Ut","St","Št","Pi","So"];
 
 const STORAGE_KEYS = {
@@ -609,6 +647,8 @@ const STORAGE_KEYS = {
   nutrition: 'fibromotyl_nutrition', // array: [{id, ts, dateKey, name, kcal, grams}]
   cycle: 'fibromotyl_cycle',       // array: [{id, date}]
   notified: 'fibromotyl_notified', // array of notification keys already shown
+  diagnoses: 'fibromotyl_diagnoses',           // array of selected COMMON_DIAGNOSES strings
+  customDiagnoses: 'fibromotyl_custom_diagnoses', // array: [{id, name}]
 };
 
 function loadJSON(key, fallback){
@@ -632,6 +672,7 @@ function goto(view){
   if(view==='nutrition') renderNutrition();
   if(view==='cycle') renderCycle();
   if(view==='summary') renderSummary();
+  if(view==='diagnoses') renderDiagnoses();
 }
 document.querySelectorAll('[data-goto]').forEach(el=>{
   el.addEventListener('click', ()=> goto(el.dataset.goto));
@@ -1204,12 +1245,61 @@ document.getElementById('cycleLogBtn').addEventListener('click', ()=>{
   renderCycle();
 });
 
+/* ---------- DIAGNOSES ---------- */
+function renderDiagnoses(){
+  const selected = new Set(loadJSON(STORAGE_KEYS.diagnoses, []));
+  const chipsWrap = document.getElementById('diagnosisChips');
+  chipsWrap.innerHTML = '';
+  COMMON_DIAGNOSES.forEach(d=>{
+    const c = document.createElement('div');
+    c.className = 'chip' + (selected.has(d) ? ' on' : '');
+    c.textContent = d;
+    c.addEventListener('click', ()=>{
+      const cur = new Set(loadJSON(STORAGE_KEYS.diagnoses, []));
+      if(cur.has(d)) cur.delete(d); else cur.add(d);
+      saveJSON(STORAGE_KEYS.diagnoses, [...cur]);
+      c.classList.toggle('on');
+    });
+    chipsWrap.appendChild(c);
+  });
+
+  const list = document.getElementById('customDiagnosisList');
+  const custom = loadJSON(STORAGE_KEYS.customDiagnoses, []);
+  if(custom.length===0){ list.innerHTML = '<div class="empty">Zatiaľ žiadne vlastné diagnózy.</div>'; return; }
+  list.innerHTML = '';
+  custom.forEach(it=>{
+    const div = document.createElement('div'); div.className='list-item';
+    div.innerHTML = `
+      <div class="info"><b>${escapeHtml(it.name)}</b></div>
+      <button class="del-btn" data-key="${it.id}">Zmazať</button>
+    `;
+    list.appendChild(div);
+  });
+  list.querySelectorAll('.del-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const items2 = loadJSON(STORAGE_KEYS.customDiagnoses, []).filter(x=>x.id!==btn.dataset.key);
+      saveJSON(STORAGE_KEYS.customDiagnoses, items2);
+      renderDiagnoses();
+    });
+  });
+}
+document.getElementById('customDiagnosisBtn').addEventListener('click', ()=>{
+  const name = document.getElementById('customDiagnosisName').value.trim();
+  if(!name) return;
+  const items = loadJSON(STORAGE_KEYS.customDiagnoses, []);
+  items.push({id: uid(), name});
+  saveJSON(STORAGE_KEYS.customDiagnoses, items);
+  document.getElementById('customDiagnosisName').value = '';
+  renderDiagnoses();
+});
+
 /* ---------- SUMMARY (pre lekára) ---------- */
 function renderSummary(){
   const all = loadJSON(STORAGE_KEYS.tracker, {});
   const entries = Object.keys(all).map(date => ({date, ...all[date]})).sort((a,b)=> b.date.localeCompare(a.date)).slice(0,14);
   const meds = loadJSON(STORAGE_KEYS.meds, []);
   const team = loadJSON(STORAGE_KEYS.team, []).filter(t=>t.name);
+  const diagnoses = [...loadJSON(STORAGE_KEYS.diagnoses, []), ...loadJSON(STORAGE_KEYS.customDiagnoses, []).map(d=>d.name)];
   const el = document.getElementById('summaryContent');
   let rows = entries.map(e=>`
     <tr>
@@ -1234,6 +1324,8 @@ function renderSummary(){
       </tr></thead>
       <tbody>${rows || '<tr><td colspan="6" style="padding:10px;">Zatiaľ žiadne záznamy.</td></tr>'}</tbody>
     </table>
+    <h2 style="margin-top:20px;">Sprievodné diagnózy</h2>
+    ${diagnoses.length ? '<ul>'+diagnoses.map(d=>`<li>${escapeHtml(d)}</li>`).join('')+'</ul>' : '<div class="empty">Žiadne zaznamenané.</div>'}
     <h2 style="margin-top:20px;">Aktuálne lieky</h2>
     ${meds.length ? '<ul>'+meds.map(m=>`<li>${escapeHtml(m.name)}${m.dose?' – '+escapeHtml(m.dose):''}${m.time?' ('+escapeHtml(m.time)+')':''}</li>`).join('')+'</ul>' : '<div class="empty">Žiadne lieky.</div>'}
     <h2 style="margin-top:20px;">Lekársky tím</h2>

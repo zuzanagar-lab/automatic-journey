@@ -14,6 +14,8 @@ Umožňuje:
 - sledovať náladu/stres (škála 0–10), pitný režim (počítadlo pohárov) a počasie
   (teplota a tlak vzduchu podľa polohy)
 - sledovať menštruačný cyklus (deň cyklu, história záznamov)
+- zaškrtnúť si sprievodné diagnózy, ktoré sa bežne spájajú s fibromyalgiou
+  (napr. IBS, migréna, depresia, hypotyreóza...), alebo pridať vlastnú
 - pripraviť si súhrn posledných 14 dní pre lekára a vytlačiť ho alebo uložiť ako PDF
 - nastaviť pripomienky na lieky (ak appku máte otvorenú v prehliadači)
 - stiahnuť si zálohu všetkých dát ako súbor a neskôr ju znova nahrať
