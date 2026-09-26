@@ -202,6 +202,23 @@
   @media (prefers-reduced-motion:reduce){
     #splash *{animation-duration:.01s!important;animation-delay:0s!important;}
   }
+  /* strava, cyklus, diagnózy, súhrn */
+  .big-num{font-size:30px;font-weight:800;color:var(--red);font-variant-numeric:tabular-nums;}
+  .food-add{display:flex;gap:8px;align-items:center;margin-top:8px;}
+  .food-add input{width:84px;}
+  .food-add .save-btn{margin:0;width:auto;min-height:48px;padding:10px 18px;}
+  .summary-table{width:100%;border-collapse:collapse;font-size:13px;}
+  .summary-table th,.summary-table td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top;}
+  .summary-scroll{overflow-x:auto;}
+  #summaryContent h3{font-size:15px;color:var(--deep);margin:18px 0 6px;}
+  #summaryContent ul{margin:0;padding-left:20px;}
+  @media print{
+    body *{visibility:hidden;}
+    #summaryContent,#summaryContent *{visibility:visible;}
+    #summaryContent{position:absolute;left:0;top:0;width:100%;box-shadow:none;}
+    .summary-scroll{overflow:visible;} .summary-table{font-size:10px;}
+    nav.bottom,header.top,#splash,.no-print{display:none!important;}
+  }
 </style>
 
 <div id="splash" role="button" tabindex="0" aria-label="Pokračovať do aplikácie">
@@ -275,6 +292,22 @@
         <div class="tool-card" data-goto="team" tabindex="0">
           <div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M3 20c0-3.3 2.7-5 6-5s6 1.7 6 5" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="9" r="2.3" stroke="currentColor" stroke-width="1.6"/><path d="M15.5 20c0-2.4 1.7-3.8 3.8-4" stroke="currentColor" stroke-width="1.6"/></svg></div>
           <div class="lbl">Môj tím</div>
+        </div>
+        <div class="tool-card" data-goto="nutrition" tabindex="0">
+          <div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 2v8a3 3 0 0 0 3 3v9M6 2v6M9 2v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M17 2c-1.5 0-3 1.5-3 4v5a2 2 0 0 0 2 2v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div class="lbl">Strava</div>
+        </div>
+        <div class="tool-card" data-goto="cycle" tabindex="0">
+          <div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div class="lbl">Cyklus</div>
+        </div>
+        <div class="tool-card" data-goto="diagnoses" tabindex="0">
+          <div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 9l2 2 4-4M8 16h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="lbl">Diagnózy</div>
+        </div>
+        <div class="tool-card" data-goto="summary" tabindex="0">
+          <div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 2h9l3 3v17H6z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 10h6M9 14h6M9 18h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div class="lbl">Súhrn pre lekára</div>
         </div>
       </div>
 
@@ -478,6 +511,73 @@
       <div class="section-title">Môj tím starostlivosti</div>
       <div class="card" id="teamList"><div class="empty">Zatiaľ žiadne kontakty.</div></div>
     </section>
+
+    <!-- NUTRITION -->
+    <section class="view" id="view-nutrition">
+      <div class="card">
+        <h2>Dnešný príjem kalórií</h2>
+        <div class="big-num" id="nutritionTotal">0 kcal</div>
+        <p class="hint" style="margin:10px 0 0;">Bielkoviny (mäso, mlieko, syr, vajcia) môžu oslabiť účinok levodopy. Ako načasovať jedlo a lieky, vám poradí lekár.</p>
+      </div>
+      <div class="card">
+        <h2>Vyhľadať potravinu</h2>
+        <label class="f" for="foodSearchInput">Názov potraviny</label>
+        <input type="text" id="foodSearchInput" placeholder="Napr. jogurt biely" enterkeyhint="search">
+        <button class="save-btn" id="foodSearchBtn">Hľadať</button>
+        <div id="foodSearchStatus" class="hint" style="margin:10px 0 0;"></div>
+        <div id="foodSearchResults"></div>
+      </div>
+      <div class="card">
+        <h2>Pridať ručne</h2>
+        <label class="f" for="manualFoodName">Názov</label>
+        <input type="text" id="manualFoodName" placeholder="Napr. domáca polievka">
+        <label class="f" for="manualFoodKcal">Kalórie (kcal)</label>
+        <input type="text" inputmode="numeric" id="manualFoodKcal" placeholder="Napr. 250">
+        <button class="save-btn" id="manualFoodBtn">Pridať</button>
+      </div>
+      <div class="section-title">Dnešný záznam stravy</div>
+      <div class="card" id="nutritionList"><div class="empty">Zatiaľ žiadny záznam.</div></div>
+    </section>
+
+    <!-- CYCLE -->
+    <section class="view" id="view-cycle">
+      <div class="card">
+        <h2>Sledovanie cyklu</h2>
+        <p class="hint" style="margin:0 0 6px;">Príznaky Parkinsonovej choroby sa u niektorých žien menia počas cyklu. Záznam pomôže lekárovi vidieť súvislosti.</p>
+        <div id="cycleStatus" style="font-size:16px;font-weight:700;color:var(--deep);padding:6px 0;">Zatiaľ žiadny záznam.</div>
+        <button class="save-btn" id="cycleLogBtn">Dnes mi začala menštruácia</button>
+        <div class="save-note" id="cycleNote"></div>
+      </div>
+      <div class="section-title">História</div>
+      <div class="card" id="cycleList"><div class="empty">Zatiaľ žiadne záznamy.</div></div>
+    </section>
+
+    <!-- DIAGNOSES -->
+    <section class="view" id="view-diagnoses">
+      <div class="card">
+        <h2>Sprievodné diagnózy</h2>
+        <p class="hint" style="margin:0 0 12px;">Pri Parkinsonovej chorobe sa často objavujú aj ďalšie ťažkosti. Označte tie, ktoré vám lekár potvrdil. Uvidíte ich potom aj v súhrne pre lekára.</p>
+        <div class="chips" id="diagnosisChips"></div>
+      </div>
+      <div class="card">
+        <h2>Pridať vlastnú diagnózu</h2>
+        <label class="f" for="customDiagnosisName">Názov</label>
+        <input type="text" id="customDiagnosisName" placeholder="Napr. diagnóza, ktorá tu chýba">
+        <button class="save-btn" id="customDiagnosisBtn">Pridať</button>
+      </div>
+      <div class="section-title">Moje vlastné diagnózy</div>
+      <div class="card" id="customDiagnosisList"><div class="empty">Zatiaľ žiadne vlastné diagnózy.</div></div>
+    </section>
+
+    <!-- SUMMARY -->
+    <section class="view" id="view-summary">
+      <div class="card no-print">
+        <h2>Súhrn pre lekára</h2>
+        <p class="hint" style="margin:0 0 4px;">Aplikácia pripraví prehľad posledných 14 dní. Tlačidlo otvorí tlač, kde môžete zvoliť aj „Uložiť ako PDF“ a súhrn poslať lekárovi.</p>
+        <button class="save-btn" id="printSummaryBtn">Vytlačiť / uložiť ako PDF</button>
+      </div>
+      <div class="card" id="summaryContent"></div>
+    </section>
   </main>
 
   <nav class="bottom">
@@ -578,6 +678,10 @@ function goto(view){
   if(view==='team') renderTeam();
   if(view==='journal') renderJournal();
   if(view==='home') refreshHome();
+  if(view==='nutrition') renderNutrition();
+  if(view==='cycle') renderCycle();
+  if(view==='diagnoses') renderDiagnoses();
+  if(view==='summary') renderSummary();
 }
 document.querySelectorAll('[data-goto]').forEach(el=>{
   el.addEventListener('click', ()=> goto(el.dataset.goto));
@@ -921,6 +1025,179 @@ document.getElementById('medSaveBtn').addEventListener('click', async ()=>{
     renderMeds(); renderNextDose();
   }catch(e){ note.style.color='var(--red)'; note.textContent='Nepodarilo sa uložiť. Skúste to znova.'; }
 });
+
+
+/* ---------- STRAVA ---------- */
+async function nutritionToday(){ return (await getAll('nutrition')).filter(x=>x.dateKey===todayKey()).sort((a,b)=>(b.ts||0)-(a.ts||0)); }
+async function renderNutrition(){
+  const list=document.getElementById('nutritionList');
+  const items=await nutritionToday();
+  const total=items.reduce((s,it)=>s+(Number(it.kcal)||0),0);
+  document.getElementById('nutritionTotal').textContent=Math.round(total)+' kcal';
+  if(!items.length){ list.innerHTML='<div class="empty">Zatiaľ žiadny záznam.</div>'; return; }
+  list.innerHTML='';
+  items.forEach(it=>{
+    const div=document.createElement('div'); div.className='list-item';
+    div.innerHTML=`<div class="info"><b>${escapeHtml(it.name)}</b><span>${Math.round(it.kcal)} kcal${it.grams?' · '+it.grams+' g':''}</span></div>
+      <button class="del-btn" data-key="${escapeHtml(it.key)}">Zmazať</button>`;
+    list.appendChild(div);
+  });
+  list.querySelectorAll('.del-btn').forEach(b=>b.addEventListener('click',async()=>{ try{ await db.collection('nutrition').doc(b.dataset.key).delete(); }catch(e){} renderNutrition(); }));
+}
+async function addNutritionEntry(name,kcal,grams){
+  if(!db) return;
+  try{ await db.collection('nutrition').add({ts:Date.now(),dateKey:todayKey(),name,kcal,grams:grams||null}); }catch(e){}
+  renderNutrition();
+}
+async function searchFood(query){
+  const statusEl=document.getElementById('foodSearchStatus'), resultsEl=document.getElementById('foodSearchResults');
+  resultsEl.innerHTML=''; statusEl.textContent='Hľadám...';
+  try{
+    const url='https://world.openfoodfacts.org/cgi/search.pl?search_terms='+encodeURIComponent(query)+'&search_simple=1&action=process&json=1&page_size=8&fields=product_name,brands,nutriments';
+    const data=await (await fetch(url)).json();
+    const products=(data.products||[]).filter(p=>p.product_name&&p.nutriments&&p.nutriments['energy-kcal_100g']);
+    if(!products.length){ statusEl.textContent='Túto potravinu sme nenašli. Skúste ju pridať ručne nižšie.'; return; }
+    statusEl.textContent='Zadajte, koľko gramov ste zjedli, a ťuknite na Pridať.';
+    products.forEach(p=>{
+      const kcal100=Number(p.nutriments['energy-kcal_100g']);
+      const div=document.createElement('div'); div.className='entry';
+      div.innerHTML=`<div><b>${escapeHtml(p.product_name)}</b></div><div class="entry-syms">${escapeHtml(p.brands||'')}${p.brands?' · ':''}${Math.round(kcal100)} kcal / 100 g</div>`;
+      const wrap=document.createElement('div'); wrap.className='food-add';
+      const g=document.createElement('input'); g.type='text'; g.inputMode='numeric'; g.value='100'; g.setAttribute('aria-label','Gramy');
+      const lbl=document.createElement('span'); lbl.textContent='g'; lbl.style.color='var(--ink-soft)';
+      const add=document.createElement('button'); add.className='save-btn'; add.textContent='Pridať';
+      add.addEventListener('click',()=>{
+        const grams=Number(String(g.value).replace(',','.'))||100;
+        addNutritionEntry(p.product_name,kcal100*grams/100,grams);
+        document.getElementById('foodSearchInput').value=''; resultsEl.innerHTML=''; statusEl.textContent='Pridané ✓';
+      });
+      wrap.append(g,lbl,add); div.appendChild(wrap); resultsEl.appendChild(div);
+    });
+  }catch(e){ statusEl.textContent='Vyhľadávanie nefunguje. Skontrolujte internet alebo pridajte jedlo ručne.'; }
+}
+document.getElementById('foodSearchBtn').addEventListener('click',()=>{ const q=document.getElementById('foodSearchInput').value.trim(); if(q) searchFood(q); });
+document.getElementById('foodSearchInput').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); document.getElementById('foodSearchBtn').click(); } });
+document.getElementById('manualFoodBtn').addEventListener('click',()=>{
+  const name=document.getElementById('manualFoodName').value.trim();
+  const kcal=Number(document.getElementById('manualFoodKcal').value.replace(',','.'));
+  if(!name||!kcal) return;
+  addNutritionEntry(name,kcal,null);
+  document.getElementById('manualFoodName').value=''; document.getElementById('manualFoodKcal').value='';
+});
+
+/* ---------- CYKLUS ---------- */
+async function renderCycle(){
+  const list=document.getElementById('cycleList'), statusEl=document.getElementById('cycleStatus');
+  const items=(await getAll('cycle')).sort((a,b)=>b.date.localeCompare(a.date));
+  if(!items.length){ statusEl.textContent='Zatiaľ žiadny záznam.'; list.innerHTML='<div class="empty">Zatiaľ žiadne záznamy.</div>'; return; }
+  const last=new Date(items[0].date+'T00:00:00');
+  const day=Math.floor((new Date(todayKey()+'T00:00:00')-last)/86400000)+1;
+  statusEl.textContent=`Deň cyklu: ${day} (posledná menštruácia ${last.toLocaleDateString('sk-SK',{day:'numeric',month:'short'})})`;
+  list.innerHTML='';
+  items.forEach((it,i)=>{
+    const d=new Date(it.date+'T00:00:00');
+    let len='';
+    if(items[i+1]){ const prev=new Date(items[i+1].date+'T00:00:00'); len=' · cyklus '+Math.round((d-prev)/86400000)+' dní'; }
+    const div=document.createElement('div'); div.className='list-item';
+    div.innerHTML=`<div class="info"><b>${d.toLocaleDateString('sk-SK',{day:'numeric',month:'short',year:'numeric'})}</b><span>${len.replace(' · ','')}</span></div>
+      <button class="del-btn" data-key="${escapeHtml(it.key)}">Zmazať</button>`;
+    list.appendChild(div);
+  });
+  list.querySelectorAll('.del-btn').forEach(b=>b.addEventListener('click',async()=>{ try{ await db.collection('cycle').doc(b.dataset.key).delete(); }catch(e){} renderCycle(); }));
+}
+document.getElementById('cycleLogBtn').addEventListener('click',async()=>{
+  if(!db) return;
+  const note=document.getElementById('cycleNote');
+  const items=await getAll('cycle');
+  if(items.some(x=>x.date===todayKey())){ note.textContent='Dnešný deň už je zapísaný.'; return; }
+  try{ await db.collection('cycle').add({date:todayKey()}); note.textContent='Zapísané ✓'; }catch(e){}
+  renderCycle();
+});
+
+/* ---------- DIAGNÓZY ---------- */
+const COMMON_DIAGNOSES = [
+  "Depresia","Úzkostná porucha","Apatia (strata záujmu a motivácie)",
+  "Porucha spánku v REM fáze (pohyby a krik počas snov)","Nespavosť","Spánkové apnoe","Syndróm nepokojných nôh",
+  "Ortostatická hypotenzia (pokles tlaku pri vstávaní)","Vysoký krvný tlak",
+  "Chronická zápcha","Porucha prehĺtania (dysfágia)","Časté alebo náhle nutkanie na močenie",
+  "Strata alebo oslabenie čuchu","Ľahká porucha pamäti a myslenia","Halucinácie",
+  "Osteoporóza","Artróza","Seboroická dermatitída","Cukrovka 2. typu","Porucha štítnej žľazy"
+];
+async function getSelectedDiagnoses(){ try{ const s=await db.collection('settings').doc('diagnoses').get(); return (s.exists&&s.data().list)||[]; }catch(e){ return []; } }
+async function renderDiagnoses(){
+  const wrap=document.getElementById('diagnosisChips');
+  const selected=new Set(db?await getSelectedDiagnoses():[]);
+  wrap.innerHTML='';
+  COMMON_DIAGNOSES.forEach(d=>{
+    const c=document.createElement('button'); c.type='button';
+    c.className='chip'+(selected.has(d)?' on':''); c.textContent=d; c.style.fontFamily='inherit';
+    c.setAttribute('aria-pressed',selected.has(d));
+    c.addEventListener('click',async()=>{
+      if(!db) return;
+      const cur=new Set(await getSelectedDiagnoses());
+      if(cur.has(d)) cur.delete(d); else cur.add(d);
+      try{ await db.collection('settings').doc('diagnoses').set({list:[...cur]}); }catch(e){}
+      c.classList.toggle('on',cur.has(d)); c.setAttribute('aria-pressed',cur.has(d));
+    });
+    wrap.appendChild(c);
+  });
+  const list=document.getElementById('customDiagnosisList');
+  const custom=await getAll('customDiagnoses');
+  if(!custom.length){ list.innerHTML='<div class="empty">Zatiaľ žiadne vlastné diagnózy.</div>'; return; }
+  list.innerHTML='';
+  custom.forEach(it=>{
+    const div=document.createElement('div'); div.className='list-item';
+    div.innerHTML=`<div class="info"><b>${escapeHtml(it.name)}</b></div><button class="del-btn" data-key="${escapeHtml(it.key)}">Zmazať</button>`;
+    list.appendChild(div);
+  });
+  list.querySelectorAll('.del-btn').forEach(b=>b.addEventListener('click',async()=>{ try{ await db.collection('customDiagnoses').doc(b.dataset.key).delete(); }catch(e){} renderDiagnoses(); }));
+}
+document.getElementById('customDiagnosisBtn').addEventListener('click',async()=>{
+  const name=document.getElementById('customDiagnosisName').value.trim();
+  if(!name||!db) return;
+  try{ await db.collection('customDiagnoses').add({name}); }catch(e){}
+  document.getElementById('customDiagnosisName').value='';
+  renderDiagnoses();
+});
+
+/* ---------- SÚHRN PRE LEKÁRA ---------- */
+const SLEEP_TXT={dobry:'dobrý',priemerny:'priemerný',zly:'zlý'};
+async function renderSummary(){
+  const el=document.getElementById('summaryContent');
+  const entries=(await getAll('tracker')).map(e=>({...e,date:e.date||e.key})).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,14);
+  const [meds,vits,team,custom,selected,cycles]=await Promise.all([getAll('meds'),getAll('vitamins'),getAll('team'),getAll('customDiagnoses'),db?getSelectedDiagnoses():[],getAll('cycle')]);
+  const diagnoses=[...selected,...custom.map(c=>c.name)];
+  const v=x=>(x===null||x===undefined||x==='')?'–':x;
+  const rows=entries.map(e=>`<tr>
+    <td>${new Date(e.date+'T00:00:00').toLocaleDateString('sk-SK',{day:'numeric',month:'short'})}</td>
+    <td>${v(e.tremor)}</td><td>${v(e.rigid)}</td><td>${v(e.pain)}</td><td>${v(e.fatigue)}</td>
+    <td>${escapeHtml(ONOFF_TXT[e.onoff]||'–')}</td>
+    <td>${escapeHtml(e.dysk&&e.dysk!=='nie'?DYSK_TXT[e.dysk]:'–')}</td>
+    <td>${e.falls>0?(e.falls>=3?'3+':e.falls):(e.falls===0?'0':'–')}</td>
+    <td>${escapeHtml(SLEEP_TXT[e.sleep]||'–')}</td>
+    <td>${escapeHtml(bmAreasOf(e.painSpots).join(', '))||'–'}</td>
+    <td>${escapeHtml((e.syms||[]).join(', '))||'–'}</td>
+  </tr>`).join('');
+  const lastCycle=cycles.sort((a,b)=>b.date.localeCompare(a.date))[0];
+  el.innerHTML=`
+    <h2>ParkiTulipán – súhrn pre lekára</h2>
+    <div class="hint" style="margin:0 0 10px;">Vytvorené ${new Date().toLocaleDateString('sk-SK',{day:'numeric',month:'long',year:'numeric'})}. Posledné dni so záznamom (najviac 14): ${entries.length}. Tras, stuhnutosť, bolesť a únava na stupnici 0–10.</div>
+    <div class="summary-scroll"><table class="summary-table">
+      <thead><tr><th>Dátum</th><th>Tras</th><th>Stuhnutosť</th><th>Bolesť</th><th>Únava</th><th>Účinok liekov</th><th>Nechcené pohyby</th><th>Pády</th><th>Spánok</th><th>Kde bolí</th><th>Príznaky</th></tr></thead>
+      <tbody>${rows||'<tr><td colspan="11">Zatiaľ žiadne záznamy.</td></tr>'}</tbody>
+    </table></div>
+    <h3>Sprievodné diagnózy</h3>
+    ${diagnoses.length?'<ul>'+diagnoses.map(d=>`<li>${escapeHtml(d)}</li>`).join('')+'</ul>':'<div class="empty" style="text-align:left;padding:0;">Žiadne zaznamenané.</div>'}
+    <h3>Lieky a časy užívania</h3>
+    ${meds.length?'<ul>'+meds.map(m=>`<li>${escapeHtml(m.name)}${m.dose?' – '+escapeHtml(m.dose):''}${m.times&&m.times.length?' ('+escapeHtml(m.times.join(', '))+')':''}</li>`).join('')+'</ul>':'<div class="empty" style="text-align:left;padding:0;">Žiadne lieky.</div>'}
+    <h3>Vitamíny a doplnky</h3>
+    ${vits.length?'<ul>'+vits.map(x=>`<li>${escapeHtml(x.name)}${x.dose?' – '+escapeHtml(x.dose):''}${x.times?' ('+escapeHtml(x.times.join(', '))+')':''}</li>`).join('')+'</ul>':'<div class="empty" style="text-align:left;padding:0;">Žiadne vitamíny.</div>'}
+    ${lastCycle?`<h3>Cyklus</h3><div>Posledná menštruácia: ${new Date(lastCycle.date+'T00:00:00').toLocaleDateString('sk-SK',{day:'numeric',month:'long'})}</div>`:''}
+    <h3>Lekársky tím</h3>
+    ${team.filter(t=>t.name).length?'<ul>'+team.filter(t=>t.name).map(t=>`<li>${escapeHtml(t.name)} – ${escapeHtml(t.spec||'')}${t.phone?' · '+escapeHtml(t.phone):''}</li>`).join('')+'</ul>':'<div class="empty" style="text-align:left;padding:0;">Žiadne kontakty.</div>'}
+  `;
+}
+document.getElementById('printSummaryBtn').addEventListener('click',async()=>{ await renderSummary(); window.print(); });
 
 /* ---------- LABS ---------- */
 async function renderLabs(){

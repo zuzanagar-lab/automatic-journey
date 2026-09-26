@@ -69,5 +69,9 @@ Umožňuje:
 - vitamíny a doplnky (ráno / obed / večer / pred spaním)
 - denník, výsledky vyšetrení a tím lekárov (neurológ, praktický lekár,
   fyzioterapeut, logopéd, psychológ)
+- strava: vyhľadanie potraviny (Open Food Facts) alebo ručné pridanie, súčet kalórií za deň
+- sledovanie menštruačného cyklu (deň cyklu, dĺžka cyklov)
+- sprievodné diagnózy typické pri Parkinsonovej chorobe (zaškrtnúť) aj vlastné
+- súhrn posledných 14 dní pre lekára na vytlačenie alebo uloženie ako PDF
 
 Dáta sa ukladajú iba v prehliadači telefónu, v ktorom sa appka používa (localStorage).
