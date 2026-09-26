@@ -6,6 +6,8 @@ Umožňuje:
 - denné sledovanie bolesti a únavy (škála 0–10), kvality spánku a príznakov
 - viesť si osobný denník
 - evidovať lieky s tlačidlom "vziať dnes"
+- zapisovať aktivity (prechádzka, cvičenie, domáce práce...), ich dĺžku, náročnosť
+  a ako bolo potom; prehľad je aj v súhrne pre lekára
 - evidovať vitamíny a doplnky (ráno / obed / večer / pred spaním) a odkliknúť každú dávku
 - označiť na schéme tela (spredu aj zozadu), kde to bolí, s vyznačenými typickými
   citlivými bodmi fibromyalgie; miesta sa ukážu v histórii aj v súhrne pre lekára

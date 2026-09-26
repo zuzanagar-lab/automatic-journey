@@ -364,6 +364,10 @@
           <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M9 3h6a1 1 0 0 1 1 1v1h1a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h1V4a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.5 13l2 2 4-4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           <div class="lbl">Diagnózy</div>
         </div>
+        <div class="tool-card" data-goto="activities">
+          <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="13.5" cy="4.5" r="2" stroke="currentColor" stroke-width="1.6"/><path d="M9 21l2.5-6 2.5 2v4M7 12l3-4 3.5 1.5L16 13l3 1M10 8l1.5 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="lbl">Aktivity</div>
+        </div>
       </div>
 
       <div class="section-title">Posledných 7 dní</div>
@@ -617,6 +621,41 @@
       <div class="card" id="customDiagnosisList"><div class="empty">Zatiaľ žiadne vlastné diagnózy.</div></div>
     </section>
 
+    <!-- ACTIVITIES -->
+    <section class="view" id="view-activities">
+      <div class="card">
+        <h2>Dnes spolu</h2>
+        <div id="actTotal" style="font-size:1.4rem;font-weight:700;color:var(--purple);">0 min</div>
+        <div class="empty" style="text-align:left;padding:8px 0 0;">Pri fibromyalgii pomáha rozložiť aktivity počas dňa a oddýchnuť si skôr, ako príde veľká únava. Záznamy ti ukážu, čo ti robí dobre a po čom ti je horšie.</div>
+      </div>
+      <div class="card">
+        <h2>Pridať aktivitu</h2>
+        <label class="f">Čo si robila</label>
+        <div class="chips" id="actTypeChips"></div>
+        <input type="text" id="actOther" placeholder="Iná aktivita – napíš sama" style="margin-top:10px;">
+        <label class="f">Ako dlho (minúty)</label>
+        <input type="text" inputmode="numeric" id="actMinutes" placeholder="Napr. 20">
+        <label class="f">Aká náročná bola</label>
+        <div class="choice-row" id="actIntensity">
+          <button type="button" data-v="ľahká">Ľahká</button>
+          <button type="button" data-v="stredná">Stredná</button>
+          <button type="button" data-v="náročná">Náročná</button>
+        </div>
+        <label class="f">Ako ti bolo potom</label>
+        <div class="choice-row" id="actAfter">
+          <button type="button" data-v="lepšie">Lepšie</button>
+          <button type="button" data-v="rovnako">Rovnako</button>
+          <button type="button" data-v="horšie">Horšie</button>
+        </div>
+        <label class="f">Poznámka (nepovinné)</label>
+        <input type="text" id="actNote" placeholder="Napr. potom som si musela ľahnúť">
+        <button class="save-btn" id="actSaveBtn">Pridať aktivitu</button>
+        <div class="save-note" id="actSaveNote"></div>
+      </div>
+      <div class="section-title">Moje aktivity</div>
+      <div class="card" id="actList"><div class="empty">Zatiaľ žiadne aktivity.</div></div>
+    </section>
+
     <!-- BACKUP -->
     <section class="view" id="view-backup">
       <div class="card">
@@ -701,6 +740,7 @@ const STORAGE_KEYS = {
   notified: 'fibromotyl_notified', // array of notification keys already shown
   diagnoses: 'fibromotyl_diagnoses',           // array of selected COMMON_DIAGNOSES strings
   customDiagnoses: 'fibromotyl_custom_diagnoses', // array: [{id, name}]
+  activities: 'fibromotyl_activities', // array: [{id, date, ts, type, minutes, intensity, after, note}]
   vitamins: 'fibromotyl_vitamins', // array: [{id, name, dose, times, taken:{date:[times]}}]
 };
 
@@ -726,6 +766,7 @@ function goto(view){
   if(view==='cycle') renderCycle();
   if(view==='summary') renderSummary();
   if(view==='diagnoses') renderDiagnoses();
+  if(view==='activities') renderActivities();
 }
 document.querySelectorAll('[data-goto]').forEach(el=>{
   el.addEventListener('click', ()=> goto(el.dataset.goto));
@@ -733,7 +774,8 @@ document.querySelectorAll('[data-goto]').forEach(el=>{
 
 /* ---------- TRACKER (daily entry) ---------- */
 let state = { pain:null, fatigue:null, mood:null, sleep:null, syms:new Set(), note:"" };
-function todayKey(){ return new Date().toISOString().slice(0,10); }
+function dateKeyOf(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); } // miestny dátum, nie UTC
+function todayKey(){ return dateKeyOf(new Date()); }
 function fmtDateLabel(d){ return d.toLocaleDateString('sk-SK', { weekday:'long', day:'numeric', month:'long' }); }
 document.getElementById('todayLabel').textContent = fmtDateLabel(new Date());
 
@@ -974,7 +1016,7 @@ function renderTrend(entries){
   const today = new Date();
   for(let i=6;i>=0;i--){
     const d = new Date(today); d.setDate(d.getDate()-i);
-    const key = d.toISOString().slice(0,10);
+    const key = dateKeyOf(d);
     const e = byDate[key];
     const dayDiv = document.createElement('div'); dayDiv.className='day';
     const painH = e ? Math.max(4, e.pain*7) : 2;
@@ -993,7 +1035,7 @@ function renderTrend(entries){
 function refreshHome(){
   const all = loadJSON(STORAGE_KEYS.tracker, {});
   const y = new Date(); y.setDate(y.getDate()-1);
-  const yKey = y.toISOString().slice(0,10);
+  const yKey = dateKeyOf(y);
   const tEl = document.getElementById('homeToday');
   const yEl = document.getElementById('homeYesterday');
   const hasToday = !!all[todayKey()];
@@ -1168,7 +1210,7 @@ function renderVitamins(){
       const v = items2.find(x=>x.id===btn.dataset.key);
       if(!v) return;
       const cutoff = new Date(); cutoff.setDate(cutoff.getDate()-14);
-      const cKey = cutoff.toISOString().slice(0,10);
+      const cKey = dateKeyOf(cutoff);
       const taken = {};
       Object.entries(v.taken||{}).forEach(([k,val])=>{ if(k>=cKey) taken[k]=val; });
       const day = taken[tKey] ? [...taken[tKey]] : [];
@@ -1388,6 +1430,74 @@ document.getElementById('manualFoodBtn').addEventListener('click', ()=>{
   document.getElementById('manualFoodKcal').value='';
 });
 
+/* ---------- ACTIVITIES ---------- */
+const ACTIVITY_TYPES = ["Prechádzka","Cvičenie / rehabilitácia","Strečing / joga","Plávanie","Bicykel","Domáce práce","Varenie","Nákup","Záhrada","Práca","Stretnutie s ľuďmi","Oddych / relaxácia"];
+const actState = { type:null, intensity:null, after:null };
+const actChips = document.getElementById('actTypeChips');
+ACTIVITY_TYPES.forEach(t=>{
+  const c = document.createElement('div'); c.className='chip'; c.textContent=t;
+  c.addEventListener('click', ()=>{
+    const on = actState.type!==t;
+    actState.type = on ? t : null;
+    [...actChips.children].forEach(x=>x.classList.toggle('on', on && x===c));
+    if(on) document.getElementById('actOther').value='';
+  });
+  actChips.appendChild(c);
+});
+document.getElementById('actOther').addEventListener('input', e=>{
+  if(e.target.value.trim()){ actState.type=null; [...actChips.children].forEach(x=>x.classList.remove('on')); }
+});
+function bindActChoice(rowId, key){
+  const btns = document.querySelectorAll('#'+rowId+' button');
+  btns.forEach(b=>b.addEventListener('click', ()=>{
+    btns.forEach(x=>x.classList.remove('on')); b.classList.add('on'); actState[key]=b.dataset.v;
+  }));
+}
+bindActChoice('actIntensity','intensity');
+bindActChoice('actAfter','after');
+function activityLine(a){
+  return `${escapeHtml(a.type)}${a.minutes?' · '+a.minutes+' min':''}${a.intensity?' · '+a.intensity:''}${a.after?' · potom '+a.after:''}`;
+}
+function renderActivities(){
+  const all = loadJSON(STORAGE_KEYS.activities, []).slice().sort((a,b)=> (b.ts||0)-(a.ts||0));
+  const today = all.filter(a=>a.date===todayKey());
+  document.getElementById('actTotal').textContent = today.reduce((s,a)=>s+(Number(a.minutes)||0),0) + ' min';
+  const list = document.getElementById('actList');
+  if(all.length===0){ list.innerHTML='<div class="empty">Zatiaľ žiadne aktivity.</div>'; return; }
+  list.innerHTML='';
+  all.slice(0,60).forEach(a=>{
+    const div=document.createElement('div'); div.className='entry';
+    const d=new Date(a.date+'T00:00:00');
+    const col = a.after==='horšie' ? 'var(--danger)' : (a.after==='lepšie' ? 'var(--good)' : 'var(--ink-soft)');
+    div.innerHTML = `
+      <div class="entry-top">
+        <span>${d.toLocaleDateString('sk-SK',{day:'numeric',month:'short'})} · <b>${escapeHtml(a.type)}</b></span>
+        <button class="del-btn" data-key="${escapeHtml(a.id)}">Zmazať</button>
+      </div>
+      <div class="entry-syms">${a.minutes?a.minutes+' min':''}${a.intensity?' · '+escapeHtml(a.intensity):''}${a.after?` · <span style="color:${col};font-weight:600;">potom ${escapeHtml(a.after)}</span>`:''}</div>
+      ${a.note?`<div class="entry-note">„${escapeHtml(a.note)}“</div>`:''}`;
+    list.appendChild(div);
+  });
+  list.querySelectorAll('.del-btn').forEach(btn=>btn.addEventListener('click', ()=>{
+    saveJSON(STORAGE_KEYS.activities, loadJSON(STORAGE_KEYS.activities, []).filter(x=>x.id!==btn.dataset.key));
+    renderActivities();
+  }));
+}
+document.getElementById('actSaveBtn').addEventListener('click', ()=>{
+  const note = document.getElementById('actSaveNote');
+  const type = actState.type || document.getElementById('actOther').value.trim();
+  if(!type){ note.style.color='var(--danger)'; note.textContent='Vyber alebo napíš, čo si robila.'; return; }
+  const minutes = parseInt(document.getElementById('actMinutes').value,10) || null;
+  const items = loadJSON(STORAGE_KEYS.activities, []);
+  items.push({ id: uid(), date: todayKey(), ts: Date.now(), type, minutes, intensity: actState.intensity, after: actState.after, note: document.getElementById('actNote').value.trim() });
+  saveJSON(STORAGE_KEYS.activities, items);
+  actState.type=null; actState.intensity=null; actState.after=null;
+  document.querySelectorAll('#actTypeChips .chip, #actIntensity button, #actAfter button').forEach(x=>x.classList.remove('on'));
+  ['actOther','actMinutes','actNote'].forEach(id=>document.getElementById(id).value='');
+  note.style.color='var(--good)'; note.textContent='Aktivita pridaná ✓';
+  renderActivities();
+});
+
 /* ---------- CYCLE ---------- */
 function renderCycle(){
   const list = document.getElementById('cycleList');
@@ -1481,6 +1591,8 @@ function renderSummary(){
   const entries = Object.keys(all).map(date => ({date, ...all[date]})).sort((a,b)=> b.date.localeCompare(a.date)).slice(0,14);
   const meds = loadJSON(STORAGE_KEYS.meds, []);
   const vitamins = loadJSON(STORAGE_KEYS.vitamins, []);
+  const since = new Date(); since.setDate(since.getDate()-13); const sinceKey = dateKeyOf(since);
+  const acts = loadJSON(STORAGE_KEYS.activities, []).filter(a=>a.date>=sinceKey).sort((a,b)=> b.date.localeCompare(a.date) || (b.ts||0)-(a.ts||0));
   const team = loadJSON(STORAGE_KEYS.team, []).filter(t=>t.name);
   const diagnoses = [...loadJSON(STORAGE_KEYS.diagnoses, []), ...loadJSON(STORAGE_KEYS.customDiagnoses, []).map(d=>d.name)];
   const el = document.getElementById('summaryContent');
@@ -1511,6 +1623,8 @@ function renderSummary(){
     </table>
     <h2 style="margin-top:20px;">Sprievodné diagnózy</h2>
     ${diagnoses.length ? '<ul>'+diagnoses.map(d=>`<li>${escapeHtml(d)}</li>`).join('')+'</ul>' : '<div class="empty">Žiadne zaznamenané.</div>'}
+    <h2 style="margin-top:20px;">Aktivity (posledných 14 dní)</h2>
+    ${acts.length ? '<ul>'+acts.map(a=>`<li>${new Date(a.date+'T00:00:00').toLocaleDateString('sk-SK',{day:'numeric',month:'short'})}: ${activityLine(a)}</li>`).join('')+'</ul>' : '<div class="empty">Žiadne zaznamenané.</div>'}
     <h2 style="margin-top:20px;">Aktuálne lieky</h2>
     ${meds.length ? '<ul>'+meds.map(m=>`<li>${escapeHtml(m.name)}${m.dose?' – '+escapeHtml(m.dose):''}${m.time?' ('+escapeHtml(m.time)+')':''}</li>`).join('')+'</ul>' : '<div class="empty">Žiadne lieky.</div>'}
     <h2 style="margin-top:20px;">Vitamíny a doplnky</h2>
