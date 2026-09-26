@@ -51,3 +51,24 @@ nie sú to skutočné notifikácie na pozadí (najmä na iPhone to nie je spoľa
 ## Plánované rozšírenia
 
 - Zdieľanie appky/dát medzi viacerými zariadeniami alebo s inou osobou
+
+---
+
+# ParkiTulipán 🌷
+
+Sesterská appka k FibroMotýľovi, určená na sledovanie Parkinsonovej choroby.
+Nachádza sa v priečinku `parkitulipan/` a má vlastnú adresu:
+https://zuzanagar-lab.github.io/automatic-journey/parkitulipan/
+
+Umožňuje:
+- denné sledovanie trasu, stuhnutosti, únavy a bolesti (škála 0–10), účinku liekov
+  (dobré / zlé obdobie), nechcených pohybov, pádov, spánku, pohybu a príznakov
+- označiť na schéme tela (spredu aj zozadu), kde to bolí
+- lieky s viacerými časmi dávok za deň, každá dávka sa odklikne zvlášť,
+  a na úvodnej obrazovke je vidno najbližšiu dávku
+- vitamíny a doplnky (ráno / obed / večer / pred spaním)
+- denník, výsledky vyšetrení a tím lekárov (neurológ, praktický lekár,
+  fyzioterapeut, logopéd, psychológ)
+- pri prvom otvorení zobrazí venovanie „Aplikácia pre Silviu“
+
+Dáta sa ukladajú iba v prehliadači telefónu, v ktorom sa appka používa (localStorage).
