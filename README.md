@@ -69,6 +69,5 @@ Umožňuje:
 - vitamíny a doplnky (ráno / obed / večer / pred spaním)
 - denník, výsledky vyšetrení a tím lekárov (neurológ, praktický lekár,
   fyzioterapeut, logopéd, psychológ)
-- pri prvom otvorení zobrazí venovanie „Aplikácia pre Silviu“
 
 Dáta sa ukladajú iba v prehliadači telefónu, v ktorom sa appka používa (localStorage).

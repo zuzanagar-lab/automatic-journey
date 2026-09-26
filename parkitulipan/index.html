@@ -177,15 +177,6 @@
   .bm-list .chip{font-family:inherit;background:#FDECEE;border-color:#F3C3C8;color:#9B1C28;}
   .bm-clear{border:none;background:none;color:var(--ink-soft);font-size:13px;text-decoration:underline;cursor:pointer;padding:8px 0 0;}
 
-  /* venovanie */
-  #dedication{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px 16px;
-    background:rgba(58,18,24,.45);opacity:0;transition:opacity .5s ease;}
-  #dedication.show{opacity:1;}
-  #dedication .box{background:var(--card);border-radius:24px;padding:30px 22px 22px;max-width:360px;width:100%;text-align:center;
-    box-shadow:0 12px 40px rgba(110,19,34,.3);transform:translateY(14px);transition:transform .5s ease;}
-  #dedication.show .box{transform:translateY(0);}
-  #dedication svg{width:64px;height:64px;}
-  #dedication h2{font-family:Georgia,"Times New Roman",serif;color:var(--deep);font-size:26px;margin:12px 0 18px;text-wrap:balance;}
   /* splash */
   #splash{
     position:fixed;inset:0;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -235,20 +226,6 @@
   </svg>
   <h2>ParkiTulipán</h2>
   <p>Váš priestor na sledovanie a zvládanie Parkinsonovej choroby</p>
-</div>
-
-<div id="dedication" hidden role="dialog" aria-modal="true" aria-labelledby="dedTitle">
-  <div class="box">
-    <svg viewBox="0 0 64 64" aria-hidden="true">
-      <path d="M32 60 V38" stroke="#4E7B4A" stroke-width="3" stroke-linecap="round"/>
-      <path d="M31 54 C22 53 16 46 15 38 C22 41 29 46 31 54Z" fill="#5E9058"/>
-      <path d="M32 40 C22 40 16 32 17 20 C21 23 25 25 29 25Z" fill="#B21F34"/>
-      <path d="M32 40 C42 40 48 32 47 20 C43 23 39 25 35 25Z" fill="#B21F34"/>
-      <path d="M32 40 C25 37 22 27 26 17 C28 12 30 10 32 7 C34 10 36 12 38 17 C42 27 39 37 32 40Z" fill="#E24A5C"/>
-    </svg>
-    <h2 id="dedTitle">Aplikácia pre Silviu</h2>
-    <button class="save-btn" id="dedOk" style="margin-top:0;">Otvoriť aplikáciu</button>
-  </div>
 </div>
 
 <div class="app">
@@ -1003,21 +980,7 @@ document.getElementById('teamSaveBtn').addEventListener('click', async ()=>{
 
 /* ---------- splash ---------- */
 const splashEl=document.getElementById('splash');
-const DED_KEY = 'parkitulipan_venovanie_videne';
-function dedicationSeen(){ try{ return localStorage.getItem(DED_KEY)==='1'; }catch(e){ return false; } }
-function showDedication(){
-  if(dedicationSeen()) return;
-  const d = document.getElementById('dedication');
-  d.hidden = false; requestAnimationFrame(()=> d.classList.add('show'));
-  document.getElementById('dedOk').focus();
-}
-document.getElementById('dedOk').addEventListener('click', ()=>{
-  try{ localStorage.setItem(DED_KEY,'1'); }catch(e){}
-  const d = document.getElementById('dedication');
-  d.classList.remove('show'); setTimeout(()=>{ d.hidden = true; }, 500);
-});
-let splashDone = false;
-function dismissSplash(){ if(splashDone) return; splashDone = true; splashEl.classList.add('hide'); setTimeout(showDedication, 400); }
+function dismissSplash(){ splashEl.classList.add('hide'); }
 splashEl.addEventListener('click', dismissSplash);
 splashEl.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' ') dismissSplash(); });
 setTimeout(dismissSplash, 4200);
