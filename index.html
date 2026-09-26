@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FibroMotýľ</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#5b2a86">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="splash" class="splash">
+  <div class="splash-content">
+    <svg class="butterfly-anim" width="140" height="140" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g class="wing wing-left">
+        <path d="M100 100 C 60 40, 10 40, 10 90 C 10 130, 50 140, 100 110 Z" fill="#a06cd5"/>
+        <path d="M100 100 C 70 130, 30 160, 20 190 C 15 150, 40 130, 100 110 Z" fill="#7b3fa0"/>
+      </g>
+      <g class="wing wing-right">
+        <path d="M100 100 C 140 40, 190 40, 190 90 C 190 130, 150 140, 100 110 Z" fill="#a06cd5"/>
+        <path d="M100 100 C 130 130, 170 160, 180 190 C 185 150, 160 130, 100 110 Z" fill="#7b3fa0"/>
+      </g>
+      <line x1="100" y1="90" x2="100" y2="130" stroke="#3d1a5b" stroke-width="4"/>
+      <circle cx="100" cy="88" r="6" fill="#3d1a5b"/>
+    </svg>
+    <h1>FibroMotýľ</h1>
+    <p>Váš sprievodca každým dňom</p>
+  </div>
+</div>
+
+<div id="app" class="app hidden">
+
+  <header class="topbar">
+    <div class="brand">
+      <svg width="32" height="32" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M100 100 C 60 40, 10 40, 10 90 C 10 130, 50 140, 100 110 Z" fill="#a06cd5"/>
+        <path d="M100 100 C 140 40, 190 40, 190 90 C 190 130, 150 140, 100 110 Z" fill="#a06cd5"/>
+        <line x1="100" y1="90" x2="100" y2="130" stroke="#3d1a5b" stroke-width="4"/>
+        <circle cx="100" cy="88" r="6" fill="#3d1a5b"/>
+      </svg>
+      <span>FibroMotýľ</span>
+    </div>
+    <button id="menuToggle" class="menu-toggle" aria-label="Menu">☰</button>
+  </header>
+
+  <nav id="sideNav" class="side-nav">
+    <button class="nav-item active" data-view="dashboard">🏠 Nástenka</button>
+    <button class="nav-item" data-view="tracker">📊 Denný tracker</button>
+    <button class="nav-item" data-view="journal">📔 Denník</button>
+    <button class="nav-item" data-view="meds">💊 Lieky</button>
+    <button class="nav-item" data-view="labs">🧪 Vyšetrenia</button>
+    <button class="nav-item" data-view="team">👩‍⚕️ Lekársky tím</button>
+  </nav>
+
+  <main id="main" class="main">
+
+    <!-- DASHBOARD -->
+    <section id="view-dashboard" class="view active">
+      <h2>Vitajte späť 🦋</h2>
+      <p class="subtitle" id="todayDate"></p>
+
+      <div class="cards-grid" id="dashboardCards"></div>
+
+      <div class="card">
+        <h3>Trend za posledných 7 dní</h3>
+        <canvas id="trendChart" width="600" height="220"></canvas>
+        <p class="empty-note" id="trendEmptyNote">Zatiaľ nemáte žiadne záznamy. Začnite v sekcii "Denný tracker".</p>
+      </div>
+    </section>
+
+    <!-- DENNÝ TRACKER -->
+    <section id="view-tracker" class="view">
+      <h2>Denný tracker</h2>
+      <p class="subtitle">Zaznamenajte, ako sa dnes cítite.</p>
+
+      <form id="trackerForm" class="card form">
+        <label>Dátum
+          <input type="date" id="trackerDate" required>
+        </label>
+
+        <label>Bolesť <span class="scale-value" id="painValue">5</span>/10
+          <input type="range" id="painRange" min="0" max="10" value="5">
+        </label>
+
+        <label>Únava <span class="scale-value" id="fatigueValue">5</span>/10
+          <input type="range" id="fatigueRange" min="0" max="10" value="5">
+        </label>
+
+        <label>Kvalita spánku <span class="scale-value" id="sleepValue">5</span>/10
+          <input type="range" id="sleepRange" min="0" max="10" value="5">
+        </label>
+
+        <label>Ďalšie symptómy (voliteľné)
+          <input type="text" id="symptomsInput" placeholder="napr. bolesť hlavy, hmla v mozgu...">
+        </label>
+
+        <label>Poznámka (voliteľné)
+          <textarea id="trackerNote" rows="2" placeholder="Čokoľvek, čo chcete pridať k dnešnému dňu..."></textarea>
+        </label>
+
+        <button type="submit" class="btn-primary">Uložiť záznam</button>
+      </form>
+
+      <div class="card">
+        <h3>História záznamov</h3>
+        <div id="trackerHistory" class="entry-list"></div>
+      </div>
+    </section>
+
+    <!-- DENNÍK -->
+    <section id="view-journal" class="view">
+      <h2>Osobný denník</h2>
+      <p class="subtitle">Priestor pre vaše myšlienky a pocity.</p>
+
+      <form id="journalForm" class="card form">
+        <label>Dátum
+          <input type="date" id="journalDate" required>
+        </label>
+        <label>Zápis
+          <textarea id="journalText" rows="5" placeholder="Napíšte, čo máte na srdci..." required></textarea>
+        </label>
+        <button type="submit" class="btn-primary">Uložiť zápis</button>
+      </form>
+
+      <div id="journalList" class="entry-list"></div>
+    </section>
+
+    <!-- LIEKY -->
+    <section id="view-meds" class="view">
+      <h2>Evidencia liekov</h2>
+      <p class="subtitle">Prehľad liekov, ktoré užívate.</p>
+
+      <form id="medsForm" class="card form">
+        <label>Názov lieku
+          <input type="text" id="medName" placeholder="napr. Diprophos" required>
+        </label>
+        <label>Dávkovanie
+          <input type="text" id="medDosage" placeholder="napr. 1 tableta ráno">
+        </label>
+        <label>Čas užívania
+          <input type="text" id="medTime" placeholder="napr. ráno, večer">
+        </label>
+        <label>Poznámka
+          <input type="text" id="medNote" placeholder="vedľajšie účinky, dôvod užívania...">
+        </label>
+        <button type="submit" class="btn-primary">Pridať liek</button>
+      </form>
+
+      <div id="medsList" class="entry-list"></div>
+    </section>
+
+    <!-- VYŠETRENIA -->
+    <section id="view-labs" class="view">
+      <h2>Výsledky vyšetrení</h2>
+      <p class="subtitle">Uchovávajte si prehľad vašich vyšetrení a výsledkov.</p>
+
+      <form id="labsForm" class="card form">
+        <label>Dátum vyšetrenia
+          <input type="date" id="labDate" required>
+        </label>
+        <label>Typ vyšetrenia
+          <input type="text" id="labType" placeholder="napr. krvný obraz, RTG..." required>
+        </label>
+        <label>Výsledok / poznámka
+          <textarea id="labNote" rows="3" placeholder="Zhrnutie výsledku alebo odporúčania lekára..."></textarea>
+        </label>
+        <button type="submit" class="btn-primary">Pridať záznam</button>
+      </form>
+
+      <div id="labsList" class="entry-list"></div>
+    </section>
+
+    <!-- LEKÁRSKY TÍM -->
+    <section id="view-team" class="view">
+      <h2>Lekársky tím</h2>
+      <p class="subtitle">Kontakty na vašich lekárov a odborníkov.</p>
+
+      <form id="teamForm" class="card form">
+        <label>Meno
+          <input type="text" id="teamName" placeholder="napr. MUDr. Nováková" required>
+        </label>
+        <label>Odbornosť
+          <input type="text" id="teamRole" placeholder="napr. reumatológ, algeziológ, ortopéd, psychiater, psychológ..." required>
+        </label>
+        <label>Telefón
+          <input type="tel" id="teamPhone" placeholder="+421...">
+        </label>
+        <label>Poznámka
+          <input type="text" id="teamNote" placeholder="adresa, ordinačné hodiny...">
+        </label>
+        <button type="submit" class="btn-primary">Pridať kontakt</button>
+      </form>
+
+      <div id="teamList" class="entry-list"></div>
+    </section>
+
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
