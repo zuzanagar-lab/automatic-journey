@@ -2,202 +2,843 @@
 <html lang="sk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 <title>FibroMotýľ</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#5b2a86">
-<link rel="stylesheet" href="style.css">
+<meta name="theme-color" content="#440A63">
+<style>
+  :root{
+    --bg: #F6EEFB;
+    --card: #FFFFFF;
+    --ink: #2E123F;
+    --ink-soft: #90739F;
+    --deep: #440A63;
+    --purple: #8E1FA8;
+    --purple-light: #D48CE8;
+    --accent: #B24FC9;
+    --line: #E8DFF5;
+    --danger: #C97664;
+    --good: #7C9B82;
+    --radius: 18px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{max-width:520px;margin:0 auto;padding-bottom:84px;}
+
+  /* header */
+  header.top{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:22px 16px 16px;
+    background:linear-gradient(160deg, var(--deep), var(--purple) 120%);
+    color:#fff;
+    border-radius:0 0 24px 24px;
+    margin-bottom:14px;
+  }
+  header.top h1{
+    font-size:21px;
+    margin:0;
+    font-weight:700;
+    letter-spacing:.01em;
+  }
+  header.top p{
+    margin:2px 0 0;
+    font-size:13px;
+    opacity:.85;
+  }
+  .logo{width:42px;height:42px;flex-shrink:0;}
+
+  main{padding:0 16px;}
+  .view{display:none;}
+  .view.active{display:block;}
+
+  .card{
+    background:var(--card);
+    border-radius:var(--radius);
+    padding:18px 16px;
+    margin-bottom:14px;
+    box-shadow: 0 1px 2px rgba(74,42,107,.08);
+  }
+  .card h2{
+    font-size:15px;
+    margin:0 0 12px;
+    font-weight:700;
+    color:var(--deep);
+  }
+  .card h2 .val{color:var(--purple);}
+
+  /* home summary */
+  .summary-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .summary-row:last-child{border-bottom:none;}
+  .summary-row .lbl{color:var(--ink-soft);font-size:14px;}
+  .badge{
+    font-size:12px;
+    font-weight:700;
+    padding:4px 10px;
+    border-radius:999px;
+  }
+  .badge.pending{background:#FBEFE0;color:#B57A2C;}
+  .badge.done{background:#E4F1E5;color:var(--good);}
+
+  .quick-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:14px;
+    background:var(--deep);
+    color:#fff;
+    font-size:15px;
+    font-weight:700;
+    margin-top:10px;
+    cursor:pointer;
+  }
+
+  .tool-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  .tool-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:16px 10px;
+    text-align:center;
+    cursor:pointer;
+  }
+  .tool-card .ic{margin-bottom:8px;color:var(--purple);}
+  .tool-card .lbl{font-size:13px;font-weight:600;color:var(--ink);}
+
+  .section-title{
+    font-size:14px;
+    color:var(--ink-soft);
+    margin:22px 4px 10px;
+    font-weight:700;
+  }
+
+  /* scale (tracker) */
+  .scale{display:flex;gap:6px;flex-wrap:wrap;}
+  .scale button{
+    flex:1 1 auto;min-width:26px;height:42px;border-radius:12px;
+    border:1px solid var(--line);background:#FBF8FE;color:var(--ink-soft);
+    font-size:13px;font-weight:700;cursor:pointer;
+  }
+  .scale button.on{color:#fff;border-color:transparent;}
+  .scale-labels{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--ink-soft);}
+
+  .choice-row{display:flex;gap:8px;}
+  .choice-row button{
+    flex:1;padding:12px 8px;border-radius:14px;border:1px solid var(--line);
+    background:#FBF8FE;color:var(--ink-soft);font-size:14px;font-weight:600;cursor:pointer;
+  }
+  .choice-row button.on{background:var(--purple);border-color:var(--purple);color:#fff;}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    padding:10px 14px;border-radius:999px;border:1px solid var(--line);
+    background:#FBF8FE;color:var(--ink-soft);font-size:14px;cursor:pointer;user-select:none;
+  }
+  .chip.on{background:var(--good);border-color:var(--good);color:#fff;}
+
+  textarea, input[type=text], input[type=date], input[type=tel]{
+    width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;
+    font-size:15px;font-family:inherit;color:var(--ink);resize:vertical;background:#FBF8FE;
+  }
+  textarea{min-height:64px;}
+  label.f{display:block;font-size:12px;color:var(--ink-soft);margin:10px 0 4px;font-weight:600;}
+
+  .save-btn{
+    width:100%;padding:15px;border:none;border-radius:16px;background:var(--deep);
+    color:#fff;font-size:15px;font-weight:700;cursor:pointer;margin-top:12px;
+  }
+  .save-note{text-align:center;font-size:13px;color:var(--good);margin-top:8px;min-height:18px;font-weight:600;}
+
+  .trend{display:flex;align-items:flex-end;gap:6px;height:90px;padding-top:8px;}
+  .trend .day{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px;}
+  .trend .bar{width:100%;border-radius:6px 6px 0 0;background:var(--purple);}
+  .trend .bar.fatigue{background:var(--accent);}
+  .trend .lbl{font-size:10px;color:var(--ink-soft);}
+  .legend{display:flex;gap:16px;font-size:12px;color:var(--ink-soft);margin-top:10px;}
+  .legend span{display:flex;align-items:center;gap:6px;}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
+
+  .entry{padding:12px 0;border-bottom:1px solid var(--line);font-size:14px;}
+  .entry:last-child{border-bottom:none;}
+  .entry-top{display:flex;justify-content:space-between;align-items:center;color:var(--ink-soft);}
+  .entry-top b{color:var(--ink);}
+  .entry-syms{margin-top:4px;color:var(--ink-soft);font-size:13px;}
+  .entry-note{margin-top:4px;font-style:italic;color:var(--ink-soft);font-size:13px;}
+  .del-btn{border:none;background:none;color:var(--danger);font-size:13px;cursor:pointer;padding:4px;}
+
+  .empty{color:var(--ink-soft);font-size:14px;text-align:center;padding:20px 10px;}
+
+  .list-item{
+    display:flex;justify-content:space-between;align-items:flex-start;gap:10px;
+    padding:14px 0;border-bottom:1px solid var(--line);
+  }
+  .list-item:last-child{border-bottom:none;}
+  .list-item .info b{display:block;font-size:15px;color:var(--ink);}
+  .list-item .info span{font-size:13px;color:var(--ink-soft);}
+  .toggle-btn{
+    border:1px solid var(--purple);background:#fff;color:var(--purple);
+    border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;
+  }
+  .toggle-btn.on{background:var(--good);border-color:var(--good);color:#fff;}
+
+  /* bottom nav */
+  nav.bottom{
+    position:fixed;bottom:0;left:0;right:0;
+    background:#fff;border-top:1px solid var(--line);
+    display:flex;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom));
+    max-width:520px;margin:0 auto;
+  }
+  nav.bottom button{
+    background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:3px;
+    color:var(--ink-soft);font-size:10px;font-weight:600;cursor:pointer;padding:4px 2px;flex:1;
+  }
+  nav.bottom button.active{color:var(--deep);}
+  nav.bottom svg{width:21px;height:21px;}
+
+  /* ---------- splash ---------- */
+  #splash{
+    position:fixed;inset:0;z-index:999;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 40%, #F7EDFC 0%, #E3C8F5 55%, #C99BE8 100%);
+    transition:opacity .7s ease, visibility .7s ease;
+  }
+  #splash.hide{opacity:0;visibility:hidden;pointer-events:none;}
+  #splash .glow{
+    position:absolute;width:300px;height:300px;border-radius:50%;
+    background:radial-gradient(circle, rgba(142,31,168,.14) 0%, rgba(142,31,168,0) 70%);
+    animation:glowPulse 3.4s ease-in-out infinite;
+  }
+  @keyframes glowPulse{0%,100%{transform:scale(1);opacity:.6;}50%{transform:scale(1.14);opacity:1;}}
+
+  #splash img#splashArt{
+    width:230px;height:auto;position:relative;
+    mix-blend-mode:multiply;
+    opacity:0;transform:scale(.72);
+    animation:artBloom 1.6s cubic-bezier(.34,1.4,.64,1) forwards .2s;
+  }
+  @keyframes artBloom{to{opacity:1;transform:scale(1);}}
+
+  #splash h2{
+    color:var(--deep);font-size:24px;font-weight:800;letter-spacing:.02em;margin:18px 0 4px;
+    opacity:0;animation:riseIn .7s ease forwards;animation-delay:1.6s;
+  }
+  #splash p{
+    font-family:Georgia, "Times New Roman", serif;
+    color:var(--purple);font-size:15px;font-weight:700;letter-spacing:.01em;
+    margin:0;text-align:center;padding:0 36px;line-height:1.45;
+    opacity:0;animation:riseIn .7s ease forwards;animation-delay:1.85s;
+  }
+  @keyframes riseIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+</style>
 </head>
 <body>
-
-<div id="splash" class="splash">
-  <div class="splash-content">
-    <svg class="butterfly-anim" width="140" height="140" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g class="wing wing-left">
-        <path d="M100 100 C 60 40, 10 40, 10 90 C 10 130, 50 140, 100 110 Z" fill="#a06cd5"/>
-        <path d="M100 100 C 70 130, 30 160, 20 190 C 15 150, 40 130, 100 110 Z" fill="#7b3fa0"/>
-      </g>
-      <g class="wing wing-right">
-        <path d="M100 100 C 140 40, 190 40, 190 90 C 190 130, 150 140, 100 110 Z" fill="#a06cd5"/>
-        <path d="M100 100 C 130 130, 170 160, 180 190 C 185 150, 160 130, 100 110 Z" fill="#7b3fa0"/>
-      </g>
-      <line x1="100" y1="90" x2="100" y2="130" stroke="#3d1a5b" stroke-width="4"/>
-      <circle cx="100" cy="88" r="6" fill="#3d1a5b"/>
-    </svg>
-    <h1>FibroMotýľ</h1>
-    <p>Váš sprievodca každým dňom</p>
-  </div>
+<div id="splash">
+  <div class="glow"></div>
+  <img id="splashArt" alt="Fibromyalgia" src="data:image/webp;base64,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">
+  <h2>FibroMotýľ</h2>
+  <p>Tvoj priestor na sledovanie a zvládanie fibromyalgie</p>
 </div>
+<div class="app">
 
-<div id="app" class="app hidden">
-
-  <header class="topbar">
-    <div class="brand">
-      <svg width="32" height="32" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M100 100 C 60 40, 10 40, 10 90 C 10 130, 50 140, 100 110 Z" fill="#a06cd5"/>
-        <path d="M100 100 C 140 40, 190 40, 190 90 C 190 130, 150 140, 100 110 Z" fill="#a06cd5"/>
-        <line x1="100" y1="90" x2="100" y2="130" stroke="#3d1a5b" stroke-width="4"/>
-        <circle cx="100" cy="88" r="6" fill="#3d1a5b"/>
-      </svg>
-      <span>FibroMotýľ</span>
+  <header class="top">
+    <svg class="logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="wg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#E6C6F5"/>
+          <stop offset="1" stop-color="#8E1FA8"/>
+        </linearGradient>
+      </defs>
+      <path d="M32 30 C24 10, 6 8, 6 22 C6 34, 20 34, 32 30 Z" fill="url(#wg)"/>
+      <path d="M32 30 C40 10, 58 8, 58 22 C58 34, 44 34, 32 30 Z" fill="url(#wg)"/>
+      <path d="M32 30 C22 40, 8 42, 10 52 C12 60, 26 54, 32 34 Z" fill="url(#wg)" opacity="0.85"/>
+      <path d="M32 30 C42 40, 56 42, 54 52 C52 60, 38 54, 32 34 Z" fill="url(#wg)" opacity="0.85"/>
+      <rect x="30.5" y="16" width="3" height="30" rx="1.5" fill="#440A63"/>
+    </svg>
+    <div>
+      <h1>FibroMotýľ</h1>
+      <p>Tvoj priestor na sledovanie a zvládanie fibromyalgie</p>
     </div>
-    <button id="menuToggle" class="menu-toggle" aria-label="Menu">☰</button>
   </header>
 
-  <nav id="sideNav" class="side-nav">
-    <button class="nav-item active" data-view="dashboard">🏠 Nástenka</button>
-    <button class="nav-item" data-view="tracker">📊 Denný tracker</button>
-    <button class="nav-item" data-view="journal">📔 Denník</button>
-    <button class="nav-item" data-view="meds">💊 Lieky</button>
-    <button class="nav-item" data-view="labs">🧪 Vyšetrenia</button>
-    <button class="nav-item" data-view="team">👩‍⚕️ Lekársky tím</button>
-  </nav>
+  <main>
 
-  <main id="main" class="main">
-
-    <!-- DASHBOARD -->
-    <section id="view-dashboard" class="view active">
-      <h2>Vitajte späť 🦋</h2>
-      <p class="subtitle" id="todayDate"></p>
-
-      <div class="cards-grid" id="dashboardCards"></div>
-
+    <!-- HOME -->
+    <section class="view active" id="view-home">
       <div class="card">
-        <h3>Trend za posledných 7 dní</h3>
-        <canvas id="trendChart" width="600" height="220"></canvas>
-        <p class="empty-note" id="trendEmptyNote">Zatiaľ nemáte žiadne záznamy. Začnite v sekcii "Denný tracker".</p>
+        <h2>Denné sledovanie</h2>
+        <div class="summary-row">
+          <span class="lbl">Včera</span>
+          <span class="badge" id="homeYesterday">–</span>
+        </div>
+        <div class="summary-row">
+          <span class="lbl">Dnes</span>
+          <span class="badge" id="homeToday">–</span>
+        </div>
+        <button class="quick-btn" data-goto="tracker">+ Pridať dnešný záznam</button>
+      </div>
+
+      <div class="section-title">Nástroje</div>
+      <div class="tool-grid">
+        <div class="tool-card" data-goto="journal">
+          <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 4h13a2 2 0 0 1 2 2v14l-3-2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.6"/></svg></div>
+          <div class="lbl">Môj denník</div>
+        </div>
+        <div class="tool-card" data-goto="meds">
+          <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="3" y="9" width="18" height="7" rx="3.5" stroke="currentColor" stroke-width="1.6"/><path d="M12 9v7" stroke="currentColor" stroke-width="1.6"/></svg></div>
+          <div class="lbl">Moje lieky</div>
+        </div>
+        <div class="tool-card" data-goto="labs">
+          <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+          <div class="lbl">Moje výsledky</div>
+        </div>
+        <div class="tool-card" data-goto="team">
+          <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M3 20c0-3.3 2.7-5 6-5s6 1.7 6 5" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="9" r="2.3" stroke="currentColor" stroke-width="1.6"/><path d="M15.5 20c0-2.4 1.7-3.8 3.8-4" stroke="currentColor" stroke-width="1.6"/></svg></div>
+          <div class="lbl">Môj tím</div>
+        </div>
+      </div>
+
+      <div class="section-title">Posledných 7 dní</div>
+      <div class="card">
+        <div class="trend" id="trendChart"></div>
+        <div class="legend">
+          <span><span class="dot" style="background:var(--purple)"></span> bolesť</span>
+          <span><span class="dot" style="background:var(--accent)"></span> únava</span>
+        </div>
       </div>
     </section>
 
-    <!-- DENNÝ TRACKER -->
-    <section id="view-tracker" class="view">
-      <h2>Denný tracker</h2>
-      <p class="subtitle">Zaznamenajte, ako sa dnes cítite.</p>
-
-      <form id="trackerForm" class="card form">
-        <label>Dátum
-          <input type="date" id="trackerDate" required>
-        </label>
-
-        <label>Bolesť <span class="scale-value" id="painValue">5</span>/10
-          <input type="range" id="painRange" min="0" max="10" value="5">
-        </label>
-
-        <label>Únava <span class="scale-value" id="fatigueValue">5</span>/10
-          <input type="range" id="fatigueRange" min="0" max="10" value="5">
-        </label>
-
-        <label>Kvalita spánku <span class="scale-value" id="sleepValue">5</span>/10
-          <input type="range" id="sleepRange" min="0" max="10" value="5">
-        </label>
-
-        <label>Ďalšie symptómy (voliteľné)
-          <input type="text" id="symptomsInput" placeholder="napr. bolesť hlavy, hmla v mozgu...">
-        </label>
-
-        <label>Poznámka (voliteľné)
-          <textarea id="trackerNote" rows="2" placeholder="Čokoľvek, čo chcete pridať k dnešnému dňu..."></textarea>
-        </label>
-
-        <button type="submit" class="btn-primary">Uložiť záznam</button>
-      </form>
+    <!-- TRACKER -->
+    <section class="view" id="view-tracker">
+      <div class="card">
+        <div id="todayLabel" style="font-size:13px;color:var(--ink-soft);margin-bottom:2px;"></div>
+        <h2 style="margin-top:0;">Dnešný záznam</h2>
+      </div>
 
       <div class="card">
-        <h3>História záznamov</h3>
-        <div id="trackerHistory" class="entry-list"></div>
+        <h2>Bolesť dnes: <span class="val" id="painVal">–</span></h2>
+        <div class="scale" id="painScale"></div>
+        <div class="scale-labels"><span>žiadna</span><span>najhoršia</span></div>
       </div>
+
+      <div class="card">
+        <h2>Únava dnes: <span class="val" id="fatigueVal">–</span></h2>
+        <div class="scale" id="fatigueScale"></div>
+        <div class="scale-labels"><span>žiadna</span><span>vyčerpaná</span></div>
+      </div>
+
+      <div class="card">
+        <h2>Spánok</h2>
+        <div class="choice-row" id="sleepRow">
+          <button data-v="dobry">Dobrý</button>
+          <button data-v="priemerny">Priemerný</button>
+          <button data-v="zly">Zlý</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Príznaky dnes</h2>
+        <div class="chips" id="symChips"></div>
+      </div>
+
+      <div class="card">
+        <h2>Poznámka (nepovinné)</h2>
+        <textarea id="noteInput" placeholder="Napr. čo mohlo bolesť spustiť, ako si sa cítila..."></textarea>
+      </div>
+
+      <button class="save-btn" id="saveBtn">Uložiť dnešný záznam</button>
+      <div class="save-note" id="saveNote"></div>
+
+      <div class="section-title">História záznamov</div>
+      <div class="card" id="historyCard"><div class="empty">Zatiaľ žiadne záznamy.</div></div>
     </section>
 
-    <!-- DENNÍK -->
-    <section id="view-journal" class="view">
-      <h2>Osobný denník</h2>
-      <p class="subtitle">Priestor pre vaše myšlienky a pocity.</p>
-
-      <form id="journalForm" class="card form">
-        <label>Dátum
-          <input type="date" id="journalDate" required>
-        </label>
-        <label>Zápis
-          <textarea id="journalText" rows="5" placeholder="Napíšte, čo máte na srdci..." required></textarea>
-        </label>
-        <button type="submit" class="btn-primary">Uložiť zápis</button>
-      </form>
-
-      <div id="journalList" class="entry-list"></div>
+    <!-- JOURNAL -->
+    <section class="view" id="view-journal">
+      <div class="card">
+        <h2>Nový zápis do denníka</h2>
+        <textarea id="journalInput" placeholder="Ako sa dnes cítiš? Čo sa dialo?" style="min-height:90px;"></textarea>
+        <button class="save-btn" id="journalSaveBtn">Uložiť zápis</button>
+      </div>
+      <div class="section-title">Moje zápisy</div>
+      <div class="card" id="journalList"><div class="empty">Zatiaľ žiadne zápisy.</div></div>
     </section>
 
-    <!-- LIEKY -->
-    <section id="view-meds" class="view">
-      <h2>Evidencia liekov</h2>
-      <p class="subtitle">Prehľad liekov, ktoré užívate.</p>
-
-      <form id="medsForm" class="card form">
-        <label>Názov lieku
-          <input type="text" id="medName" placeholder="napr. Diprophos" required>
-        </label>
-        <label>Dávkovanie
-          <input type="text" id="medDosage" placeholder="napr. 1 tableta ráno">
-        </label>
-        <label>Čas užívania
-          <input type="text" id="medTime" placeholder="napr. ráno, večer">
-        </label>
-        <label>Poznámka
-          <input type="text" id="medNote" placeholder="vedľajšie účinky, dôvod užívania...">
-        </label>
-        <button type="submit" class="btn-primary">Pridať liek</button>
-      </form>
-
-      <div id="medsList" class="entry-list"></div>
+    <!-- MEDS -->
+    <section class="view" id="view-meds">
+      <div class="card">
+        <h2>Pridať liek</h2>
+        <label class="f">Názov lieku</label>
+        <input type="text" id="medName" placeholder="Napr. Pregabalin">
+        <label class="f">Dávka</label>
+        <input type="text" id="medDose" placeholder="Napr. 75 mg">
+        <label class="f">Kedy užívať</label>
+        <input type="text" id="medTime" placeholder="Napr. ráno a večer">
+        <button class="save-btn" id="medSaveBtn">Pridať liek</button>
+      </div>
+      <div class="section-title">Moje lieky</div>
+      <div class="card" id="medsList"><div class="empty">Zatiaľ žiadne lieky.</div></div>
     </section>
 
-    <!-- VYŠETRENIA -->
-    <section id="view-labs" class="view">
-      <h2>Výsledky vyšetrení</h2>
-      <p class="subtitle">Uchovávajte si prehľad vašich vyšetrení a výsledkov.</p>
-
-      <form id="labsForm" class="card form">
-        <label>Dátum vyšetrenia
-          <input type="date" id="labDate" required>
-        </label>
-        <label>Typ vyšetrenia
-          <input type="text" id="labType" placeholder="napr. krvný obraz, RTG..." required>
-        </label>
-        <label>Výsledok / poznámka
-          <textarea id="labNote" rows="3" placeholder="Zhrnutie výsledku alebo odporúčania lekára..."></textarea>
-        </label>
-        <button type="submit" class="btn-primary">Pridať záznam</button>
-      </form>
-
-      <div id="labsList" class="entry-list"></div>
+    <!-- LABS -->
+    <section class="view" id="view-labs">
+      <div class="card">
+        <h2>Pridať výsledok</h2>
+        <label class="f">Názov vyšetrenia</label>
+        <input type="text" id="labName" placeholder="Napr. Vitamín D">
+        <label class="f">Hodnota</label>
+        <input type="text" id="labValue" placeholder="Napr. 42 nmol/l">
+        <label class="f">Dátum</label>
+        <input type="date" id="labDate">
+        <button class="save-btn" id="labSaveBtn">Pridať výsledok</button>
+      </div>
+      <div class="section-title">Moje výsledky</div>
+      <div class="card" id="labsList"><div class="empty">Zatiaľ žiadne výsledky.</div></div>
     </section>
 
-    <!-- LEKÁRSKY TÍM -->
-    <section id="view-team" class="view">
-      <h2>Lekársky tím</h2>
-      <p class="subtitle">Kontakty na vašich lekárov a odborníkov.</p>
-
-      <form id="teamForm" class="card form">
-        <label>Meno
-          <input type="text" id="teamName" placeholder="napr. MUDr. Nováková" required>
-        </label>
-        <label>Odbornosť
-          <input type="text" id="teamRole" placeholder="napr. reumatológ, algeziológ, ortopéd, psychiater, psychológ..." required>
-        </label>
-        <label>Telefón
-          <input type="tel" id="teamPhone" placeholder="+421...">
-        </label>
-        <label>Poznámka
-          <input type="text" id="teamNote" placeholder="adresa, ordinačné hodiny...">
-        </label>
-        <button type="submit" class="btn-primary">Pridať kontakt</button>
-      </form>
-
-      <div id="teamList" class="entry-list"></div>
+    <!-- TEAM -->
+    <section class="view" id="view-team">
+      <div class="card">
+        <h2>Pridať kontakt</h2>
+        <label class="f">Meno</label>
+        <input type="text" id="teamName" placeholder="Napr. MUDr. Nováková">
+        <label class="f">Špecializácia</label>
+        <input type="text" id="teamSpec" placeholder="Napr. reumatológ">
+        <label class="f">Telefón</label>
+        <input type="tel" id="teamPhone" placeholder="Napr. 0900 123 456">
+        <button class="save-btn" id="teamSaveBtn">Pridať kontakt</button>
+      </div>
+      <div class="section-title">Môj tím starostlivosti</div>
+      <div class="card" id="teamList"><div class="empty">Zatiaľ žiadne kontakty.</div></div>
     </section>
 
   </main>
+
+  <nav class="bottom">
+    <button data-goto="home" class="active">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v9a1 1 0 0 0 1 1h4v-6h2v6h4a1 1 0 0 0 1-1v-9" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+      Domov
+    </button>
+    <button data-goto="tracker">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M3 17l5-5 4 4 9-9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Sledovanie
+    </button>
+    <button data-goto="journal">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 4h13a2 2 0 0 1 2 2v14l-3-2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.6"/></svg>
+      Denník
+    </button>
+    <button data-goto="meds">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="9" width="18" height="7" rx="3.5" stroke="currentColor" stroke-width="1.6"/><path d="M12 9v7" stroke="currentColor" stroke-width="1.6"/></svg>
+      Lieky
+    </button>
+    <button data-goto="labs">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      Výsledky
+    </button>
+    <button data-goto="team">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M3 20c0-3.3 2.7-5 6-5s6 1.7 6 5" stroke="currentColor" stroke-width="1.6"/></svg>
+      Tím
+    </button>
+  </nav>
+
 </div>
 
-<script src="app.js"></script>
+<script>
+const SYMPTOMS = ["Mozgová hmla","Bolesť hlavy","Stuhnutosť","Nespavosť","Úzkosť / napätie","Bolesť žalúdka","Citlivosť na svetlo/hluk","Studené ruky/nohy"];
+const DOW = ["Ne","Po","Ut","St","Št","Pi","So"];
+
+const STORAGE_KEYS = {
+  tracker: 'fibromotyl_tracker',   // object: { "2026-09-26": {pain, fatigue, sleep, syms, note} }
+  journal: 'fibromotyl_journal',   // array: [{id, ts, text}]
+  meds: 'fibromotyl_meds',         // array: [{id, name, dose, time, takenDates}]
+  labs: 'fibromotyl_labs',         // array: [{id, name, value, date}]
+  team: 'fibromotyl_team',         // array: [{id, name, spec, phone}]
+};
+
+function loadJSON(key, fallback){
+  try{ const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; }
+  catch(e){ return fallback; }
+}
+function saveJSON(key, value){
+  try{ localStorage.setItem(key, JSON.stringify(value)); }catch(e){}
+}
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+/* ---------- navigation ---------- */
+function goto(view){
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active', v.id==='view-'+view));
+  document.querySelectorAll('nav.bottom button').forEach(b=>b.classList.toggle('active', b.dataset.goto===view));
+  window.scrollTo(0,0);
+  if(view==='meds') renderMeds();
+  if(view==='labs') renderLabs();
+  if(view==='team') renderTeam();
+  if(view==='journal') renderJournal();
+}
+document.querySelectorAll('[data-goto]').forEach(el=>{
+  el.addEventListener('click', ()=> goto(el.dataset.goto));
+});
+
+/* ---------- TRACKER (daily entry) ---------- */
+let state = { pain:null, fatigue:null, sleep:null, syms:new Set(), note:"" };
+function todayKey(){ return new Date().toISOString().slice(0,10); }
+function fmtDateLabel(d){ return d.toLocaleDateString('sk-SK', { weekday:'long', day:'numeric', month:'long' }); }
+document.getElementById('todayLabel').textContent = fmtDateLabel(new Date());
+
+function buildScale(containerId, valId, key){
+  const el = document.getElementById(containerId);
+  for(let i=0;i<=10;i++){
+    const b = document.createElement('button');
+    b.textContent = i;
+    b.addEventListener('click', ()=>{
+      state[key] = i;
+      document.getElementById(valId).textContent = i;
+      [...el.children].forEach((c,idx)=>{
+        c.classList.toggle('on', idx<=i);
+        if(idx<=i){
+          const t = i/10;
+          const r = Math.round(140 + t*(201-140));
+          const g = Math.round(95 + t*(118-95));
+          const bl = Math.round(191 + t*(100-191));
+          c.style.background = `rgb(${r},${g},${bl})`;
+        } else { c.style.background = ''; }
+      });
+    });
+    el.appendChild(b);
+  }
+}
+buildScale('painScale','painVal','pain');
+buildScale('fatigueScale','fatigueVal','fatigue');
+
+document.querySelectorAll('#sleepRow button').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    document.querySelectorAll('#sleepRow button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    state.sleep = b.dataset.v;
+  });
+});
+
+const chipsEl = document.getElementById('symChips');
+SYMPTOMS.forEach(s=>{
+  const c = document.createElement('div');
+  c.className = 'chip'; c.textContent = s;
+  c.addEventListener('click', ()=>{
+    c.classList.toggle('on');
+    if(state.syms.has(s)) state.syms.delete(s); else state.syms.add(s);
+  });
+  chipsEl.appendChild(c);
+});
+document.getElementById('noteInput').addEventListener('input', e=>{ state.note = e.target.value; });
+
+function saveEntry(){
+  const n = document.getElementById('saveNote');
+  if(state.pain===null || state.fatigue===null){
+    n.style.color = 'var(--danger)'; n.textContent = 'Vyber aspoň bolesť a únavu.';
+    return;
+  }
+  const all = loadJSON(STORAGE_KEYS.tracker, {});
+  all[todayKey()] = { pain: state.pain, fatigue: state.fatigue, sleep: state.sleep, syms:[...state.syms], note: state.note };
+  saveJSON(STORAGE_KEYS.tracker, all);
+  n.style.color = 'var(--good)'; n.textContent = 'Uložené ✓';
+  loadHistory(); refreshHome();
+}
+document.getElementById('saveBtn').addEventListener('click', saveEntry);
+
+function loadTodayIfExists(){
+  const all = loadJSON(STORAGE_KEYS.tracker, {});
+  const d = all[todayKey()];
+  if(d){
+    if(d.pain!==null && d.pain!==undefined) document.getElementById('painScale').children[d.pain].click();
+    if(d.fatigue!==null && d.fatigue!==undefined) document.getElementById('fatigueScale').children[d.fatigue].click();
+    if(d.sleep){ [...document.querySelectorAll('#sleepRow button')].find(b=>b.dataset.v===d.sleep)?.click(); }
+    state.syms = new Set(d.syms||[]);
+    [...chipsEl.children].forEach(c=>{ if(state.syms.has(c.textContent)) c.classList.add('on'); });
+    document.getElementById('noteInput').value = d.note||'';
+    state.note = d.note||'';
+  }
+}
+
+function loadHistory(){
+  const all = loadJSON(STORAGE_KEYS.tracker, {});
+  const entries = Object.keys(all).map(date => ({ date, ...all[date] }));
+  entries.sort((a,b)=> a.date < b.date ? 1 : -1);
+
+  const histCard = document.getElementById('historyCard');
+  if(entries.length===0){ histCard.innerHTML = '<div class="empty">Zatiaľ žiadne záznamy.</div>'; }
+  else{
+    histCard.innerHTML = '';
+    entries.forEach(e=>{
+      const div = document.createElement('div'); div.className='entry';
+      const dObj = new Date(e.date+'T00:00:00');
+      div.innerHTML = `
+        <div class="entry-top">
+          <span>${dObj.toLocaleDateString('sk-SK',{day:'numeric',month:'short'})}</span>
+          <span><b>Bolesť ${e.pain}</b> · Únava ${e.fatigue}</span>
+          <button class="del-btn" data-date="${e.date}">Zmazať</button>
+        </div>
+        ${e.syms && e.syms.length ? `<div class="entry-syms">${escapeHtml(e.syms.join(', '))}</div>` : ''}
+        ${e.note ? `<div class="entry-note">„${escapeHtml(e.note)}"</div>` : ''}
+      `;
+      histCard.appendChild(div);
+    });
+    histCard.querySelectorAll('.del-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const all2 = loadJSON(STORAGE_KEYS.tracker, {});
+        delete all2[btn.dataset.date];
+        saveJSON(STORAGE_KEYS.tracker, all2);
+        loadHistory(); refreshHome();
+        if(btn.dataset.date===todayKey()){ location.reload(); }
+      });
+    });
+  }
+  return entries;
+}
+
+function renderTrend(entries){
+  const trendEl = document.getElementById('trendChart');
+  trendEl.innerHTML = '';
+  const byDate = {}; entries.forEach(e=> byDate[e.date]=e);
+  const today = new Date();
+  for(let i=6;i>=0;i--){
+    const d = new Date(today); d.setDate(d.getDate()-i);
+    const key = d.toISOString().slice(0,10);
+    const e = byDate[key];
+    const dayDiv = document.createElement('div'); dayDiv.className='day';
+    const painH = e ? Math.max(4, e.pain*7) : 2;
+    const fatH = e ? Math.max(4, e.fatigue*7) : 2;
+    dayDiv.innerHTML = `
+      <div style="display:flex;align-items:flex-end;gap:2px;height:70px;width:100%;">
+        <div class="bar" style="height:${painH}px;opacity:${e?1:0.25}"></div>
+        <div class="bar fatigue" style="height:${fatH}px;opacity:${e?1:0.25}"></div>
+      </div>
+      <div class="lbl">${DOW[d.getDay()]}</div>
+    `;
+    trendEl.appendChild(dayDiv);
+  }
+}
+
+function refreshHome(){
+  const all = loadJSON(STORAGE_KEYS.tracker, {});
+  const y = new Date(); y.setDate(y.getDate()-1);
+  const yKey = y.toISOString().slice(0,10);
+  const tEl = document.getElementById('homeToday');
+  const yEl = document.getElementById('homeYesterday');
+  const hasToday = !!all[todayKey()];
+  const hasYesterday = !!all[yKey];
+  tEl.textContent = hasToday ? 'Vyplnené' : 'Nevyplnené';
+  tEl.className = 'badge ' + (hasToday ? 'done' : 'pending');
+  yEl.textContent = hasYesterday ? 'Vyplnené' : 'Nevyplnené';
+  yEl.className = 'badge ' + (hasYesterday ? 'done' : 'pending');
+}
+
+/* ---------- JOURNAL ---------- */
+function renderJournal(){
+  const list = document.getElementById('journalList');
+  const items = loadJSON(STORAGE_KEYS.journal, []).slice().sort((a,b)=> (b.ts||0)-(a.ts||0));
+  if(items.length===0){ list.innerHTML = '<div class="empty">Zatiaľ žiadne zápisy.</div>'; return; }
+  list.innerHTML = '';
+  items.forEach(it=>{
+    const div = document.createElement('div'); div.className='entry';
+    const d = new Date(it.ts);
+    div.innerHTML = `
+      <div class="entry-top">
+        <span>${d.toLocaleDateString('sk-SK',{day:'numeric',month:'short',year:'numeric'})}</span>
+        <button class="del-btn" data-key="${it.id}">Zmazať</button>
+      </div>
+      <div class="entry-note" style="font-style:normal;color:var(--ink);margin-top:6px;">${escapeHtml(it.text)}</div>
+    `;
+    list.appendChild(div);
+  });
+  list.querySelectorAll('.del-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const items2 = loadJSON(STORAGE_KEYS.journal, []).filter(x=>x.id!==btn.dataset.key);
+      saveJSON(STORAGE_KEYS.journal, items2);
+      renderJournal();
+    });
+  });
+}
+document.getElementById('journalSaveBtn').addEventListener('click', ()=>{
+  const ta = document.getElementById('journalInput');
+  if(!ta.value.trim()) return;
+  const items = loadJSON(STORAGE_KEYS.journal, []);
+  items.push({id: uid(), ts: Date.now(), text: ta.value.trim()});
+  saveJSON(STORAGE_KEYS.journal, items);
+  ta.value = '';
+  renderJournal();
+});
+
+/* ---------- MEDS ---------- */
+function renderMeds(){
+  const list = document.getElementById('medsList');
+  const items = loadJSON(STORAGE_KEYS.meds, []);
+  if(items.length===0){ list.innerHTML = '<div class="empty">Zatiaľ žiadne lieky.</div>'; return; }
+  list.innerHTML = '';
+  const tKey = todayKey();
+  items.forEach(it=>{
+    const takenToday = (it.takenDates||[]).includes(tKey);
+    const div = document.createElement('div'); div.className='list-item';
+    div.innerHTML = `
+      <div class="info">
+        <b>${escapeHtml(it.name)}</b>
+        <span>${escapeHtml(it.dose||'')}${it.time?' · '+escapeHtml(it.time):''}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
+        <button class="toggle-btn ${takenToday?'on':''}" data-key="${it.id}">${takenToday?'Vzaté dnes ✓':'Vziať dnes'}</button>
+        <button class="del-btn" data-delkey="${it.id}">Zmazať</button>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+  list.querySelectorAll('.toggle-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const items2 = loadJSON(STORAGE_KEYS.meds, []);
+      const med = items2.find(m=>m.id===btn.dataset.key);
+      if(med){
+        med.takenDates = med.takenDates || [];
+        const idx = med.takenDates.indexOf(tKey);
+        if(idx>=0) med.takenDates.splice(idx,1); else med.takenDates.push(tKey);
+        saveJSON(STORAGE_KEYS.meds, items2);
+        renderMeds();
+      }
+    });
+  });
+  list.querySelectorAll('[data-delkey]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const items2 = loadJSON(STORAGE_KEYS.meds, []).filter(m=>m.id!==btn.dataset.delkey);
+      saveJSON(STORAGE_KEYS.meds, items2);
+      renderMeds();
+    });
+  });
+}
+document.getElementById('medSaveBtn').addEventListener('click', ()=>{
+  const name = document.getElementById('medName').value.trim();
+  if(!name) return;
+  const dose = document.getElementById('medDose').value.trim();
+  const time = document.getElementById('medTime').value.trim();
+  const items = loadJSON(STORAGE_KEYS.meds, []);
+  items.push({id: uid(), name, dose, time, takenDates:[]});
+  saveJSON(STORAGE_KEYS.meds, items);
+  document.getElementById('medName').value='';
+  document.getElementById('medDose').value='';
+  document.getElementById('medTime').value='';
+  renderMeds();
+});
+
+/* ---------- LABS ---------- */
+function renderLabs(){
+  const list = document.getElementById('labsList');
+  const items = loadJSON(STORAGE_KEYS.labs, []).slice().sort((a,b)=> (b.date||'').localeCompare(a.date||''));
+  if(items.length===0){ list.innerHTML = '<div class="empty">Zatiaľ žiadne výsledky.</div>'; return; }
+  list.innerHTML = '';
+  items.forEach(it=>{
+    const div = document.createElement('div'); div.className='list-item';
+    div.innerHTML = `
+      <div class="info">
+        <b>${escapeHtml(it.name)}</b>
+        <span>${escapeHtml(it.value||'')}${it.date?' · '+new Date(it.date+'T00:00:00').toLocaleDateString('sk-SK',{day:'numeric',month:'short',year:'numeric'}):''}</span>
+      </div>
+      <button class="del-btn" data-key="${it.id}">Zmazať</button>
+    `;
+    list.appendChild(div);
+  });
+  list.querySelectorAll('.del-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const items2 = loadJSON(STORAGE_KEYS.labs, []).filter(x=>x.id!==btn.dataset.key);
+      saveJSON(STORAGE_KEYS.labs, items2);
+      renderLabs();
+    });
+  });
+}
+document.getElementById('labSaveBtn').addEventListener('click', ()=>{
+  const name = document.getElementById('labName').value.trim();
+  if(!name) return;
+  const value = document.getElementById('labValue').value.trim();
+  const date = document.getElementById('labDate').value || todayKey();
+  const items = loadJSON(STORAGE_KEYS.labs, []);
+  items.push({id: uid(), name, value, date});
+  saveJSON(STORAGE_KEYS.labs, items);
+  document.getElementById('labName').value='';
+  document.getElementById('labValue').value='';
+  document.getElementById('labDate').value='';
+  renderLabs();
+});
+
+/* ---------- CARE TEAM ---------- */
+function renderTeam(){
+  const list = document.getElementById('teamList');
+  let items = loadJSON(STORAGE_KEYS.team, []);
+  if(items.length===0){
+    const defaults = ["Reumatológ","Algeziológ","Ortopéd","Psychiater","Psychológ"];
+    items = defaults.map(spec => ({id: uid(), name:'', spec, phone:''}));
+    saveJSON(STORAGE_KEYS.team, items);
+  }
+  list.innerHTML = '';
+  items.forEach(it=>{
+    const div = document.createElement('div'); div.className='list-item';
+    div.innerHTML = `
+      <div class="info">
+        <b>${escapeHtml(it.name) || '(meno nevyplnené)'}</b>
+        <span>${escapeHtml(it.spec||'')}${it.phone?' · '+escapeHtml(it.phone):''}</span>
+      </div>
+      <button class="del-btn" data-key="${it.id}">Zmazať</button>
+    `;
+    list.appendChild(div);
+  });
+  list.querySelectorAll('.del-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const items2 = loadJSON(STORAGE_KEYS.team, []).filter(x=>x.id!==btn.dataset.key);
+      saveJSON(STORAGE_KEYS.team, items2);
+      renderTeam();
+    });
+  });
+}
+document.getElementById('teamSaveBtn').addEventListener('click', ()=>{
+  const name = document.getElementById('teamName').value.trim();
+  if(!name) return;
+  const spec = document.getElementById('teamSpec').value.trim();
+  const phone = document.getElementById('teamPhone').value.trim();
+  const items = loadJSON(STORAGE_KEYS.team, []);
+  items.push({id: uid(), name, spec, phone});
+  saveJSON(STORAGE_KEYS.team, items);
+  document.getElementById('teamName').value='';
+  document.getElementById('teamSpec').value='';
+  document.getElementById('teamPhone').value='';
+  renderTeam();
+});
+
+/* ---------- helpers ---------- */
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str == null ? '' : str;
+  return div.innerHTML;
+}
+
+/* ---------- splash ---------- */
+const splashEl = document.getElementById('splash');
+function dismissSplash(){ splashEl.classList.add('hide'); }
+splashEl.addEventListener('click', dismissSplash);
+setTimeout(dismissSplash, 4000);
+
+/* ---------- init ---------- */
+loadTodayIfExists();
+const _entries = loadHistory();
+renderTrend(_entries);
+refreshHome();
+</script>
 </body>
 </html>
