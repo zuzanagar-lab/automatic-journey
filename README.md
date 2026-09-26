@@ -9,6 +9,8 @@ Umožňuje:
 - uchovávať výsledky vyšetrení
 - mať prehľad kontaktov na lekársky tím (vopred pripravené špecializácie)
 - vidieť trendy na domovskej obrazovke za posledných 7 dní
+- sledovať stravu: vyhľadať potravinu (databáza Open Food Facts) s automatickým
+  doplnením kalórií, alebo pridať jedlo ručne, a vidieť súčet kalórií za deň
 
 ## Ako appku spustiť
 
@@ -19,6 +21,10 @@ prehliadači (Chrome, Safari, Edge...) na počítači alebo v telefóne.
 Dáta sa ukladajú priamo vo vašom prehliadači (tzv. localStorage) – zostávajú
 uložené aj po zatvorení appky, ale iba na tom istom zariadení a v tom istom
 prehliadači, v ktorom ste ich zadali.
+
+Vyhľadávanie potravín (Strava) potrebuje pripojenie na internet, keďže si
+appka pýta údaje z voľnej databázy Open Food Facts. Bez internetu, alebo ak sa
+potravina nenájde, je stále možné pridať jedlo ručne so zadaním kalórií.
 
 ## Súbory projektu
 

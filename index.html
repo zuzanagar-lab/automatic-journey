@@ -312,6 +312,10 @@
           <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M3 20c0-3.3 2.7-5 6-5s6 1.7 6 5" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="9" r="2.3" stroke="currentColor" stroke-width="1.6"/><path d="M15.5 20c0-2.4 1.7-3.8 3.8-4" stroke="currentColor" stroke-width="1.6"/></svg></div>
           <div class="lbl">Môj tím</div>
         </div>
+        <div class="tool-card" data-goto="nutrition">
+          <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M6 2v8a3 3 0 0 0 3 3v9M6 2v6M9 2v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M17 2c-1.5 0-3 1.5-3 4v5a2 2 0 0 0 2 2v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div class="lbl">Strava</div>
+        </div>
       </div>
 
       <div class="section-title">Posledných 7 dní</div>
@@ -439,6 +443,32 @@
       <div class="card" id="teamList"><div class="empty">Zatiaľ žiadne kontakty.</div></div>
     </section>
 
+    <!-- NUTRITION -->
+    <section class="view" id="view-nutrition">
+      <div class="card">
+        <h2>Dnešný príjem kalórií</h2>
+        <div class="empty" id="nutritionTotal" style="font-size:1.4rem;font-weight:700;color:var(--purple);">0 kcal</div>
+      </div>
+      <div class="card">
+        <h2>Vyhľadať potravinu</h2>
+        <label class="f">Názov potraviny</label>
+        <input type="text" id="foodSearchInput" placeholder="Napr. jogurt biely">
+        <button class="save-btn" id="foodSearchBtn">Hľadať</button>
+        <div id="foodSearchStatus" style="margin-top:8px;font-size:.9rem;color:#777;"></div>
+        <div id="foodSearchResults"></div>
+      </div>
+      <div class="card">
+        <h2>Pridať ručne</h2>
+        <label class="f">Názov</label>
+        <input type="text" id="manualFoodName" placeholder="Napr. domáca polievka">
+        <label class="f">Kalórie (kcal)</label>
+        <input type="number" id="manualFoodKcal" placeholder="Napr. 250">
+        <button class="save-btn" id="manualFoodBtn">Pridať</button>
+      </div>
+      <div class="section-title">Dnešný záznam stravy</div>
+      <div class="card" id="nutritionList"><div class="empty">Zatiaľ žiadny záznam.</div></div>
+    </section>
+
   </main>
 
   <nav class="bottom">
@@ -466,6 +496,10 @@
       <svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M3 20c0-3.3 2.7-5 6-5s6 1.7 6 5" stroke="currentColor" stroke-width="1.6"/></svg>
       Tím
     </button>
+    <button data-goto="nutrition">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M6 2v8a3 3 0 0 0 3 3v9M6 2v6M9 2v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M17 2c-1.5 0-3 1.5-3 4v5a2 2 0 0 0 2 2v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      Strava
+    </button>
   </nav>
 
 </div>
@@ -480,6 +514,7 @@ const STORAGE_KEYS = {
   meds: 'fibromotyl_meds',         // array: [{id, name, dose, time, takenDates}]
   labs: 'fibromotyl_labs',         // array: [{id, name, value, date}]
   team: 'fibromotyl_team',         // array: [{id, name, spec, phone}]
+  nutrition: 'fibromotyl_nutrition', // array: [{id, ts, dateKey, name, kcal, grams}]
 };
 
 function loadJSON(key, fallback){
@@ -500,6 +535,7 @@ function goto(view){
   if(view==='labs') renderLabs();
   if(view==='team') renderTeam();
   if(view==='journal') renderJournal();
+  if(view==='nutrition') renderNutrition();
 }
 document.querySelectorAll('[data-goto]').forEach(el=>{
   el.addEventListener('click', ()=> goto(el.dataset.goto));
@@ -835,6 +871,110 @@ document.getElementById('teamSaveBtn').addEventListener('click', ()=>{
   document.getElementById('teamSpec').value='';
   document.getElementById('teamPhone').value='';
   renderTeam();
+});
+
+/* ---------- NUTRITION (Strava / kalórie) ---------- */
+function nutritionTodayItems(){
+  return loadJSON(STORAGE_KEYS.nutrition, []).filter(x=>x.dateKey===todayKey());
+}
+function renderNutrition(){
+  const list = document.getElementById('nutritionList');
+  const items = nutritionTodayItems().slice().sort((a,b)=> (b.ts||0)-(a.ts||0));
+  const total = items.reduce((sum,it)=> sum + (Number(it.kcal)||0), 0);
+  document.getElementById('nutritionTotal').textContent = Math.round(total) + ' kcal';
+  list.innerHTML = '';
+  if(items.length===0){
+    list.innerHTML = '<div class="empty">Zatiaľ žiadny záznam.</div>';
+    return;
+  }
+  items.forEach(it=>{
+    const div = document.createElement('div'); div.className='list-item';
+    div.innerHTML = `
+      <div class="info">
+        <b>${escapeHtml(it.name)}</b>
+        <span>${Math.round(it.kcal)} kcal${it.grams?' · '+it.grams+' g':''}</span>
+      </div>
+      <button class="del-btn" data-key="${it.id}">Zmazať</button>
+    `;
+    list.appendChild(div);
+  });
+  list.querySelectorAll('.del-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const items2 = loadJSON(STORAGE_KEYS.nutrition, []).filter(x=>x.id!==btn.dataset.key);
+      saveJSON(STORAGE_KEYS.nutrition, items2);
+      renderNutrition();
+    });
+  });
+}
+function addNutritionEntry(name, kcal, grams){
+  const items = loadJSON(STORAGE_KEYS.nutrition, []);
+  items.push({id: uid(), ts: Date.now(), dateKey: todayKey(), name, kcal, grams: grams||null});
+  saveJSON(STORAGE_KEYS.nutrition, items);
+  renderNutrition();
+}
+async function searchFood(query){
+  const statusEl = document.getElementById('foodSearchStatus');
+  const resultsEl = document.getElementById('foodSearchResults');
+  resultsEl.innerHTML = '';
+  statusEl.textContent = 'Hľadám...';
+  try{
+    const url = 'https://world.openfoodfacts.org/cgi/search.pl?search_terms=' + encodeURIComponent(query) +
+      '&search_simple=1&action=process&json=1&page_size=8&fields=product_name,brands,nutriments';
+    const res = await fetch(url);
+    const data = await res.json();
+    const products = (data.products||[]).filter(p => p.product_name && p.nutriments && p.nutriments['energy-kcal_100g']);
+    if(products.length===0){
+      statusEl.textContent = 'Nenašli sme túto potravinu. Skúste ju pridať ručne nižšie.';
+      return;
+    }
+    statusEl.textContent = '';
+    products.forEach(p=>{
+      const kcal100 = Number(p.nutriments['energy-kcal_100g']);
+      const div = document.createElement('div'); div.className='list-item';
+      div.innerHTML = `
+        <div class="info">
+          <b>${escapeHtml(p.product_name)}</b>
+          <span>${escapeHtml(p.brands||'')}${p.brands?' · ':''}${Math.round(kcal100)} kcal/100g</span>
+        </div>
+      `;
+      const wrap = document.createElement('div');
+      wrap.style.display='flex'; wrap.style.gap='6px'; wrap.style.alignItems='center';
+      const gramsInput = document.createElement('input');
+      gramsInput.type='number'; gramsInput.value='100'; gramsInput.style.width='64px';
+      gramsInput.placeholder='g';
+      const addBtn = document.createElement('button');
+      addBtn.className='save-btn'; addBtn.textContent='Pridať'; addBtn.style.margin='0';
+      addBtn.addEventListener('click', ()=>{
+        const grams = Number(gramsInput.value)||100;
+        const kcal = kcal100 * grams / 100;
+        addNutritionEntry(p.product_name, kcal, grams);
+        document.getElementById('foodSearchInput').value='';
+        resultsEl.innerHTML=''; statusEl.textContent='';
+      });
+      wrap.appendChild(gramsInput);
+      wrap.appendChild(addBtn);
+      div.appendChild(wrap);
+      resultsEl.appendChild(div);
+    });
+  }catch(e){
+    statusEl.textContent = 'Vyhľadávanie zlyhalo. Skontrolujte pripojenie na internet alebo pridajte potravinu ručne.';
+  }
+}
+document.getElementById('foodSearchBtn').addEventListener('click', ()=>{
+  const q = document.getElementById('foodSearchInput').value.trim();
+  if(!q) return;
+  searchFood(q);
+});
+document.getElementById('foodSearchInput').addEventListener('keydown', (e)=>{
+  if(e.key==='Enter'){ e.preventDefault(); document.getElementById('foodSearchBtn').click(); }
+});
+document.getElementById('manualFoodBtn').addEventListener('click', ()=>{
+  const name = document.getElementById('manualFoodName').value.trim();
+  const kcal = Number(document.getElementById('manualFoodKcal').value);
+  if(!name || !kcal) return;
+  addNutritionEntry(name, kcal, null);
+  document.getElementById('manualFoodName').value='';
+  document.getElementById('manualFoodKcal').value='';
 });
 
 /* ---------- helpers ---------- */
