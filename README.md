@@ -6,6 +6,16 @@ Umožňuje:
 - denné sledovanie bolesti a únavy (škála 0–10), kvality spánku a príznakov
 - viesť si osobný denník
 - evidovať lieky s tlačidlom "vziať dnes"
+- rýchly záznam na zlé dni (bolesť, únava, spánok na 3 ťuknutia)
+- „Čo mi škodí a čo mi pomáha“: appka sama porovná záznamy (spánok, stres, tlak vzduchu,
+  teplota, voda, kroky, aktivity, cyklus) a ukáže súvislosti s bolesťou
+- mesačný kalendár zafarbený podľa bolesti so značkami vzplanutí, návštev lekára a menštruácie
+- záznam vzplanutí (začiatok, koniec, sila, spúšťače) s upozornením na domovskej obrazovke
+- návštevy lekára a zoznam otázok pre lekára; najbližšia návšteva na domovskej obrazovke
+- lieky s viacerými časmi dávok (odklikávanie, najbližšia dávka, pripomienky)
+  a lieky podľa potreby s počítaním, koľkokrát za týždeň
+- tmavý režim a väčšie písmo (ikonka ozubeného kolieska vpravo hore)
+- pripomienka stiahnuť zálohu raz za mesiac
 - zapisovať aktivity (prechádzka, cvičenie, domáce práce...), ich dĺžku, náročnosť
   a ako bolo potom; prehľad je aj v súhrne pre lekára
 - evidovať vitamíny a doplnky (ráno / obed / večer / pred spaním) a odkliknúť každú dávku

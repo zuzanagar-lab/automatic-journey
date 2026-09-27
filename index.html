@@ -44,14 +44,14 @@
     margin-bottom:14px;
   }
   header.top h1{
-    font-size:21px;
+    font-size:calc(21px * var(--fs));
     margin:0;
     font-weight:700;
     letter-spacing:.01em;
   }
   header.top p{
     margin:2px 0 0;
-    font-size:13px;
+    font-size:calc(13px * var(--fs));
     opacity:.85;
   }
   .logo{width:42px;height:42px;flex-shrink:0;}
@@ -68,10 +68,10 @@
     box-shadow: 0 1px 2px rgba(74,42,107,.08);
   }
   .card h2{
-    font-size:15px;
+    font-size:calc(15px * var(--fs));
     margin:0 0 12px;
     font-weight:700;
-    color:var(--deep);
+    color:var(--head);
   }
   .card h2 .val{color:var(--purple);}
 
@@ -84,15 +84,15 @@
     border-bottom:1px solid var(--line);
   }
   .summary-row:last-child{border-bottom:none;}
-  .summary-row .lbl{color:var(--ink-soft);font-size:14px;}
+  .summary-row .lbl{color:var(--ink-soft);font-size:calc(14px * var(--fs));}
   .badge{
-    font-size:12px;
+    font-size:calc(12px * var(--fs));
     font-weight:700;
     padding:4px 10px;
     border-radius:999px;
   }
-  .badge.pending{background:#FBEFE0;color:#B57A2C;}
-  .badge.done{background:#E4F1E5;color:var(--good);}
+  .badge.pending{background:var(--pending-bg);color:var(--pending-ink);}
+  .badge.done{background:var(--done-bg);color:var(--good);}
 
   .quick-btn{
     width:100%;
@@ -101,7 +101,7 @@
     border-radius:14px;
     background:var(--deep);
     color:#fff;
-    font-size:15px;
+    font-size:calc(15px * var(--fs));
     font-weight:700;
     margin-top:10px;
     cursor:pointer;
@@ -121,112 +121,112 @@
     cursor:pointer;
   }
   .tool-card .ic{margin-bottom:8px;color:var(--purple);}
-  .tool-card .lbl{font-size:13px;font-weight:600;color:var(--ink);}
+  .tool-card .lbl{font-size:calc(13px * var(--fs));font-weight:600;color:var(--ink);}
 
   .section-title{
-    font-size:14px;
+    font-size:calc(14px * var(--fs));
     color:var(--ink-soft);
     margin:22px 4px 10px;
     font-weight:700;
   }
 
   /* scale (tracker) */
-  .scale{display:flex;gap:6px;flex-wrap:wrap;}
+  .scale{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));gap:4px;}
   .scale button{
-    flex:1 1 auto;min-width:26px;height:42px;border-radius:12px;
-    border:1px solid var(--line);background:#FBF8FE;color:var(--ink-soft);
-    font-size:13px;font-weight:700;cursor:pointer;
+    min-width:0;padding:0;height:44px;border-radius:10px;
+    border:1px solid var(--line);background:var(--field);color:var(--ink-soft);
+    font-size:calc(13px * var(--fs));font-weight:700;cursor:pointer;
   }
   .scale button.on{color:#fff;border-color:transparent;}
-  .scale-labels{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--ink-soft);}
+  .scale-labels{display:flex;justify-content:space-between;margin-top:8px;font-size:calc(12px * var(--fs));color:var(--ink-soft);}
 
   .choice-row{display:flex;gap:8px;}
   .choice-row button{
     flex:1;padding:12px 8px;border-radius:14px;border:1px solid var(--line);
-    background:#FBF8FE;color:var(--ink-soft);font-size:14px;font-weight:600;cursor:pointer;
+    background:var(--field);color:var(--ink-soft);font-size:calc(14px * var(--fs));font-weight:600;cursor:pointer;
   }
   .choice-row button.on{background:var(--purple);border-color:var(--purple);color:#fff;}
 
   .chips{display:flex;flex-wrap:wrap;gap:8px;}
   .chip{
     padding:10px 14px;border-radius:999px;border:1px solid var(--line);
-    background:#FBF8FE;color:var(--ink-soft);font-size:14px;cursor:pointer;user-select:none;
+    background:var(--field);color:var(--ink-soft);font-size:calc(14px * var(--fs));cursor:pointer;user-select:none;
   }
   .chip.on{background:var(--good);border-color:var(--good);color:#fff;}
 
-  textarea, input[type=text], input[type=date], input[type=tel]{
+  textarea, input[type=text], input[type=date], input[type=tel], input[type=time], input[type=number]{
     width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;
-    font-size:15px;font-family:inherit;color:var(--ink);resize:vertical;background:#FBF8FE;
+    font-size:calc(15px * var(--fs));font-family:inherit;color:var(--ink);resize:vertical;background:var(--field);
   }
   textarea{min-height:64px;}
-  label.f{display:block;font-size:12px;color:var(--ink-soft);margin:10px 0 4px;font-weight:600;}
+  label.f{display:block;font-size:calc(12px * var(--fs));color:var(--ink-soft);margin:10px 0 4px;font-weight:600;}
 
   .save-btn{
     width:100%;padding:15px;border:none;border-radius:16px;background:var(--deep);
-    color:#fff;font-size:15px;font-weight:700;cursor:pointer;margin-top:12px;
+    color:#fff;font-size:calc(15px * var(--fs));font-weight:700;cursor:pointer;margin-top:12px;
   }
-  .save-note{text-align:center;font-size:13px;color:var(--good);margin-top:8px;min-height:18px;font-weight:600;}
+  .save-note{text-align:center;font-size:calc(13px * var(--fs));color:var(--good);margin-top:8px;min-height:18px;font-weight:600;}
 
   .trend{display:flex;align-items:flex-end;gap:6px;height:90px;padding-top:8px;}
   .trend .day{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px;}
   .trend .bar{width:100%;border-radius:6px 6px 0 0;background:var(--purple);}
   .trend .bar.fatigue{background:var(--accent);}
-  .trend .lbl{font-size:10px;color:var(--ink-soft);}
-  .legend{display:flex;gap:16px;font-size:12px;color:var(--ink-soft);margin-top:10px;}
+  .trend .lbl{font-size:calc(10px * var(--fs));color:var(--ink-soft);}
+  .legend{display:flex;gap:16px;font-size:calc(12px * var(--fs));color:var(--ink-soft);margin-top:10px;}
   .legend span{display:flex;align-items:center;gap:6px;}
   .dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
 
-  .entry{padding:12px 0;border-bottom:1px solid var(--line);font-size:14px;}
+  .entry{padding:12px 0;border-bottom:1px solid var(--line);font-size:calc(14px * var(--fs));}
   .entry:last-child{border-bottom:none;}
   .entry-top{display:flex;justify-content:space-between;align-items:center;color:var(--ink-soft);}
   .entry-top b{color:var(--ink);}
-  .entry-syms{margin-top:4px;color:var(--ink-soft);font-size:13px;}
-  .entry-note{margin-top:4px;font-style:italic;color:var(--ink-soft);font-size:13px;}
-  .del-btn{border:none;background:none;color:var(--danger);font-size:13px;cursor:pointer;padding:4px;}
+  .entry-syms{margin-top:4px;color:var(--ink-soft);font-size:calc(13px * var(--fs));}
+  .entry-note{margin-top:4px;font-style:italic;color:var(--ink-soft);font-size:calc(13px * var(--fs));}
+  .del-btn{border:none;background:none;color:var(--danger);font-size:calc(13px * var(--fs));cursor:pointer;padding:4px;}
 
-  .empty{color:var(--ink-soft);font-size:14px;text-align:center;padding:20px 10px;}
+  .empty{color:var(--ink-soft);font-size:calc(14px * var(--fs));text-align:center;padding:20px 10px;}
 
   .list-item{
     display:flex;justify-content:space-between;align-items:flex-start;gap:10px;
     padding:14px 0;border-bottom:1px solid var(--line);
   }
   .list-item:last-child{border-bottom:none;}
-  .list-item .info b{display:block;font-size:15px;color:var(--ink);}
-  .list-item .info span{font-size:13px;color:var(--ink-soft);}
+  .list-item .info b{display:block;font-size:calc(15px * var(--fs));color:var(--ink);}
+  .list-item .info span{font-size:calc(13px * var(--fs));color:var(--ink-soft);}
   .toggle-btn{
-    border:1px solid var(--purple);background:#fff;color:var(--purple);
-    border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;
+    border:1px solid var(--purple);background:var(--card);color:var(--purple);
+    border-radius:999px;padding:8px 14px;font-size:calc(13px * var(--fs));font-weight:700;cursor:pointer;white-space:nowrap;
   }
   .toggle-btn.on{background:var(--good);border-color:var(--good);color:#fff;}
 
   /* bottom nav */
   nav.bottom{
     position:fixed;bottom:0;left:0;right:0;
-    background:#fff;border-top:1px solid var(--line);
+    background:var(--nav);border-top:1px solid var(--line);
     display:flex;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom));
     max-width:520px;margin:0 auto;
   }
   nav.bottom button{
     background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:3px;
-    color:var(--ink-soft);font-size:10px;font-weight:600;cursor:pointer;padding:4px 2px;flex:1;
+    color:var(--ink-soft);font-size:calc(10px * var(--fs));font-weight:600;cursor:pointer;padding:4px 2px;flex:1;
   }
   nav.bottom button.active{color:var(--deep);}
   nav.bottom svg{width:21px;height:21px;}
 
 
-  .bm-hint{font-size:13px;color:var(--ink-soft);margin:-4px 0 12px;}
+  .bm-hint{font-size:calc(13px * var(--fs));color:var(--ink-soft);margin:-4px 0 12px;}
   .bm-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   .bm-fig{margin:0;text-align:center;}
-  .bm-fig figcaption{font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:4px;}
+  .bm-fig figcaption{font-size:calc(13px * var(--fs));font-weight:700;color:var(--ink-soft);margin-bottom:4px;}
   .bm-box{position:relative;max-width:170px;margin:0 auto;cursor:crosshair;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
   .bm-box img{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none;pointer-events:none;}
   .bm-dot{position:absolute;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;background:#E0202E;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35);padding:0;cursor:pointer;}
   .bm-ring{position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;border:2px dashed rgba(142,31,168,.55);pointer-events:none;}
-  .bm-legend{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-soft);margin-top:10px;}
+  .bm-legend{display:flex;align-items:center;gap:8px;font-size:calc(12px * var(--fs));color:var(--ink-soft);margin-top:10px;}
   .bm-legend i{display:inline-block;width:12px;height:12px;border-radius:50%;border:2px dashed rgba(142,31,168,.55);}
   .bm-list{margin-top:12px;}
   .bm-list .chip{font-family:inherit;background:#FDECEE;border-color:#F3C3C8;color:#9B1C28;}
-  .bm-clear{border:none;background:none;color:var(--ink-soft);font-size:13px;text-decoration:underline;cursor:pointer;padding:8px 0 0;}
+  .bm-clear{border:none;background:none;color:var(--ink-soft);font-size:calc(13px * var(--fs));text-decoration:underline;cursor:pointer;padding:8px 0 0;}
 
   /* ---------- splash ---------- */
   #splash{
@@ -252,12 +252,12 @@
   @keyframes artBloom{to{opacity:1;transform:scale(1);}}
 
   #splash h2{
-    color:var(--deep);font-size:24px;font-weight:800;letter-spacing:.02em;margin:18px 0 4px;
+    color:var(--deep);font-size:calc(24px * var(--fs));font-weight:800;letter-spacing:.02em;margin:18px 0 4px;
     opacity:0;animation:riseIn .7s ease forwards;animation-delay:1.6s;
   }
   #splash p{
     font-family:Georgia, "Times New Roman", serif;
-    color:var(--purple);font-size:15px;font-weight:700;letter-spacing:.01em;
+    color:var(--purple);font-size:calc(15px * var(--fs));font-weight:700;letter-spacing:.01em;
     margin:0;text-align:center;padding:0 36px;line-height:1.45;
     opacity:0;animation:riseIn .7s ease forwards;animation-delay:1.85s;
   }
@@ -266,10 +266,10 @@
   /* counter (water) */
   .counter-row{display:flex;gap:12px;align-items:center;justify-content:center;padding:6px 0;}
   .counter-btn{
-    width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#FBF8FE;
-    color:var(--deep);font-size:22px;font-weight:800;cursor:pointer;line-height:1;
+    width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--field);
+    color:var(--deep);font-size:calc(22px * var(--fs));font-weight:800;cursor:pointer;line-height:1;
   }
-  .counter-num{font-size:28px;font-weight:800;color:var(--purple);min-width:44px;text-align:center;}
+  .counter-num{font-size:calc(28px * var(--fs));font-weight:800;color:var(--purple);min-width:44px;text-align:center;}
 
   /* print (Súhrn pre lekára) */
   @media print{
@@ -278,6 +278,92 @@
     #summaryContent{position:absolute;left:0;top:0;width:100%;background:#fff;}
     nav.bottom, header.top, #splash, .no-print{display:none !important;}
   }
+  /* ---------- nové časti ---------- */
+  :root{ --fs:1; --field:#FBF8FE; --nav:#FFFFFF; --pending-bg:#FBEFE0; --pending-ink:#B57A2C; --done-bg:#E4F1E5; --head:var(--deep); }
+  html{font-size:calc(16px * var(--fs));}
+  .hdr-btn{margin-left:auto;background:rgba(255,255,255,.16);border:none;border-radius:12px;width:42px;height:42px;display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;flex-shrink:0;}
+  .hdr-btn svg{width:22px;height:22px;}
+  .btn-outline{width:100%;padding:13px;border:1.5px solid var(--purple);border-radius:14px;background:transparent;color:var(--purple);font-size:calc(15px * var(--fs));font-weight:700;cursor:pointer;margin-top:10px;font-family:inherit;}
+  .banner{border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;display:flex;flex-direction:column;gap:10px;}
+  .banner p{margin:0;font-size:calc(14px * var(--fs));line-height:1.4;}
+  .banner.flare{background:#F9E1E6;color:#7A1F35;}
+  .banner.info{background:#EFE3F8;color:var(--ink);}
+  .banner .row{display:flex;gap:8px;flex-wrap:wrap;}
+  .banner button{border:none;border-radius:12px;padding:10px 14px;font-weight:700;font-size:calc(14px * var(--fs));cursor:pointer;font-family:inherit;}
+  .banner .primary{background:var(--deep);color:#fff;}
+  .banner .ghost{background:transparent;color:inherit;text-decoration:underline;}
+  .mini-row{display:flex;align-items:center;gap:14px;}
+  .mini-row .big{font-size:calc(26px * var(--fs));font-weight:800;color:var(--purple);min-width:78px;font-variant-numeric:tabular-nums;}
+  .mini-row .txt{font-size:calc(14px * var(--fs));color:var(--ink);}
+  .mini-row .txt span{display:block;color:var(--ink-soft);font-size:calc(13px * var(--fs));}
+  .dose-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+  .med-block{padding:14px 0;border-bottom:1px solid var(--line);}
+  .med-block:last-child{border-bottom:none;}
+  .check-row{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:calc(14px * var(--fs));color:var(--ink);}
+  .check-row input{width:22px;height:22px;accent-color:var(--purple);}
+
+  /* rýchly záznam */
+  #quickSheet{position:fixed;inset:0;z-index:900;background:rgba(30,10,45,.45);display:flex;align-items:flex-end;justify-content:center;}
+  #quickSheet[hidden]{display:none!important;}
+  #quickSheet .sheet{background:var(--card);width:100%;max-width:520px;border-radius:24px 24px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto;}
+  #quickSheet h2{margin:0 0 4px;font-size:calc(18px * var(--fs));color:var(--head);}
+  #quickSheet .q{margin-top:16px;}
+  #quickSheet .q b{display:block;font-size:calc(15px * var(--fs));margin-bottom:8px;color:var(--ink);}
+  .qscale{display:grid;grid-template-columns:repeat(11,1fr);gap:4px;}
+  .qscale button{height:44px;border-radius:10px;border:1px solid var(--line);background:var(--field);color:var(--ink-soft);font-weight:700;font-size:calc(14px * var(--fs));padding:0;cursor:pointer;font-family:inherit;}
+  .qscale button.on{background:var(--purple);border-color:var(--purple);color:#fff;}
+
+  /* súvislosti */
+  .insight{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);align-items:flex-start;}
+  .insight:last-child{border-bottom:none;}
+  .insight .ic2{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:calc(16px * var(--fs));}
+  .insight.bad .ic2{background:#F9E1E6;color:#A3334B;}
+  .insight.good .ic2{background:#E4F1E5;color:#4F7A55;}
+  .insight.info .ic2{background:#EFE3F8;color:var(--purple);}
+  .insight .t{font-size:calc(15px * var(--fs));color:var(--ink);line-height:1.4;}
+  .insight .t small{display:block;color:var(--ink-soft);font-size:calc(12.5px * var(--fs));margin-top:3px;}
+
+  /* kalendár */
+  .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+  .cal-head h2{margin:0!important;text-transform:capitalize;}
+  .cal-nav{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--field);color:var(--ink);font-size:calc(20px * var(--fs));cursor:pointer;}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
+  .cal-dow{text-align:center;font-size:calc(11px * var(--fs));color:var(--ink-soft);font-weight:700;padding-bottom:2px;}
+  .cal-day{aspect-ratio:1/1.05;border-radius:10px;border:1px solid var(--line);background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:calc(14px * var(--fs));font-weight:700;color:var(--ink);cursor:pointer;padding:0;font-family:inherit;position:relative;}
+  .cal-day.empty-cell{border:none;background:none;cursor:default;}
+  .cal-day.today{outline:2.5px solid var(--purple);outline-offset:1px;}
+  .cal-day.sel{box-shadow:0 0 0 3px var(--accent) inset;}
+  .cal-day .marks{display:flex;gap:2px;height:6px;}
+  .cal-day .marks i{width:6px;height:6px;border-radius:50%;display:block;}
+  .cal-day.flare{border:2px solid #D2475F;}
+  .m-flare{background:#D2475F;} .m-visit{background:#3F7FBF;} .m-cycle{background:#E58FB0;}
+  .cal-legend{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:calc(12px * var(--fs));color:var(--ink-soft);margin-top:12px;align-items:center;}
+  .cal-legend .grad{width:110px;height:10px;border-radius:6px;background:linear-gradient(90deg,#EFE3F8,#B67AD6,#5A1180);}
+  .cal-legend i{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:4px;}
+
+  /* nastavenia */
+  .set-choice{display:flex;gap:8px;flex-wrap:wrap;}
+  .set-choice button{flex:1 1 0;min-width:90px;padding:12px 8px;border-radius:14px;border:1px solid var(--line);background:var(--field);color:var(--ink-soft);font-weight:700;cursor:pointer;font-family:inherit;font-size:calc(14px * var(--fs));}
+  .set-choice button.on{background:var(--purple);border-color:var(--purple);color:#fff;}
+
+  /* tmavý režim */
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --bg:#1B1224; --card:#271A34; --ink:#F2E9F8; --ink-soft:#BBA6CB; --deep:#7C35A5; --purple:#C27BE0;
+    --purple-light:#D48CE8; --accent:#9E5BC4; --line:#3B2B4A; --danger:#EB9A88; --good:#8FC39A;
+    --field:#31223F; --nav:#221630; --pending-bg:#4A3522; --pending-ink:#F2C487; --done-bg:#223A28; --head:#E6C8F6;
+  }
+  :root[data-theme="dark"] .banner.flare{background:#4A2130;color:#F7D2DB;}
+  :root[data-theme="dark"] .banner.info{background:#3A2A4B;color:var(--ink);}
+  :root[data-theme="dark"] .insight.bad .ic2{background:#4A2130;color:#F7B3C1;}
+  :root[data-theme="dark"] .insight.good .ic2{background:#223A28;color:#A9DDB2;}
+  :root[data-theme="dark"] .insight.info .ic2{background:#3A2A4B;color:var(--purple);}
+  :root[data-theme="dark"] .bm-box img{border-radius:12px;}
+  @media print{
+    :root[data-theme="dark"]{--ink:#2E123F;--ink-soft:#6F5A7D;--line:#DDD;--card:#FFF;--head:#440A63;}
+    #summaryContent,#summaryContent *{color:#222!important;}
+  }
+
 </style>
 </head>
 <body>
@@ -307,12 +393,14 @@
       <h1>FibroMotýľ</h1>
       <p>Tvoj priestor na sledovanie a zvládanie fibromyalgie</p>
     </div>
+    <button class="hdr-btn" data-goto="settings" aria-label="Nastavenia"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.8v2.4M12 18.8v2.4M4.2 7.5l2.1 1.2M17.7 15.3l2.1 1.2M4.2 16.5l2.1-1.2M17.7 8.7l2.1-1.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.8"/></svg></button>
   </header>
 
   <main>
 
     <!-- HOME -->
     <section class="view active" id="view-home">
+      <div id="homeAlerts"></div>
       <div class="card">
         <h2>Denné sledovanie</h2>
         <div class="summary-row">
@@ -323,8 +411,10 @@
           <span class="lbl">Dnes</span>
           <span class="badge" id="homeToday">–</span>
         </div>
-        <button class="quick-btn" data-goto="tracker">+ Pridať dnešný záznam</button>
+        <button class="quick-btn" id="quickOpenBtn" type="button">⚡ Rýchly záznam (3 ťuknutia)</button>
+        <button class="btn-outline" data-goto="tracker" type="button">+ Celý dnešný záznam</button>
       </div>
+      <div id="homeUpcoming"></div>
 
       <div class="section-title">Nástroje</div>
       <div class="tool-grid">
@@ -368,6 +458,22 @@
           <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="13.5" cy="4.5" r="2" stroke="currentColor" stroke-width="1.6"/><path d="M9 21l2.5-6 2.5 2v4M7 12l3-4 3.5 1.5L16 13l3 1M10 8l1.5 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           <div class="lbl">Aktivity</div>
         </div>
+        <div class="tool-card" data-goto="calendar">
+          <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><rect x="7" y="13" width="3" height="3" rx=".6" fill="currentColor"/></svg></div>
+          <div class="lbl">Kalendár</div>
+        </div>
+        <div class="tool-card" data-goto="insights">
+          <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+          <div class="lbl">Čo mi škodí a pomáha</div>
+        </div>
+        <div class="tool-card" data-goto="flares">
+          <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2.2 1-3.6 2-4.6.3 1.6 1 2.6 2 3 0-3 .5-5.8 1-8.4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+          <div class="lbl">Vzplanutia</div>
+        </div>
+        <div class="tool-card" data-goto="doctor">
+          <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M6 3v5a4 4 0 0 0 8 0V3M6 3H5M14 3h1M10 12v3a5 5 0 0 0 10 0v-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="20" cy="11" r="2" stroke="currentColor" stroke-width="1.6"/></svg></div>
+          <div class="lbl">Návštevy lekára</div>
+        </div>
       </div>
 
       <div class="section-title">Posledných 7 dní</div>
@@ -383,7 +489,7 @@
     <!-- TRACKER -->
     <section class="view" id="view-tracker">
       <div class="card">
-        <div id="todayLabel" style="font-size:13px;color:var(--ink-soft);margin-bottom:2px;"></div>
+        <div id="todayLabel" style="font-size:calc(13px * var(--fs));color:var(--ink-soft);margin-bottom:2px;"></div>
         <h2 style="margin-top:0;">Dnešný záznam</h2>
       </div>
 
@@ -440,7 +546,7 @@
       <div class="card">
         <h2>Počasie dnes</h2>
         <button class="toggle-btn" id="weatherBtn" style="width:100%;">Zistiť počasie podľa polohy</button>
-        <div id="weatherStatus" style="font-size:13px;color:var(--ink-soft);margin-top:8px;"></div>
+        <div id="weatherStatus" style="font-size:calc(13px * var(--fs));color:var(--ink-soft);margin-top:8px;"></div>
       </div>
 
       <div class="card">
@@ -451,7 +557,7 @@
         <input type="text" inputmode="numeric" id="stepsInput" placeholder="Napr. 3200">
         <div class="empty" style="padding:8px 0 0;text-align:left;">Zadajte hodnoty z appky Zdravie / Google Fit, alebo skúste krokomer nižšie.</div>
         <button class="toggle-btn" id="pedoToggleBtn" style="margin-top:10px;width:100%;">Spustiť krokomer telefónu</button>
-        <div id="pedoStatus" style="font-size:13px;color:var(--ink-soft);margin-top:8px;"></div>
+        <div id="pedoStatus" style="font-size:calc(13px * var(--fs));color:var(--ink-soft);margin-top:8px;"></div>
       </div>
 
       <div class="card">
@@ -486,9 +592,9 @@
     <section class="view" id="view-meds">
       <div class="card">
         <h2>Pripomienky</h2>
-        <div class="empty" style="text-align:left;padding:0 0 10px;">Appka vám vie pripomenúť liek, ak ju máte otvorenú v prehliadači telefónu. Nie je to 100% spoľahlivé na pozadí (najmä na iPhone), preto sa naň úplne nespoliehajte.</div>
+        <div class="empty" style="text-align:left;padding:0 0 10px;">Appka ti vie pripomenúť dávku lieku v zadanom čase, ak ju máš otvorenú v prehliadači telefónu. Nie je to 100% spoľahlivé na pozadí (najmä na iPhone), preto sa naň úplne nespoliehajte.</div>
         <button class="toggle-btn" id="notifPermBtn" style="width:100%;">Povoliť pripomienky</button>
-        <div id="notifStatus" style="font-size:13px;color:var(--ink-soft);margin-top:8px;"></div>
+        <div id="notifStatus" style="font-size:calc(13px * var(--fs));color:var(--ink-soft);margin-top:8px;"></div>
       </div>
       <div class="card">
         <h2>Pridať liek</h2>
@@ -496,11 +602,13 @@
         <input type="text" id="medName" placeholder="Napr. Pregabalin">
         <label class="f">Dávka</label>
         <input type="text" id="medDose" placeholder="Napr. 75 mg">
-        <label class="f">Kedy užívať</label>
-        <input type="text" id="medTime" placeholder="Napr. ráno a večer">
-        <label class="f">Pripomenúť o (nepovinné)</label>
-        <input type="time" id="medReminder">
+        <label class="f">Časy dávok (oddeľ čiarkou)</label>
+        <input type="text" id="medTimes" placeholder="Napr. 8:00, 20:00">
+        <label class="f">Poznámka k užívaniu (nepovinné)</label>
+        <input type="text" id="medTime" placeholder="Napr. po jedle">
+        <label class="check-row"><input type="checkbox" id="medPrn"> Beriem ho len podľa potreby (napr. pri bolesti)</label>
         <button class="save-btn" id="medSaveBtn">Pridať liek</button>
+        <div class="save-note" id="medNote"></div>
       </div>
       <div class="section-title">Moje lieky</div>
       <div class="card" id="medsList"><div class="empty">Zatiaľ žiadne lieky.</div></div>
@@ -568,7 +676,7 @@
         <label class="f">Názov potraviny</label>
         <input type="text" id="foodSearchInput" placeholder="Napr. jogurt biely">
         <button class="save-btn" id="foodSearchBtn">Hľadať</button>
-        <div id="foodSearchStatus" style="margin-top:8px;font-size:.9rem;color:#777;"></div>
+        <div id="foodSearchStatus" style="margin-top:8px;font-size:.9rem;color:var(--ink-soft);"></div>
         <div id="foodSearchResults"></div>
       </div>
       <div class="card">
@@ -656,6 +764,120 @@
       <div class="card" id="actList"><div class="empty">Zatiaľ žiadne aktivity.</div></div>
     </section>
 
+
+    <!-- CALENDAR -->
+    <section class="view" id="view-calendar">
+      <div class="card">
+        <div class="cal-head">
+          <button class="cal-nav" id="calPrev" type="button" aria-label="Predchádzajúci mesiac">‹</button>
+          <h2 id="calTitle"></h2>
+          <button class="cal-nav" id="calNext" type="button" aria-label="Nasledujúci mesiac">›</button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="cal-legend">
+          <span>bolesť 0</span><span class="grad"></span><span>10</span>
+          <span><i class="m-flare"></i>vzplanutie</span><span><i class="m-visit"></i>lekár</span><span><i class="m-cycle"></i>menštruácia</span>
+        </div>
+        <div id="calStats" class="empty" style="text-align:left;padding:12px 0 0;"></div>
+      </div>
+      <div class="card" id="calDetail"><div class="empty">Ťukni na deň a uvidíš podrobnosti.</div></div>
+    </section>
+
+    <!-- INSIGHTS -->
+    <section class="view" id="view-insights">
+      <div class="card">
+        <h2>Čo mi škodí a čo mi pomáha</h2>
+        <div class="empty" style="text-align:left;padding:0;">Appka porovnáva tvoje záznamy: spánok, stres, počasie, vodu, pohyb, aktivity a cyklus. Čím viac dní vyplníš, tým presnejšie to bude.</div>
+      </div>
+      <div class="card" id="insightList"></div>
+      <div class="empty" style="text-align:left;padding:0 6px 14px;font-size:calc(13px * var(--fs));">Sú to len súvislosti v tvojich záznamoch, nie istá príčina. Ukáž ich lekárovi a poraďte sa spolu.</div>
+    </section>
+
+    <!-- FLARES -->
+    <section class="view" id="view-flares">
+      <div class="card" id="flareActiveCard"></div>
+      <div class="card" id="flareFormCard">
+        <h2>Začalo sa mi vzplanutie</h2>
+        <label class="f" for="flareStart">Kedy sa začalo</label>
+        <input type="date" id="flareStart">
+        <label class="f">Aké silné je</label>
+        <div class="choice-row" id="flareSeverity">
+          <button type="button" data-v="mierne">Mierne</button>
+          <button type="button" data-v="stredné">Stredné</button>
+          <button type="button" data-v="silné">Silné</button>
+        </div>
+        <label class="f">Čo ho mohlo spustiť (môžeš vybrať viac)</label>
+        <div class="chips" id="flareTriggers"></div>
+        <label class="f" for="flareNote">Poznámka (nepovinné)</label>
+        <input type="text" id="flareNote" placeholder="Napr. po návšteve u rodiny">
+        <button class="save-btn" id="flareSaveBtn" type="button">Zapísať vzplanutie</button>
+        <div class="save-note" id="flareNoteMsg"></div>
+      </div>
+      <div class="section-title">História vzplanutí</div>
+      <div class="card" id="flareList"><div class="empty">Zatiaľ žiadne vzplanutia.</div></div>
+    </section>
+
+    <!-- DOCTOR -->
+    <section class="view" id="view-doctor">
+      <div class="card">
+        <h2>Najbližšie návštevy</h2>
+        <div id="visitList"><div class="empty">Zatiaľ žiadne plánované návštevy.</div></div>
+      </div>
+      <div class="card">
+        <h2>Pridať návštevu</h2>
+        <label class="f" for="visitDoctor">U koho</label>
+        <input type="text" id="visitDoctor" list="doctorOptions" placeholder="Napr. reumatológ, MUDr. Nováková">
+        <datalist id="doctorOptions"></datalist>
+        <label class="f" for="visitDate">Dátum</label>
+        <input type="date" id="visitDate">
+        <label class="f" for="visitTime">Čas (nepovinné)</label>
+        <input type="time" id="visitTime">
+        <label class="f" for="visitNote">Poznámka (nepovinné)</label>
+        <input type="text" id="visitNote" placeholder="Napr. priniesť výsledky krvi">
+        <button class="save-btn" id="visitSaveBtn" type="button">Pridať návštevu</button>
+        <div class="save-note" id="visitMsg"></div>
+      </div>
+      <div class="card">
+        <h2>Otázky pre lekára</h2>
+        <div class="empty" style="text-align:left;padding:0 0 6px;">Keď ťa niečo napadne, zapíš si to sem. U lekára tak na nič nezabudneš.</div>
+        <label class="f" for="questionText">Otázka</label>
+        <textarea id="questionText" placeholder="Napr. Môžem skúsiť iný liek na spánok?"></textarea>
+        <label class="f" for="questionDoctor">Pre koho (nepovinné)</label>
+        <input type="text" id="questionDoctor" list="doctorOptions" placeholder="Napr. reumatológ">
+        <button class="save-btn" id="questionSaveBtn" type="button">Pridať otázku</button>
+        <div id="questionList" style="margin-top:10px;"></div>
+      </div>
+      <div class="section-title">Minulé návštevy</div>
+      <div class="card" id="pastVisitList"><div class="empty">Zatiaľ žiadne.</div></div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="view" id="view-settings">
+      <div class="card">
+        <h2>Vzhľad</h2>
+        <div class="empty" style="text-align:left;padding:0 0 10px;">Tmavý režim je šetrnejší k očiam, keď ťa ruší svetlo.</div>
+        <div class="set-choice" id="setTheme">
+          <button type="button" data-v="light">Svetlý</button>
+          <button type="button" data-v="dark">Tmavý</button>
+          <button type="button" data-v="auto">Podľa telefónu</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Veľkosť písma</h2>
+        <div class="empty" style="text-align:left;padding:0 0 10px;">Väčšie písmo pomáha, keď je mozgová hmla alebo unavené oči.</div>
+        <div class="set-choice" id="setFont">
+          <button type="button" data-v="1">Normálne</button>
+          <button type="button" data-v="1.15">Väčšie</button>
+          <button type="button" data-v="1.3">Najväčšie</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Záloha</h2>
+        <div id="setBackupInfo" class="empty" style="text-align:left;padding:0 0 4px;"></div>
+        <button class="save-btn" data-goto="backup" type="button">Otvoriť zálohu</button>
+      </div>
+    </section>
+
     <!-- BACKUP -->
     <section class="view" id="view-backup">
       <div class="card">
@@ -703,6 +925,24 @@
 
 </div>
 
+<div id="quickSheet" hidden role="dialog" aria-modal="true" aria-labelledby="quickTitle">
+  <div class="sheet">
+    <h2 id="quickTitle">Rýchly záznam</h2>
+    <div class="empty" style="text-align:left;padding:0;">Na zlé dni stačí toto. Zvyšok môžeš doplniť neskôr, alebo vôbec.</div>
+    <div class="q"><b>Bolesť dnes: <span id="qPainVal">–</span></b><div class="qscale" id="qPain"></div></div>
+    <div class="q"><b>Únava dnes: <span id="qFatVal">–</span></b><div class="qscale" id="qFat"></div></div>
+    <div class="q"><b>Spánok</b>
+      <div class="choice-row" id="qSleep">
+        <button type="button" data-v="dobry">Dobrý</button>
+        <button type="button" data-v="priemerny">Priemerný</button>
+        <button type="button" data-v="zly">Zlý</button>
+      </div>
+    </div>
+    <button class="save-btn" id="quickSaveBtn" type="button">Uložiť</button>
+    <button class="btn-outline" id="quickCancelBtn" type="button">Zavrieť</button>
+    <div class="save-note" id="quickMsg"></div>
+  </div>
+</div>
 <script>
 const SYMPTOMS = ["Mozgová hmla","Bolesť hlavy","Stuhnutosť","Nespavosť","Úzkosť / napätie","Bolesť žalúdka","Citlivosť na svetlo/hluk","Studené ruky/nohy"];
 const COMMON_DIAGNOSES = [
@@ -740,6 +980,10 @@ const STORAGE_KEYS = {
   notified: 'fibromotyl_notified', // array of notification keys already shown
   diagnoses: 'fibromotyl_diagnoses',           // array of selected COMMON_DIAGNOSES strings
   customDiagnoses: 'fibromotyl_custom_diagnoses', // array: [{id, name}]
+  flares: 'fibromotyl_flares',       // [{id,start,end,severity,triggers,note}]
+  visits: 'fibromotyl_visits',       // [{id,date,time,doctor,note}]
+  questions: 'fibromotyl_questions', // [{id,text,doctor,done,ts}]
+  settings: 'fibromotyl_settings',   // {theme, fs}
   activities: 'fibromotyl_activities', // array: [{id, date, ts, type, minutes, intensity, after, note}]
   vitamins: 'fibromotyl_vitamins', // array: [{id, name, dose, times, taken:{date:[times]}}]
 };
@@ -767,6 +1011,12 @@ function goto(view){
   if(view==='summary') renderSummary();
   if(view==='diagnoses') renderDiagnoses();
   if(view==='activities') renderActivities();
+  if(view==='calendar') renderCalendar();
+  if(view==='insights') renderInsights();
+  if(view==='flares') renderFlares();
+  if(view==='doctor') renderDoctor();
+  if(view==='settings') renderSettings();
+  if(view==='home') refreshHome();
 }
 document.querySelectorAll('[data-goto]').forEach(el=>{
   el.addEventListener('click', ()=> goto(el.dataset.goto));
@@ -1033,6 +1283,7 @@ function renderTrend(entries){
 }
 
 function refreshHome(){
+  try{ renderHomeExtras(); }catch(e){ console.error(e); }
   const all = loadJSON(STORAGE_KEYS.tracker, {});
   const y = new Date(); y.setDate(y.getDate()-1);
   const yKey = dateKeyOf(y);
@@ -1083,63 +1334,84 @@ document.getElementById('journalSaveBtn').addEventListener('click', ()=>{
 });
 
 /* ---------- MEDS ---------- */
+function parseTimes(str){
+  return (str||'').split(/[,;]+/).map(t=>t.trim()).filter(Boolean).map(t=>{
+    const m = t.match(/^(\d{1,2})(?:[:.](\d{2}))?$/);
+    if(!m) return null;
+    const h=+m[1], mi=+(m[2]||0);
+    if(h>23||mi>59) return null;
+    return String(h).padStart(2,'0')+':'+String(mi).padStart(2,'0');
+  }).filter(Boolean).sort();
+}
+function nowHHMM(){ const d=new Date(); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+function prnCount(m, days){
+  const since = Date.now() - days*86400000;
+  return (m.prnLog||[]).filter(ts=>ts>=since).length;
+}
 function renderMeds(){
   const list = document.getElementById('medsList');
   const items = loadJSON(STORAGE_KEYS.meds, []);
   if(items.length===0){ list.innerHTML = '<div class="empty">Zatiaľ žiadne lieky.</div>'; return; }
-  list.innerHTML = '';
   const tKey = todayKey();
+  list.innerHTML = '';
   items.forEach(it=>{
-    const takenToday = (it.takenDates||[]).includes(tKey);
-    const div = document.createElement('div'); div.className='list-item';
-    div.innerHTML = `
-      <div class="info">
-        <b>${escapeHtml(it.name)}</b>
-        <span>${escapeHtml(it.dose||'')}${it.time?' · '+escapeHtml(it.time):''}${it.reminderTime?' · pripomienka '+escapeHtml(it.reminderTime):''}</span>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
-        <button class="toggle-btn ${takenToday?'on':''}" data-key="${it.id}">${takenToday?'Vzaté dnes ✓':'Vziať dnes'}</button>
-        <button class="del-btn" data-delkey="${it.id}">Zmazať</button>
-      </div>
-    `;
+    const div = document.createElement('div'); div.className='med-block';
+    let body = '';
+    if(it.prn){
+      const last = (it.prnLog||[]).slice(-1)[0];
+      const lastTxt = last ? new Date(last).toLocaleString('sk-SK',{weekday:'short',day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit'}) : 'zatiaľ nikdy';
+      body = `<div class="entry-syms">Podľa potreby · tento týždeň: <b style="color:var(--ink)">${prnCount(it,7)}×</b> · naposledy: ${lastTxt}</div>
+        <div class="dose-row"><button class="toggle-btn" data-prn="${escapeHtml(it.id)}">Vzala som teraz</button>
+        ${last?`<button class="del-btn" data-prnundo="${escapeHtml(it.id)}">Zrušiť posledné</button>`:''}</div>`;
+    } else if(it.times && it.times.length){
+      const taken = (it.taken||{})[tKey] || [];
+      body = `<div class="dose-row">${it.times.map(t=>{ const on=taken.includes(t); return `<button class="toggle-btn ${on?'on':''}" data-dose="${escapeHtml(it.id)}" data-t="${t}">${t} ${on?'✓':''}</button>`; }).join('')}</div>`;
+    } else {
+      const takenToday = (it.takenDates||[]).includes(tKey);
+      body = `<div class="dose-row"><button class="toggle-btn ${takenToday?'on':''}" data-key="${escapeHtml(it.id)}">${takenToday?'Vzaté dnes ✓':'Vziať dnes'}</button></div>`;
+    }
+    const sub = [it.dose, it.time, (!it.times||!it.times.length) && it.reminderTime ? 'pripomienka '+it.reminderTime : ''].filter(Boolean).map(escapeHtml).join(' · ');
+    div.innerHTML = `<div class="entry-top"><span><b>${escapeHtml(it.name)}</b>${sub?' · '+sub:''}</span><button class="del-btn" data-delkey="${escapeHtml(it.id)}">Zmazať</button></div>${body}`;
     list.appendChild(div);
   });
-  list.querySelectorAll('.toggle-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const items2 = loadJSON(STORAGE_KEYS.meds, []);
-      const med = items2.find(m=>m.id===btn.dataset.key);
-      if(med){
-        med.takenDates = med.takenDates || [];
-        const idx = med.takenDates.indexOf(tKey);
-        if(idx>=0) med.takenDates.splice(idx,1); else med.takenDates.push(tKey);
-        saveJSON(STORAGE_KEYS.meds, items2);
-        renderMeds();
-      }
-    });
-  });
-  list.querySelectorAll('[data-delkey]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const items2 = loadJSON(STORAGE_KEYS.meds, []).filter(m=>m.id!==btn.dataset.delkey);
-      saveJSON(STORAGE_KEYS.meds, items2);
-      renderMeds();
-    });
-  });
+  const update = (id, fn)=>{ const all=loadJSON(STORAGE_KEYS.meds, []); const m=all.find(x=>x.id===id); if(m){ fn(m); saveJSON(STORAGE_KEYS.meds, all); } renderMeds(); refreshHome(); };
+  list.querySelectorAll('[data-key]').forEach(btn=>btn.addEventListener('click', ()=>update(btn.dataset.key, m=>{
+    m.takenDates = m.takenDates||[]; const i=m.takenDates.indexOf(tKey); if(i>=0) m.takenDates.splice(i,1); else m.takenDates.push(tKey);
+  })));
+  list.querySelectorAll('[data-dose]').forEach(btn=>btn.addEventListener('click', ()=>update(btn.dataset.dose, m=>{
+    const cutoff = new Date(); cutoff.setDate(cutoff.getDate()-14); const cKey=dateKeyOf(cutoff);
+    const taken={}; Object.entries(m.taken||{}).forEach(([k,v])=>{ if(k>=cKey) taken[k]=v; });
+    const day = taken[tKey] ? [...taken[tKey]] : []; const i=day.indexOf(btn.dataset.t);
+    if(i>=0) day.splice(i,1); else day.push(btn.dataset.t);
+    taken[tKey]=day; m.taken=taken;
+  })));
+  list.querySelectorAll('[data-prn]').forEach(btn=>btn.addEventListener('click', ()=>update(btn.dataset.prn, m=>{
+    const since = Date.now()-90*86400000;
+    m.prnLog = (m.prnLog||[]).filter(ts=>ts>=since); m.prnLog.push(Date.now());
+  })));
+  list.querySelectorAll('[data-prnundo]').forEach(btn=>btn.addEventListener('click', ()=>update(btn.dataset.prnundo, m=>{ (m.prnLog||[]).pop(); })));
+  list.querySelectorAll('[data-delkey]').forEach(btn=>btn.addEventListener('click', ()=>{
+    saveJSON(STORAGE_KEYS.meds, loadJSON(STORAGE_KEYS.meds, []).filter(m=>m.id!==btn.dataset.delkey));
+    renderMeds(); refreshHome();
+  }));
 }
 document.getElementById('medSaveBtn').addEventListener('click', ()=>{
+  const note = document.getElementById('medNote');
   const name = document.getElementById('medName').value.trim();
-  if(!name) return;
-  const dose = document.getElementById('medDose').value.trim();
-  const time = document.getElementById('medTime').value.trim();
-  const reminderTime = document.getElementById('medReminder').value.trim();
+  if(!name){ note.style.color='var(--danger)'; note.textContent='Zadaj názov lieku.'; return; }
+  const raw = document.getElementById('medTimes').value;
+  const prn = document.getElementById('medPrn').checked;
+  const times = prn ? [] : parseTimes(raw);
+  if(!prn && raw.trim() && !times.length){ note.style.color='var(--danger)'; note.textContent='Časy napíš takto: 8:00, 20:00'; return; }
   const items = loadJSON(STORAGE_KEYS.meds, []);
-  items.push({id: uid(), name, dose, time, reminderTime, takenDates:[]});
+  items.push({id: uid(), name, dose: document.getElementById('medDose').value.trim(), time: document.getElementById('medTime').value.trim(), times, prn, taken:{}, takenDates:[], prnLog:[]});
   saveJSON(STORAGE_KEYS.meds, items);
-  document.getElementById('medName').value='';
-  document.getElementById('medDose').value='';
-  document.getElementById('medTime').value='';
-  document.getElementById('medReminder').value='';
-  renderMeds();
+  ['medName','medDose','medTimes','medTime'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('medPrn').checked=false;
+  note.style.color='var(--good)'; note.textContent='Liek pridaný ✓';
+  renderMeds(); refreshHome();
 });
+document.getElementById('medPrn').addEventListener('change', e=>{ document.getElementById('medTimes').disabled = e.target.checked; });
 
 /* ---------- notifications / med reminders ---------- */
 function updateNotifStatus(){
@@ -1157,12 +1429,13 @@ updateNotifStatus();
 
 function checkMedReminders(){
   if(!('Notification' in window) || Notification.permission!=='granted') return;
-  const hhmm = new Date().toTimeString().slice(0,5);
+  const hhmm = nowHHMM();
   const items = loadJSON(STORAGE_KEYS.meds, []);
   const notified = loadJSON(STORAGE_KEYS.notified, []);
   let changed = false;
   items.forEach(m=>{
-    if(m.reminderTime && m.reminderTime===hhmm){
+    const due = (m.times && m.times.length) ? m.times.includes(hhmm) && !(((m.taken||{})[todayKey()]||[]).includes(hhmm)) : (m.reminderTime && m.reminderTime===hhmm);
+    if(due && !m.prn){
       const key = m.id + '_' + todayKey() + '_' + hhmm;
       if(!notified.includes(key)){
         try{ new Notification('Čas na liek: ' + m.name, { body: m.dose ? 'Dávka: ' + m.dose : 'Nezabudni si vziať liek.' }); }catch(e){}
@@ -1170,7 +1443,7 @@ function checkMedReminders(){
       }
     }
   });
-  if(changed) saveJSON(STORAGE_KEYS.notified, notified);
+  if(changed) saveJSON(STORAGE_KEYS.notified, notified.slice(-300));
 }
 setInterval(checkMedReminders, 30000);
 
@@ -1594,6 +1867,9 @@ function renderSummary(){
   const since = new Date(); since.setDate(since.getDate()-13); const sinceKey = dateKeyOf(since);
   const acts = loadJSON(STORAGE_KEYS.activities, []).filter(a=>a.date>=sinceKey).sort((a,b)=> b.date.localeCompare(a.date) || (b.ts||0)-(a.ts||0));
   const team = loadJSON(STORAGE_KEYS.team, []).filter(t=>t.name);
+  const since60 = new Date(); since60.setDate(since60.getDate()-60); const since60Key = dateKeyOf(since60);
+  const flares = loadJSON(STORAGE_KEYS.flares, []).filter(f=>!f.end || f.end>=since60Key).sort((a,b)=>b.start.localeCompare(a.start));
+  const openQs = loadJSON(STORAGE_KEYS.questions, []).filter(q=>!q.done);
   const diagnoses = [...loadJSON(STORAGE_KEYS.diagnoses, []), ...loadJSON(STORAGE_KEYS.customDiagnoses, []).map(d=>d.name)];
   const el = document.getElementById('summaryContent');
   let rows = entries.map(e=>`
@@ -1609,7 +1885,7 @@ function renderSummary(){
   `).join('');
   el.innerHTML = `
     <h2>Súhrn pre FibroMotýľ – posledných ${entries.length} dní</h2>
-    <table style="width:100%;border-collapse:collapse;font-size:13px;">
+    <table style="width:100%;border-collapse:collapse;font-size:calc(13px * var(--fs));">
       <thead><tr>
         <th style="text-align:left;padding:6px 8px;">Dátum</th>
         <th style="text-align:left;padding:6px 8px;">Bolesť</th>
@@ -1623,12 +1899,15 @@ function renderSummary(){
     </table>
     <h2 style="margin-top:20px;">Sprievodné diagnózy</h2>
     ${diagnoses.length ? '<ul>'+diagnoses.map(d=>`<li>${escapeHtml(d)}</li>`).join('')+'</ul>' : '<div class="empty">Žiadne zaznamenané.</div>'}
+    <h2 style="margin-top:20px;">Vzplanutia (posledných 60 dní)</h2>
+    ${flares.length ? '<ul>'+flares.map(f=>`<li>${flareLine(f)}</li>`).join('')+'</ul>' : '<div class="empty">Žiadne zaznamenané.</div>'}
     <h2 style="margin-top:20px;">Aktivity (posledných 14 dní)</h2>
     ${acts.length ? '<ul>'+acts.map(a=>`<li>${new Date(a.date+'T00:00:00').toLocaleDateString('sk-SK',{day:'numeric',month:'short'})}: ${activityLine(a)}</li>`).join('')+'</ul>' : '<div class="empty">Žiadne zaznamenané.</div>'}
     <h2 style="margin-top:20px;">Aktuálne lieky</h2>
-    ${meds.length ? '<ul>'+meds.map(m=>`<li>${escapeHtml(m.name)}${m.dose?' – '+escapeHtml(m.dose):''}${m.time?' ('+escapeHtml(m.time)+')':''}</li>`).join('')+'</ul>' : '<div class="empty">Žiadne lieky.</div>'}
+    ${meds.length ? '<ul>'+meds.map(m=>`<li>${escapeHtml(m.name)}${m.dose?' – '+escapeHtml(m.dose):''}${m.times&&m.times.length?' ('+escapeHtml(m.times.join(', '))+')':''}${m.time?' – '+escapeHtml(m.time):''}${m.prn?' – podľa potreby, za 14 dní: '+prnCount(m,14)+'×':''}</li>`).join('')+'</ul>' : '<div class="empty">Žiadne lieky.</div>'}
     <h2 style="margin-top:20px;">Vitamíny a doplnky</h2>
     ${vitamins.length ? '<ul>'+vitamins.map(v=>`<li>${escapeHtml(v.name)}${v.dose?' – '+escapeHtml(v.dose):''}${v.times?' ('+escapeHtml(v.times.join(', '))+')':''}</li>`).join('')+'</ul>' : '<div class="empty">Žiadne vitamíny.</div>'}
+    ${openQs.length ? '<h2 style="margin-top:20px;">Moje otázky pre lekára</h2><ul>'+openQs.map(q=>`<li>${escapeHtml(q.text)}${q.doctor?' <i>('+escapeHtml(q.doctor)+')</i>':''}</li>`).join('')+'</ul>' : ''}
     <h2 style="margin-top:20px;">Lekársky tím</h2>
     ${team.length ? '<ul>'+team.map(t=>`<li>${escapeHtml(t.name)} – ${escapeHtml(t.spec||'')}</li>`).join('')+'</ul>' : '<div class="empty">Žiadne kontakty.</div>'}
   `;
@@ -1646,6 +1925,7 @@ document.getElementById('exportBtn').addEventListener('click', ()=>{
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = 'fibromotyl-zaloha-' + todayKey() + '.json';
+  try{ localStorage.setItem('fibromotyl_lastBackup', String(Date.now())); }catch(e){}
   document.body.appendChild(a); a.click(); a.remove();
   URL.revokeObjectURL(url);
 });
@@ -1670,6 +1950,407 @@ document.getElementById('importFile').addEventListener('change', (e)=>{
   };
   reader.readAsText(file);
 });
+
+/* ---------- spoločné pomôcky pre nové časti ---------- */
+function fmtNum(n){ return Number(n).toLocaleString('sk-SK',{maximumFractionDigits:1}); }
+function avg(arr){ return arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : null; }
+function dFromKey(k){ return new Date(k+'T00:00:00'); }
+function fmtDay(k, opts){ return dFromKey(k).toLocaleDateString('sk-SK', opts||{day:'numeric',month:'numeric'}); }
+function daysBetween(a,b){ return Math.round((dFromKey(b)-dFromKey(a))/86400000); }
+function addDays(k,n){ const d=dFromKey(k); d.setDate(d.getDate()+n); return dateKeyOf(d); }
+function trackerEntries(){
+  const all = loadJSON(STORAGE_KEYS.tracker, {});
+  return Object.keys(all).map(date=>({date, ...all[date]})).sort((a,b)=>a.date.localeCompare(b.date));
+}
+
+/* ---------- RÝCHLY ZÁZNAM ---------- */
+const quick = { pain:null, fatigue:null, sleep:null };
+function buildQuickScale(id, valId, key){
+  const el = document.getElementById(id);
+  for(let i=0;i<=10;i++){
+    const b=document.createElement('button'); b.type='button'; b.textContent=i;
+    b.addEventListener('click', ()=>{ quick[key]=i; document.getElementById(valId).textContent=i; [...el.children].forEach((c,j)=>c.classList.toggle('on', j===i)); });
+    el.appendChild(b);
+  }
+}
+buildQuickScale('qPain','qPainVal','pain');
+buildQuickScale('qFat','qFatVal','fatigue');
+document.querySelectorAll('#qSleep button').forEach(b=>b.addEventListener('click', ()=>{
+  document.querySelectorAll('#qSleep button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); quick.sleep=b.dataset.v;
+}));
+function openQuick(){
+  const d = loadJSON(STORAGE_KEYS.tracker, {})[todayKey()] || {};
+  quick.pain = d.pain ?? null; quick.fatigue = d.fatigue ?? null; quick.sleep = d.sleep || null;
+  document.getElementById('qPainVal').textContent = quick.pain ?? '–';
+  document.getElementById('qFatVal').textContent = quick.fatigue ?? '–';
+  [...document.getElementById('qPain').children].forEach((c,j)=>c.classList.toggle('on', j===quick.pain));
+  [...document.getElementById('qFat').children].forEach((c,j)=>c.classList.toggle('on', j===quick.fatigue));
+  document.querySelectorAll('#qSleep button').forEach(x=>x.classList.toggle('on', x.dataset.v===quick.sleep));
+  document.getElementById('quickMsg').textContent='';
+  document.getElementById('quickSheet').hidden=false;
+}
+function closeQuick(){ document.getElementById('quickSheet').hidden=true; }
+document.getElementById('quickOpenBtn').addEventListener('click', openQuick);
+document.getElementById('quickCancelBtn').addEventListener('click', closeQuick);
+document.getElementById('quickSheet').addEventListener('click', e=>{ if(e.target.id==='quickSheet') closeQuick(); });
+document.getElementById('quickSaveBtn').addEventListener('click', ()=>{
+  const msg=document.getElementById('quickMsg');
+  if(quick.pain===null){ msg.style.color='var(--danger)'; msg.textContent='Vyber aspoň bolesť.'; return; }
+  const all = loadJSON(STORAGE_KEYS.tracker, {});
+  const patch = { pain: quick.pain };
+  if(quick.fatigue!==null) patch.fatigue = quick.fatigue;
+  if(quick.sleep) patch.sleep = quick.sleep;
+  all[todayKey()] = Object.assign({}, all[todayKey()], patch);
+  saveJSON(STORAGE_KEYS.tracker, all);
+  if(quick.pain!==null) document.getElementById('painScale').children[quick.pain].click();
+  if(quick.fatigue!==null) document.getElementById('fatigueScale').children[quick.fatigue].click();
+  if(quick.sleep){ [...document.querySelectorAll('#sleepRow button')].find(b=>b.dataset.v===quick.sleep)?.click(); }
+  renderTrend(loadHistory()); refreshHome();
+  msg.style.color='var(--good)'; msg.textContent='Uložené ✓';
+  setTimeout(closeQuick, 700);
+});
+
+/* ---------- DOMOV: upozornenia a najbližšie veci ---------- */
+function nextDoseInfo(){
+  const meds = loadJSON(STORAGE_KEYS.meds, []).filter(m=>!m.prn && m.times && m.times.length);
+  if(!meds.length) return null;
+  const tKey=todayKey(), now=nowHHMM(), pending=[];
+  meds.forEach(m=>m.times.forEach(t=>{ if(!(((m.taken||{})[tKey])||[]).includes(t)) pending.push({t, m}); }));
+  if(!pending.length) return {done:true};
+  pending.sort((a,b)=>a.t.localeCompare(b.t));
+  const late = pending.filter(p=>p.t<now);
+  return late.length ? {...late[0], late:true} : pending[0];
+}
+function activeFlare(){ return loadJSON(STORAGE_KEYS.flares, []).find(f=>!f.end); }
+function upcomingVisits(){
+  const t=todayKey();
+  return loadJSON(STORAGE_KEYS.visits, []).filter(v=>v.date>=t).sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||'')));
+}
+function backupDue(){
+  let last=0, snooze=0;
+  try{ last=Number(localStorage.getItem('fibromotyl_lastBackup'))||0; snooze=Number(localStorage.getItem('fibromotyl_backupSnooze'))||0; }catch(e){}
+  if(Date.now()<snooze) return false;
+  const days = Object.keys(loadJSON(STORAGE_KEYS.tracker, {})).length;
+  if(!last) return days>=5;
+  return Date.now()-last > 30*86400000;
+}
+function renderHomeExtras(){
+  const alerts=document.getElementById('homeAlerts'), up=document.getElementById('homeUpcoming');
+  if(!alerts||!up) return;
+  let a='';
+  const f=activeFlare();
+  if(f){
+    const day = daysBetween(f.start, todayKey())+1;
+    a += `<div class="banner flare"><p><b>Vzplanutie trvá ${day}. deň.</b> Buď k sebe dnes jemná, oddychuj a nič netlač nasilu.</p>
+      <div class="row"><button class="primary" id="homeFlareEnd">Vzplanutie skončilo</button><button class="ghost" data-goto2="flares">Podrobnosti</button></div></div>`;
+  }
+  if(backupDue()){
+    a += `<div class="banner info"><p><b>Je čas stiahnuť si zálohu.</b> Tvoje záznamy sú len v tomto telefóne. Záloha ich ochráni, ak by sa telefón pokazil alebo si ho vymenila.</p>
+      <div class="row"><button class="primary" data-goto2="backup">Stiahnuť zálohu</button><button class="ghost" id="homeBackupLater">Neskôr</button></div></div>`;
+  }
+  alerts.innerHTML=a;
+  let u='';
+  const nd=nextDoseInfo();
+  if(nd && !nd.done){
+    u += `<div class="card"><h2>Najbližšia dávka lieku</h2><div class="mini-row"><div class="big">${nd.t}</div><div class="txt"><b>${escapeHtml(nd.m.name)}</b>${nd.m.dose?' · '+escapeHtml(nd.m.dose):''}
+      <span${nd.late?' style="color:var(--pending-ink);font-weight:700;"':''}>${nd.late?'Táto dávka ešte nie je odkliknutá':'Ďalšia dávka dnes'}</span></div></div>
+      <button class="btn-outline" data-goto2="meds">Otvoriť lieky</button></div>`;
+  } else if(nd && nd.done){
+    u += `<div class="card"><h2>Lieky na dnes</h2><div class="mini-row"><div class="big" style="color:var(--good)">✓</div><div class="txt">Všetky dnešné dávky sú odkliknuté.</div></div></div>`;
+  }
+  const v=upcomingVisits()[0];
+  if(v && daysBetween(todayKey(), v.date)<=30){
+    const qs=loadJSON(STORAGE_KEYS.questions, []).filter(q=>!q.done).length;
+    const dd=daysBetween(todayKey(), v.date);
+    const when = dd===0?'dnes':dd===1?'zajtra':'o '+dd+' dní';
+    u += `<div class="card"><h2>Najbližšie u lekára</h2><div class="mini-row"><div class="big" style="font-size:calc(20px * var(--fs));">${fmtDay(v.date)}</div><div class="txt"><b>${escapeHtml(v.doctor)}</b>${v.time?' · '+v.time:''}<span>${when} · pripravené otázky: ${qs}</span></div></div>
+      <button class="btn-outline" data-goto2="doctor">Otvoriť návštevy</button></div>`;
+  }
+  up.innerHTML=u;
+  document.querySelectorAll('#homeAlerts [data-goto2], #homeUpcoming [data-goto2]').forEach(b=>b.addEventListener('click', ()=>goto(b.dataset.goto2)));
+  const fe=document.getElementById('homeFlareEnd'); if(fe) fe.addEventListener('click', ()=>{ endFlare(f.id); });
+  const bl=document.getElementById('homeBackupLater'); if(bl) bl.addEventListener('click', ()=>{ try{ localStorage.setItem('fibromotyl_backupSnooze', String(Date.now()+7*86400000)); }catch(e){} renderHomeExtras(); });
+}
+
+/* ---------- SÚVISLOSTI ---------- */
+function cycleDayFor(dateKey, starts){
+  let best=null;
+  starts.forEach(s0=>{ if(s0<=dateKey && (!best || s0>best)) best=s0; });
+  if(!best) return null;
+  const d = daysBetween(best, dateKey)+1;
+  return d<=40 ? d : null;
+}
+function computeInsights(){
+  const E = trackerEntries().filter(e=>typeof e.pain==='number');
+  const out = [];
+  const cmp = (A, B, minN, makeText)=>{
+    const a=A.map(e=>e.pain), b=B.map(e=>e.pain);
+    if(a.length<minN || b.length<minN) return;
+    const ma=avg(a), mb=avg(b), diff=ma-mb;
+    if(Math.abs(diff)<1) return;
+    out.push({kind: diff>0?'bad':'good', text: makeText(ma,mb,diff), sub:`Porovnané dni: ${a.length} a ${b.length}.`, weight:Math.abs(diff)});
+  };
+  // spánok
+  cmp(E.filter(e=>e.sleep==='zly'), E.filter(e=>e.sleep==='dobry'), 3, (ma,mb)=>`Po <b>zlom spánku</b> máš bolesť v priemere <b>${fmtNum(ma)}</b>, po dobrom <b>${fmtNum(mb)}</b>.`);
+  // stres
+  cmp(E.filter(e=>typeof e.mood==='number' && e.mood>=6), E.filter(e=>typeof e.mood==='number' && e.mood<=3), 3, (ma,mb)=>`V <b>stresových dňoch</b> je bolesť v priemere <b>${fmtNum(ma)}</b>, v pokojných <b>${fmtNum(mb)}</b>.`);
+  // tlak vzduchu (porovnanie nižšej a vyššej polovice tvojich dní)
+  const W = E.filter(e=>e.weather && typeof e.weather.pressure==='number');
+  if(W.length>=6){
+    const ps=W.map(e=>e.weather.pressure).sort((x,y)=>x-y), med=ps[Math.floor(ps.length/2)];
+    cmp(W.filter(e=>e.weather.pressure<med), W.filter(e=>e.weather.pressure>=med), 3, (ma,mb)=>`Pri <b>nižšom tlaku vzduchu</b> (pod ${Math.round(med)} hPa) je bolesť v priemere <b>${fmtNum(ma)}</b>, pri vyššom <b>${fmtNum(mb)}</b>.`);
+    cmp(W.filter(e=>e.weather.temp<10), W.filter(e=>e.weather.temp>=18), 3, (ma,mb)=>`V <b>chladných dňoch</b> (pod 10 °C) je bolesť v priemere <b>${fmtNum(ma)}</b>, v teplých <b>${fmtNum(mb)}</b>.`);
+  }
+  // voda
+  cmp(E.filter(e=>typeof e.water==='number' && e.water<=3), E.filter(e=>typeof e.water==='number' && e.water>=6), 3, (ma,mb)=>`Keď vypiješ <b>málo vody</b> (do 3 pohárov), bolesť je v priemere <b>${fmtNum(ma)}</b>, pri 6 a viac pohároch <b>${fmtNum(mb)}</b>.`);
+  // kroky
+  const st = e=>parseInt(String(e.steps||'').replace(/\D/g,''),10);
+  cmp(E.filter(e=>st(e)>0 && st(e)<=1500), E.filter(e=>st(e)>=4000), 3, (ma,mb,diff)=> diff>0
+    ? `V dňoch s <b>veľmi málo pohybu</b> (do 1 500 krokov) je bolesť v priemere <b>${fmtNum(ma)}</b>, pri 4 000 a viac krokoch <b>${fmtNum(mb)}</b>.`
+    : `V dňoch s <b>veľa krokmi</b> (4 000 a viac) je bolesť v priemere <b>${fmtNum(mb)}</b>, v pokojnejších dňoch <b>${fmtNum(ma)}</b>.`);
+  // cyklus
+  const starts = loadJSON(STORAGE_KEYS.cycle, []).map(c=>c.date);
+  if(starts.length){
+    const withDay = E.map(e=>({...e, cd: cycleDayFor(e.date, starts)})).filter(e=>e.cd);
+    cmp(withDay.filter(e=>e.cd<=5), withDay.filter(e=>e.cd>5), 3, (ma,mb)=>`Počas <b>prvých 5 dní cyklu</b> je bolesť v priemere <b>${fmtNum(ma)}</b>, v ostatné dni <b>${fmtNum(mb)}</b>.`);
+  }
+  // aktivity: ako bolo potom
+  const acts = loadJSON(STORAGE_KEYS.activities, []);
+  const byType = {};
+  acts.filter(a=>a.after).forEach(a=>{ (byType[a.type]=byType[a.type]||[]).push(a.after); });
+  Object.entries(byType).forEach(([t,arr])=>{
+    if(arr.length<3) return;
+    const worse=arr.filter(x=>x==='horšie').length, better=arr.filter(x=>x==='lepšie').length;
+    if(worse/arr.length>=0.6) out.push({kind:'bad', text:`Po aktivite <b>${escapeHtml(t)}</b> ti bývalo <b>horšie</b> (${worse} z ${arr.length}-krát). Skús ju rozdeliť na kratšie časti s prestávkami.`, sub:'', weight:1.5});
+    else if(better/arr.length>=0.6) out.push({kind:'good', text:`Po aktivite <b>${escapeHtml(t)}</b> ti bývalo <b>lepšie</b> (${better} z ${arr.length}-krát).`, sub:'', weight:1.5});
+  });
+  // bolesť na druhý deň po náročnom dni
+  const minsByDay = {};
+  acts.forEach(a=>{ minsByDay[a.date]=(minsByDay[a.date]||0)+(Number(a.minutes)||0); });
+  const byDate = {}; E.forEach(e=>byDate[e.date]=e);
+  const heavy=[], light=[];
+  Object.entries(minsByDay).forEach(([d,m])=>{ const nx=byDate[addDays(d,1)]; if(!nx) return; if(m>=90) heavy.push(nx); else if(m>0 && m<=40) light.push(nx); });
+  cmp(heavy, light, 3, (ma,mb)=>`Na druhý deň po <b>dni s viac ako hodinou a pol aktivít</b> je bolesť v priemere <b>${fmtNum(ma)}</b>, po pokojnejšom dni <b>${fmtNum(mb)}</b>.`);
+  // spúšťače vzplanutí
+  const trig={};
+  loadJSON(STORAGE_KEYS.flares, []).forEach(f=>(f.triggers||[]).forEach(t=>{ if(t!=='Neviem') trig[t]=(trig[t]||0)+1; }));
+  const topT = Object.entries(trig).sort((a,b)=>b[1]-a[1]).filter(x=>x[1]>=2).slice(0,3);
+  if(topT.length) out.push({kind:'info', text:`Najčastejšie spúšťače tvojich vzplanutí: ${topT.map(([t,n])=>`<b>${escapeHtml(t)}</b> (${n}×)`).join(', ')}.`, sub:'', weight:0.9});
+  out.sort((a,b)=>b.weight-a.weight);
+  // trend: posledných 14 dní vs predchádzajúcich 14
+  const t0=todayKey(), last14=E.filter(e=>daysBetween(e.date,t0)<14), prev14=E.filter(e=>{const d=daysBetween(e.date,t0); return d>=14 && d<28;});
+  let trend=null;
+  if(last14.length>=5 && prev14.length>=5){
+    const a=avg(last14.map(e=>e.pain)), b=avg(prev14.map(e=>e.pain));
+    trend = Math.abs(a-b)<0.5 ? {kind:'info', text:`Posledné dva týždne je bolesť <b>podobná</b> ako predtým (priemer ${fmtNum(a)}).`}
+      : a<b ? {kind:'good', text:`Posledné dva týždne je bolesť <b>nižšia</b>: priemer ${fmtNum(a)}, predtým ${fmtNum(b)}.`}
+      : {kind:'bad', text:`Posledné dva týždne je bolesť <b>vyššia</b>: priemer ${fmtNum(a)}, predtým ${fmtNum(b)}.`};
+  }
+  // najčastejšie príznaky za 30 dní
+  const symC={};
+  E.filter(e=>daysBetween(e.date,t0)<30).forEach(e=>(e.syms||[]).forEach(x=>symC[x]=(symC[x]||0)+1));
+  const topS=Object.entries(symC).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  return { n:E.length, items:out, trend, topS };
+}
+function renderInsights(){
+  const el=document.getElementById('insightList');
+  const r=computeInsights();
+  const icon={bad:'↑',good:'↓',info:'i'};
+  let h='';
+  if(r.n<7) h+=`<div class="insight info"><div class="ic2">i</div><div class="t">Zatiaľ máš <b>${r.n}</b> ${r.n===1?'deň':r.n>=2&&r.n<=4?'dni':'dní'} so záznamom. Prvé súvislosti sa zvyčajne ukážu po 1–2 týždňoch pravidelného zapisovania.<small>Stačí aj rýchly záznam, najlepšie s počasím a náladou.</small></div></div>`;
+  if(r.trend) h+=`<div class="insight ${r.trend.kind}"><div class="ic2">${icon[r.trend.kind]}</div><div class="t">${r.trend.text}</div></div>`;
+  r.items.forEach(i=>{ h+=`<div class="insight ${i.kind}"><div class="ic2">${i.kind==='bad'?'!':i.kind==='good'?'✓':'i'}</div><div class="t">${i.text}${i.sub?`<small>${i.sub}</small>`:''}</div></div>`; });
+  if(r.topS.length) h+=`<div class="insight info"><div class="ic2">i</div><div class="t">Najčastejšie príznaky za posledný mesiac: ${r.topS.map(([x,n])=>`<b>${escapeHtml(x)}</b> (${n}×)`).join(', ')}.</div></div>`;
+  if(r.n>=7 && !r.items.length) h+=`<div class="insight info"><div class="ic2">i</div><div class="t">Zatiaľ nevidno výrazné rozdiely. Keď budeš zapisovať ďalej, appka ich ukáže tu.</div></div>`;
+  el.innerHTML=h||'<div class="empty">Zatiaľ nič.</div>';
+}
+
+/* ---------- KALENDÁR ---------- */
+let calMonth = (()=>{ const d=new Date(); return new Date(d.getFullYear(), d.getMonth(), 1); })();
+let calSelected = null;
+function painColor(p){
+  const stops=[[239,227,248],[182,122,214],[90,17,128]];
+  const t=Math.max(0,Math.min(10,p))/10, seg=t<.5?0:1, lt=t<.5?t*2:(t-.5)*2;
+  const c=stops[seg].map((v,i)=>Math.round(v+(stops[seg+1][i]-v)*lt));
+  return `rgb(${c[0]},${c[1]},${c[2]})`;
+}
+function dayMarks(k, flares, visits, cycles){
+  return {
+    flare: flares.some(f=>f.start<=k && (f.end ? f.end>=k : k<=todayKey())),
+    visit: visits.some(v=>v.date===k),
+    cycle: cycles.includes(k)
+  };
+}
+function renderCalendar(){
+  const all=loadJSON(STORAGE_KEYS.tracker, {}), flares=loadJSON(STORAGE_KEYS.flares, []), visits=loadJSON(STORAGE_KEYS.visits, []), cycles=loadJSON(STORAGE_KEYS.cycle, []).map(c=>c.date);
+  const y=calMonth.getFullYear(), m=calMonth.getMonth();
+  document.getElementById('calTitle').textContent = calMonth.toLocaleDateString('sk-SK',{month:'long',year:'numeric'});
+  const grid=document.getElementById('calGrid');
+  let h=['Po','Ut','St','Št','Pi','So','Ne'].map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  const first=(new Date(y,m,1).getDay()+6)%7, days=new Date(y,m+1,0).getDate(), t=todayKey();
+  for(let i=0;i<first;i++) h+='<div class="cal-day empty-cell"></div>';
+  const pains=[];
+  for(let d=1; d<=days; d++){
+    const k=dateKeyOf(new Date(y,m,d)), e=all[k], mk=dayMarks(k,flares,visits,cycles);
+    let style='';
+    if(e && typeof e.pain==='number'){ pains.push(e.pain); style=`background:${painColor(e.pain)};border-color:transparent;${e.pain>=5?'color:#fff;':'color:#2E123F;'}`; }
+    const marks=[mk.flare?'<i class="m-flare"></i>':'', mk.visit?'<i class="m-visit"></i>':'', mk.cycle?'<i class="m-cycle"></i>':''].join('');
+    h+=`<button type="button" class="cal-day${k===t?' today':''}${k===calSelected?' sel':''}${mk.flare?' flare':''}" data-k="${k}" style="${style}" aria-label="${fmtDay(k,{day:'numeric',month:'long'})}${e&&typeof e.pain==='number'?', bolesť '+e.pain:''}">${d}<span class="marks">${marks}</span></button>`;
+  }
+  grid.innerHTML=h;
+  grid.querySelectorAll('[data-k]').forEach(b=>b.addEventListener('click', ()=>{ calSelected=b.dataset.k; renderCalendar(); }));
+  const flareDays = [...Array(days)].filter((_,i)=>dayMarks(dateKeyOf(new Date(y,m,i+1)),flares,[],[]).flare).length;
+  document.getElementById('calStats').innerHTML = pains.length
+    ? `Dní so záznamom: <b>${pains.length}</b> · priemerná bolesť: <b>${fmtNum(avg(pains))}</b> · dni s bolesťou 7 a viac: <b>${pains.filter(p=>p>=7).length}</b>${flareDays?` · dni vo vzplanutí: <b>${flareDays}</b>`:''}`
+    : 'V tomto mesiaci zatiaľ nie sú záznamy.';
+  renderCalDetail();
+}
+function renderCalDetail(){
+  const el=document.getElementById('calDetail');
+  if(!calSelected){ el.innerHTML='<div class="empty">Ťukni na deň a uvidíš podrobnosti.</div>'; return; }
+  const k=calSelected, e=loadJSON(STORAGE_KEYS.tracker, {})[k];
+  const acts=loadJSON(STORAGE_KEYS.activities, []).filter(a=>a.date===k);
+  const fl=loadJSON(STORAGE_KEYS.flares, []).filter(f=>f.start<=k && (!f.end||f.end>=k));
+  const vs=loadJSON(STORAGE_KEYS.visits, []).filter(v=>v.date===k);
+  const cy=loadJSON(STORAGE_KEYS.cycle, []).some(c=>c.date===k);
+  const sleepTxt={dobry:'dobrý',priemerny:'priemerný',zly:'zlý'};
+  let h=`<h2 style="text-transform:none;">${dFromKey(k).toLocaleDateString('sk-SK',{weekday:'long',day:'numeric',month:'long'})}</h2>`;
+  if(e){
+    h+=`<div class="entry-syms" style="font-size:calc(15px * var(--fs));color:var(--ink);">Bolesť <b>${e.pain??'–'}</b> · Únava <b>${e.fatigue??'–'}</b>${typeof e.mood==='number'?' · Stres '+e.mood:''}${e.sleep?' · Spánok '+sleepTxt[e.sleep]:''}</div>`;
+    if(e.painSpots&&e.painSpots.length) h+=`<div class="entry-syms">Bolelo: ${escapeHtml(bmAreasOf(e.painSpots).join(', '))}</div>`;
+    if(e.syms&&e.syms.length) h+=`<div class="entry-syms">Príznaky: ${escapeHtml(e.syms.join(', '))}</div>`;
+    if(e.weather) h+=`<div class="entry-syms">Počasie: ${Math.round(e.weather.temp)} °C, tlak ${Math.round(e.weather.pressure)} hPa</div>`;
+    if(e.water) h+=`<div class="entry-syms">Voda: ${e.water} pohárov</div>`;
+    if(e.note) h+=`<div class="entry-note">„${escapeHtml(e.note)}“</div>`;
+  } else h+='<div class="empty" style="text-align:left;padding:4px 0;">V tento deň nie je denný záznam.</div>';
+  if(acts.length) h+=`<div class="entry-syms" style="margin-top:8px;">Aktivity: ${acts.map(activityLine).join('; ')}</div>`;
+  if(fl.length) h+=`<div class="entry-syms" style="color:#D2475F;font-weight:700;">Vzplanutie (${fl.map(f=>escapeHtml(f.severity||'')).join(', ')})</div>`;
+  if(vs.length) h+=`<div class="entry-syms">U lekára: ${vs.map(v=>escapeHtml(v.doctor)+(v.time?' o '+v.time:'')).join(', ')}</div>`;
+  if(cy) h+='<div class="entry-syms">Začiatok menštruácie</div>';
+  el.innerHTML=h;
+}
+document.getElementById('calPrev').addEventListener('click', ()=>{ calMonth=new Date(calMonth.getFullYear(), calMonth.getMonth()-1, 1); renderCalendar(); });
+document.getElementById('calNext').addEventListener('click', ()=>{ calMonth=new Date(calMonth.getFullYear(), calMonth.getMonth()+1, 1); renderCalendar(); });
+
+/* ---------- VZPLANUTIA ---------- */
+const FLARE_TRIGGERS=["Stres","Zlý spánok","Zmena počasia","Chlad","Veľa aktivity / prepätie","Choroba / infekcia","Menštruácia","Cestovanie","Emócie / smútok","Neviem"];
+const flareState={severity:null, triggers:new Set()};
+FLARE_TRIGGERS.forEach(t=>{
+  const c=document.createElement('div'); c.className='chip'; c.textContent=t;
+  c.addEventListener('click', ()=>{ if(flareState.triggers.has(t)) flareState.triggers.delete(t); else flareState.triggers.add(t); c.classList.toggle('on'); });
+  document.getElementById('flareTriggers').appendChild(c);
+});
+document.querySelectorAll('#flareSeverity button').forEach(b=>b.addEventListener('click', ()=>{
+  document.querySelectorAll('#flareSeverity button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); flareState.severity=b.dataset.v;
+}));
+function flareLine(f){
+  const len = daysBetween(f.start, f.end||todayKey())+1;
+  return `${fmtDay(f.start)}${f.end?' – '+fmtDay(f.end):' – trvá'} (${len} ${len===1?'deň':len<=4?'dni':'dní'})${f.severity?', '+escapeHtml(f.severity):''}${f.triggers&&f.triggers.length?', spúšťač: '+escapeHtml(f.triggers.join(', ')):''}${f.note?' – '+escapeHtml(f.note):''}`;
+}
+function endFlare(id){
+  const all=loadJSON(STORAGE_KEYS.flares, []); const f=all.find(x=>x.id===id);
+  if(f){ f.end=todayKey(); saveJSON(STORAGE_KEYS.flares, all); }
+  renderFlares(); refreshHome();
+}
+function renderFlares(){
+  const all=loadJSON(STORAGE_KEYS.flares, []).sort((a,b)=>b.start.localeCompare(a.start));
+  const act=all.find(f=>!f.end);
+  const ac=document.getElementById('flareActiveCard'), form=document.getElementById('flareFormCard');
+  if(act){
+    ac.hidden=false; form.hidden=true;
+    ac.innerHTML=`<h2>Práve máš vzplanutie</h2><div class="entry-syms" style="font-size:calc(15px * var(--fs));color:var(--ink);">${flareLine(act)}</div>
+      <div class="empty" style="text-align:left;padding:8px 0 0;">Keď sa ti uľaví, ťukni na tlačidlo nižšie. Appka si zapamätá, ako dlho trvalo.</div>
+      <button class="save-btn" id="flareEndBtn" type="button">Vzplanutie skončilo dnes</button>`;
+    document.getElementById('flareEndBtn').addEventListener('click', ()=>endFlare(act.id));
+  } else { ac.hidden=true; form.hidden=false; if(!document.getElementById('flareStart').value) document.getElementById('flareStart').value=todayKey(); }
+  const list=document.getElementById('flareList');
+  const done=all.filter(f=>f.end);
+  if(!done.length){ list.innerHTML='<div class="empty">Zatiaľ žiadne ukončené vzplanutia.</div>'; return; }
+  const lens=done.map(f=>daysBetween(f.start,f.end)+1);
+  list.innerHTML=`<div class="entry-syms" style="padding-bottom:6px;">Spolu: ${done.length} · priemerná dĺžka: ${fmtNum(avg(lens))} dňa</div>` + done.map(f=>`<div class="entry"><div class="entry-top"><span>${flareLine(f)}</span><button class="del-btn" data-key="${escapeHtml(f.id)}">Zmazať</button></div></div>`).join('');
+  list.querySelectorAll('.del-btn').forEach(b=>b.addEventListener('click', ()=>{ saveJSON(STORAGE_KEYS.flares, loadJSON(STORAGE_KEYS.flares, []).filter(x=>x.id!==b.dataset.key)); renderFlares(); }));
+}
+document.getElementById('flareSaveBtn').addEventListener('click', ()=>{
+  const msg=document.getElementById('flareNoteMsg');
+  const start=document.getElementById('flareStart').value||todayKey();
+  if(start>todayKey()){ msg.style.color='var(--danger)'; msg.textContent='Dátum nemôže byť v budúcnosti.'; return; }
+  const all=loadJSON(STORAGE_KEYS.flares, []);
+  all.push({id:uid(), start, end:null, severity:flareState.severity, triggers:[...flareState.triggers], note:document.getElementById('flareNote').value.trim()});
+  saveJSON(STORAGE_KEYS.flares, all);
+  flareState.severity=null; flareState.triggers.clear();
+  document.querySelectorAll('#flareTriggers .chip, #flareSeverity button').forEach(x=>x.classList.remove('on'));
+  document.getElementById('flareNote').value=''; document.getElementById('flareStart').value='';
+  msg.textContent='';
+  renderFlares(); refreshHome();
+});
+
+/* ---------- NÁVŠTEVY LEKÁRA A OTÁZKY ---------- */
+function fillDoctorOptions(){
+  const team=loadJSON(STORAGE_KEYS.team, []);
+  const opts=new Set();
+  team.forEach(t=>{ if(t.spec) opts.add(t.spec); if(t.name) opts.add(t.name+(t.spec?' ('+t.spec.toLowerCase()+')':'')); });
+  document.getElementById('doctorOptions').innerHTML=[...opts].map(o=>`<option value="${escapeHtml(o)}"></option>`).join('');
+}
+function renderDoctor(){
+  fillDoctorOptions();
+  const t=todayKey(), visits=loadJSON(STORAGE_KEYS.visits, []);
+  const up=visits.filter(v=>v.date>=t).sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||'')));
+  const past=visits.filter(v=>v.date<t).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,10);
+  const vHtml = v=>`<div class="entry"><div class="entry-top"><span><b>${escapeHtml(v.doctor)}</b></span><button class="del-btn" data-vkey="${escapeHtml(v.id)}">Zmazať</button></div>
+    <div class="entry-syms">${dFromKey(v.date).toLocaleDateString('sk-SK',{weekday:'long',day:'numeric',month:'long'})}${v.time?' o '+v.time:''}</div>${v.note?`<div class="entry-note">${escapeHtml(v.note)}</div>`:''}</div>`;
+  document.getElementById('visitList').innerHTML = up.length ? up.map(vHtml).join('') : '<div class="empty">Zatiaľ žiadne plánované návštevy.</div>';
+  document.getElementById('pastVisitList').innerHTML = past.length ? past.map(vHtml).join('') : '<div class="empty">Zatiaľ žiadne.</div>';
+  document.querySelectorAll('[data-vkey]').forEach(b=>b.addEventListener('click', ()=>{ saveJSON(STORAGE_KEYS.visits, loadJSON(STORAGE_KEYS.visits, []).filter(x=>x.id!==b.dataset.vkey)); renderDoctor(); refreshHome(); }));
+  const qs=loadJSON(STORAGE_KEYS.questions, []).sort((a,b)=>(a.done-b.done)||((b.ts||0)-(a.ts||0)));
+  const ql=document.getElementById('questionList');
+  ql.innerHTML = qs.length ? qs.map(q=>`<div class="entry" style="${q.done?'opacity:.55;':''}"><label class="check-row" style="margin:0;align-items:flex-start;"><input type="checkbox" data-qkey="${escapeHtml(q.id)}" ${q.done?'checked':''}><span>${escapeHtml(q.text)}${q.doctor?`<span class="entry-syms" style="display:block;">pre: ${escapeHtml(q.doctor)}</span>`:''}</span></label>
+    <div style="text-align:right;"><button class="del-btn" data-qdel="${escapeHtml(q.id)}">Zmazať</button></div></div>`).join('') : '<div class="empty" style="padding:8px 0;">Zatiaľ žiadne otázky.</div>';
+  ql.querySelectorAll('[data-qkey]').forEach(c=>c.addEventListener('change', ()=>{ const all=loadJSON(STORAGE_KEYS.questions, []); const q=all.find(x=>x.id===c.dataset.qkey); if(q){ q.done=c.checked; saveJSON(STORAGE_KEYS.questions, all); } renderDoctor(); }));
+  ql.querySelectorAll('[data-qdel]').forEach(b=>b.addEventListener('click', ()=>{ saveJSON(STORAGE_KEYS.questions, loadJSON(STORAGE_KEYS.questions, []).filter(x=>x.id!==b.dataset.qdel)); renderDoctor(); }));
+}
+document.getElementById('visitSaveBtn').addEventListener('click', ()=>{
+  const msg=document.getElementById('visitMsg');
+  const doctor=document.getElementById('visitDoctor').value.trim(), date=document.getElementById('visitDate').value;
+  if(!doctor||!date){ msg.style.color='var(--danger)'; msg.textContent='Vyplň, u koho a kedy.'; return; }
+  const all=loadJSON(STORAGE_KEYS.visits, []);
+  all.push({id:uid(), doctor, date, time:document.getElementById('visitTime').value, note:document.getElementById('visitNote').value.trim()});
+  saveJSON(STORAGE_KEYS.visits, all);
+  ['visitDoctor','visitDate','visitTime','visitNote'].forEach(id=>document.getElementById(id).value='');
+  msg.style.color='var(--good)'; msg.textContent='Návšteva pridaná ✓';
+  renderDoctor(); refreshHome();
+});
+document.getElementById('questionSaveBtn').addEventListener('click', ()=>{
+  const text=document.getElementById('questionText').value.trim();
+  if(!text) return;
+  const all=loadJSON(STORAGE_KEYS.questions, []);
+  all.push({id:uid(), text, doctor:document.getElementById('questionDoctor').value.trim(), done:false, ts:Date.now()});
+  saveJSON(STORAGE_KEYS.questions, all);
+  document.getElementById('questionText').value=''; document.getElementById('questionDoctor').value='';
+  renderDoctor(); refreshHome();
+});
+
+/* ---------- NASTAVENIA: vzhľad a písmo ---------- */
+const darkMQ = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+function getSettings(){ return Object.assign({theme:'light', fs:'1'}, loadJSON(STORAGE_KEYS.settings, {})); }
+function applySettings(){
+  const st=getSettings();
+  const dark = st.theme==='dark' || (st.theme==='auto' && darkMQ && darkMQ.matches);
+  document.documentElement.setAttribute('data-theme', dark?'dark':'light');
+  document.documentElement.style.setProperty('--fs', st.fs);
+  const meta=document.querySelector('meta[name="theme-color"]'); if(meta) meta.setAttribute('content', dark?'#1B1224':'#440A63');
+}
+if(darkMQ && darkMQ.addEventListener) darkMQ.addEventListener('change', applySettings);
+function renderSettings(){
+  const st=getSettings();
+  document.querySelectorAll('#setTheme button').forEach(b=>b.classList.toggle('on', b.dataset.v===st.theme));
+  document.querySelectorAll('#setFont button').forEach(b=>b.classList.toggle('on', b.dataset.v===String(st.fs)));
+  let last=0; try{ last=Number(localStorage.getItem('fibromotyl_lastBackup'))||0; }catch(e){}
+  document.getElementById('setBackupInfo').textContent = last ? 'Posledná záloha: '+new Date(last).toLocaleDateString('sk-SK',{day:'numeric',month:'long',year:'numeric'})+'.' : 'Zálohu si zatiaľ nestiahla. Appka ti to raz za mesiac pripomenie.';
+}
+function saveSetting(k,v){ const st=getSettings(); st[k]=v; saveJSON(STORAGE_KEYS.settings, st); applySettings(); renderSettings(); }
+document.querySelectorAll('#setTheme button').forEach(b=>b.addEventListener('click', ()=>saveSetting('theme', b.dataset.v)));
+document.querySelectorAll('#setFont button').forEach(b=>b.addEventListener('click', ()=>saveSetting('fs', b.dataset.v)));
+applySettings();
 
 /* ---------- helpers ---------- */
 function escapeHtml(str){
@@ -1704,7 +2385,7 @@ function pedoHandleMotion(event){
 
 function updatePedoStatus(){
   const el = document.getElementById('pedoStatus');
-  el.innerHTML = `Napočítané kroky: <b>${pedoCount}</b> &nbsp; <button class="toggle-btn" id="pedoUseBtn" style="padding:4px 10px;font-size:12px;">Použiť tento počet</button>`;
+  el.innerHTML = `Napočítané kroky: <b>${pedoCount}</b> &nbsp; <button class="toggle-btn" id="pedoUseBtn" style="padding:4px 10px;font-size:calc(12px * var(--fs));">Použiť tento počet</button>`;
   const useBtn = document.getElementById('pedoUseBtn');
   if(useBtn){
     useBtn.addEventListener('click', ()=>{
