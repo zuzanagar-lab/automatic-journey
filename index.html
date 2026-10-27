@@ -7,6 +7,7 @@
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#440A63">
 <link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="vendor/lenis.css">
 <style>
   :root{
     --bg: #F6EEFB;
@@ -2445,6 +2446,71 @@ if('serviceWorker' in navigator){
     navigator.serviceWorker.register('sw.js').catch(()=>{});
   });
 }
+</script>
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/lenis.min.js"></script>
+<script>
+/* ---------- animácie (GSAP + Lenis, efekty v štýle React Bits) ---------- */
+(function(){
+  if(!window.gsap) return; // bez knižníc appka funguje ako doteraz
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  // Plynulé skrolovanie (Lenis) len na počítači s myšou, na mobile ostáva prirodzené
+  let lenis = null;
+  if(window.Lenis && matchMedia('(hover: hover) and (pointer: fine)').matches){
+    lenis = new Lenis({ prevent: (node)=> !!node.closest('#quickSheet') });
+    gsap.ticker.add((t)=> lenis.raf(t*1000));
+    gsap.ticker.lagSmoothing(0);
+  }
+
+  // Úvodná obrazovka: písmená nadpisu naskakujú postupne (ako React Bits SplitText)
+  const splashTitle = document.querySelector('#splash h2');
+  if(splashTitle && !splashEl.classList.contains('hide')){
+    const txt = splashTitle.textContent;
+    splashTitle.setAttribute('aria-label', txt);
+    splashTitle.textContent = '';
+    [...txt].forEach(ch=>{
+      const s = document.createElement('span');
+      s.textContent = ch; s.style.display = 'inline-block'; s.setAttribute('aria-hidden','true');
+      splashTitle.appendChild(s);
+    });
+    splashTitle.style.animation = 'none'; splashTitle.style.opacity = 1;
+    gsap.from(splashTitle.children, { y:18, opacity:0, duration:.6, ease:'back.out(1.7)', stagger:.045, delay:1.5 });
+  }
+
+  // Obrazovky: kartičky sa jemne vysunú jedna po druhej (ako React Bits AnimatedContent)
+  function revealView(view){
+    const el = document.getElementById('view-'+view);
+    if(!el) return;
+    const items = [...el.querySelectorAll(':scope > .card, :scope > .section-title, :scope > .tool-grid > .tool-card, :scope > div > .card')].slice(0,14);
+    gsap.fromTo(items, { opacity:0, y:14 }, { opacity:1, y:0, duration:.45, ease:'power2.out', stagger:.04, overwrite:true, clearProps:'transform,opacity' });
+  }
+  const origGoto = goto;
+  goto = function(view){
+    origGoto(view);
+    if(lenis) lenis.scrollTo(0, { immediate:true });
+    revealView(view);
+  };
+
+  // Graf za 7 dní: stĺpce vyrastú zdola
+  const origRenderTrend = renderTrend;
+  renderTrend = function(entries){
+    origRenderTrend(entries);
+    gsap.from('#trendChart .bar', { scaleY:0, transformOrigin:'bottom', duration:.6, ease:'power3.out', stagger:.03 });
+  };
+
+  // Rýchly záznam: panel sa vysunie zdola
+  const quickSheet = document.getElementById('quickSheet');
+  new MutationObserver(()=>{
+    if(quickSheet.hidden) return;
+    gsap.fromTo(quickSheet, { backgroundColor:'rgba(30,10,45,0)' }, { backgroundColor:'rgba(30,10,45,.45)', duration:.3, clearProps:'backgroundColor' });
+    gsap.fromTo(quickSheet.querySelector('.sheet'), { y:'100%' }, { y:0, duration:.45, ease:'power3.out', clearProps:'transform' });
+  }).observe(quickSheet, { attributes:true, attributeFilter:['hidden'] });
+
+  // Prvé načítanie
+  renderTrend(loadHistory());
+  revealView('home');
+})();
 </script>
 </body>
 </html>
